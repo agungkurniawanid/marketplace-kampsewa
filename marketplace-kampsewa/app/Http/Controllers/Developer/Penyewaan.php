@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 class Penyewaan extends Controller
 {
-    // ! main function
+    public function __construct() {
+        $this->middleware('dev');
+    }
     public function index(){
         return view('developers.informasi-penyewaan', ['title' => 'Penyewaan']);
     }
