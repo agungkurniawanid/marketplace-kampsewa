@@ -7,6 +7,7 @@ use App\Http\Controllers\Developer\DetailPenggunaController;
 use App\Http\Controllers\Developer\IklanController;
 use App\Http\Controllers\Developer\InformasiPenggunaController;
 use App\Http\Controllers\Developer\KelolaPenggunaMenuController;
+use App\Http\Controllers\Developer\LupaPassword;
 use App\Http\Controllers\Developer\NotificationController;
 use App\Http\Controllers\Developer\PengeluaranController;
 use App\Http\Controllers\Developer\PenghasilanController;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [AuthController::class, 'index'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post("/logout", [AuthController::class, 'logout'])->name('logout');
+Route::get('/lupa-password', [LupaPassword::class, 'index'])->name('lupa-password');
+Route::post('/lupa-password/send-email', [LupaPassword::class, 'sendEmail'])->name('lupa-password.send-email');
+Route::post('/lupa-password/kode-otp', [LupaPassword::class, 'kodeOTP'])->name('lupa-password.kode-otp');
+Route::post('/lupa-password/reset-password', [LupaPassword::class, 'resetPassword'])->name('lupa-password.reset-password');
 
 // -- developer route
 Route::get('/developer/dashboard/home', [DashboardController::class, 'index'])->name('home.index')->middleware('auth');
