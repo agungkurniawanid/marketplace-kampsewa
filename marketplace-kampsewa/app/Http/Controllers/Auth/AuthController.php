@@ -38,18 +38,18 @@ class AuthController extends Controller
                 $user = auth()->user();
 
                 // todo Menyimpan data nama lengkap dan level dalam sesi
-                $request->session()->put('id_user', $user->id_user);
-                $request->session()->put('nama_lengkap', $user->nama_lengkap);
+                $request->session()->put('id_user', $user->id);
+                $request->session()->put('nama_lengkap', $user->name);
                 $request->session()->put('level', $user->type);
                 $request->session()->put('foto', $user->foto);
 
                 // todo cek user login sesuai dengan level dan dialihkan ke dashboard bersangkutan
                 if ($user->type == 1) {
                     Alert::toast('Login success', 'success');
-                    return redirect()->intended('/dev')->with('success', 'Login success');
+                    return redirect()->intended('/developer/dashboard/home')->with('success', 'Login success');
                 } elseif ($user->type == 0) {
                     Alert::toast('Login success', 'success');
-                    return redirect()->intended('/cust')->with('success', 'Login success');
+                    return redirect()->intended('/customer/dashboard/home')->with('success', 'Login success');
                 }
             } else {
                 Alert::toast('Password salah', 'error');
@@ -60,6 +60,15 @@ class AuthController extends Controller
         return back()->withErrors([
             'nomor_telfon' => 'The provided credentials do not match our records.',
         ])->onlyInput('nomor_telfon');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        Alert::toast('Logout success', 'success');
+        return redirect()->route('login');
     }
 }
 
