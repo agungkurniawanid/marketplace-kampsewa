@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class DetailPenggunaController extends Controller
 {
+    public function __construct() {
+        $this->middleware('dev');
+    }
     public function index($namalengkap) {
         $name = $namalengkap;
         return view('developers.detail-pengguna', ['title' => 'Detail Pengguna', 'name' => $name]);
