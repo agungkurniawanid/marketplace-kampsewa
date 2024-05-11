@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 class RekapKeuanganController extends Controller
 {
-    // index
+    public function __construct() {
+        $this->middleware('dev');
+    }
     public function index() {
         return view('developers.rekap-keuangan', ['title' => 'Rekap Keuangan | Developer']);
     }
