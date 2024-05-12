@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('produk', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_user')->nullable(false);
+            $table->foreign('id_user')->references('id')->on('users');
             $table->string('nama', 100)->nullable(false);
             $table->string('deskripsi', 255)->nullable(false);
             $table->integer('harga')->nullable(false);
@@ -24,6 +26,7 @@ return new class extends Migration
             $table->string('foto_belakang', 255)->nullable();
             $table->string('foto_kiri', 255)->nullable();
             $table->string('foto_kanan', 255)->nullable();
+            $table->timestamps();
         });
     }
 

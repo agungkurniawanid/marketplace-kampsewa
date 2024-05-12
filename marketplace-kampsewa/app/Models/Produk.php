@@ -11,7 +11,18 @@ class Produk extends Model
 
     protected $table = 'produk';
 
-    public function user(){
-        return $this->belongsTo(User::class, 'id');
-    }
+    protected $fillable = [
+        'id_user',
+        'nama',
+        'deskripsi',
+        'harga',
+        'stok',
+        'status',
+        'kategori',
+        'variants',
+        'foto_depan',
+        'foto_belakang',
+        'foto_kiri',
+        'foto_kanan',
+    ];
 }
