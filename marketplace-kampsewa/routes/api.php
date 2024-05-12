@@ -10,5 +10,5 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/users', [UserController::class, 'getAllUsers']);
-    Route::get('/users/{id_user}', [UserController::class, 'getUserById']);
+    Route::get('/users/{identifier}', [UserController::class, 'getUserByIDOrName']);
 });

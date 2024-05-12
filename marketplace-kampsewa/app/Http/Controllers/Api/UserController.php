@@ -8,20 +8,23 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    // get all users
     public function getAllUsers()
     {
-        $users = User::where('level', 'Customer')->get();
+        $users = User::where('type', 0)->get();
         return response()->json([
             'users' => $users,
             'message' => 'Success'
         ], 200);
     }
-    // get detail users by id
-    public function getUserById($id_user)
+
+    public function getUserByIDOrName($identifier)
     {
-        $user = User::find($id_user);
-        if (!$user) {
+        if (is_numeric($identifier)) {
+            $user = User::find($identifier);
+        } else {
+            $user = User::where('name', $identifier)->first();
+        }
+        if (!$user || $user->type !== 0) {
             return response()->json(['message' => 'User not found'], 404);
         }
         return response()->json(['user' => $user], 200);
