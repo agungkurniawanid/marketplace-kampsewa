@@ -10,32 +10,21 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    // ! fungsi login
     public function login(Request $request)
     {
-        // Validasi input
         $request->validate([
             'identifier' => ['required'],
             'password' => ['required'],
         ]);
-
-        // Cari pengguna berdasarkan nomor telepon atau email
-        $user = User::where('nomor_telefon', $request->identifier)
+        $user = User::where('nomor_telephone', $request->identifier)
             ->orWhere('email', $request->identifier)
             ->first();
-
-        // Jika pengguna ditemukan
         if ($user) {
-            // Jika level pengguna bukan "Customer"
-            if ($user->level !== 'customer') {
+            if ($user->type !== 0) {
                 return response()->json(['message' => 'Maaf, Anda tidak memiliki hak akses untuk login.'], 401);
             }
-
-            // Periksa kredensial pengguna
             if (Hash::check($request->password, $user->password)) {
-                // Buat token autentikasi
                 $token = $user->createToken('API Token')->plainTextToken;
-
                 return response()->json([
                     'access_token' => $token,
                     'token_type' => 'bearer',
@@ -46,7 +35,6 @@ class LoginController extends Controller
                 return response()->json(['message' => 'Password anda salah.'], 401);
             }
         } else {
-            // Jika pengguna tidak ditemukan
             return response()->json(['message' => 'Username pengguna tidak ditemukan.'], 401);
         }
     }
