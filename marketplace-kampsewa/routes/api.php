@@ -12,4 +12,3 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/users', [UserController::class, 'getAllUsers']);
     Route::get('/users/{id_user}', [UserController::class, 'getUserById']);
 });
-
