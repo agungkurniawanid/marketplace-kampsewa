@@ -55,7 +55,7 @@
                             name="password" placeholder="Masukkan password">
                     </div>
                     <div class="_forgot-password w-full flex justify-end"><a
-                            class="text-[#343B7C] text-[14px] underline" href="">Lupa
+                            class="text-[#343B7C] text-[14px] underline" href="{{ route('lupa-password') }}">Lupa
                             Password?</a></div>
                 </div>
 

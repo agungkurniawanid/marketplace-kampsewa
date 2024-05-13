@@ -8,15 +8,12 @@ use Illuminate\Http\Request;
 class LupaPassword extends Controller
 {
     public function index() {
-        return view('auth.lupa-password', ['title' => 'Lupa Password']);
+        return view('auth.lupa-password', ['title' => 'Verifikasi Email']);
     }
-    public function sendEmail(Request $request) {
-        return view('auth.pesan-email-terkirim', ['title' => 'Pesan Email Terkirim']);
-    }
-    public function kodeOTP(Request $request) {
-        return view('auth.reset-password', ['title' => 'Reset Password']);
-    }
-    public function resetPassword(Request $request) {
-        return redirect()->route('login');
+
+    public function sendEmail() {}
+
+    public function kodeOTP($id_user) {
+        return view('auth.verifikasi-kode-otp', ['title' => 'Verifikasi Kode OTP']);
     }
 }

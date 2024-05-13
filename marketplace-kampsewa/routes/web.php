@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Customer\DashboardCustController;
+use App\Http\Controllers\Customer\ProdukController;
 use App\Http\Controllers\Developer\DashboardController;
 use App\Http\Controllers\Developer\DetailPenggunaController;
 use App\Http\Controllers\Developer\IklanController;
@@ -17,13 +18,13 @@ use App\Http\Controllers\Developer\RekapKeuanganController;
 use Illuminate\Support\Facades\Route;
 
 // -- auth route
+Route::get('/', [AuthController::class, 'index']);
 Route::get('/login', [AuthController::class, 'index'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post("/logout", [AuthController::class, 'logout'])->name('logout');
 Route::get('/lupa-password', [LupaPassword::class, 'index'])->name('lupa-password');
 Route::post('/lupa-password/send-email', [LupaPassword::class, 'sendEmail'])->name('lupa-password.send-email');
-Route::post('/lupa-password/kode-otp', [LupaPassword::class, 'kodeOTP'])->name('lupa-password.kode-otp');
-Route::post('/lupa-password/reset-password', [LupaPassword::class, 'resetPassword'])->name('lupa-password.reset-password');
+Route::get('/lupa-password/kode-otp/{id_user}', [LupaPassword::class, 'kodeOTP'])->name('lupa-password.kode-otp');
 
 // -- developer route
 Route::get('/developer/dashboard/home', [DashboardController::class, 'index'])->name('home.index')->middleware('auth');
@@ -44,3 +45,4 @@ Route::get('developer/dashboard/profile/{nama_lengkap}', [ProfileController::cla
 
 // -- customer route
 Route::get('/customer/dashboard/home', [DashboardCustController::class, 'index'])->middleware('auth');
+Route::get('/customer/dashboard/menu-produk', [ProdukController::class, 'index'])->name('menu-produk.index')->middleware('auth');

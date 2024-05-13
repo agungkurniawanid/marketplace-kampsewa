@@ -10,7 +10,7 @@
                 <a href="" class="close">&times;</a>
             </div><!-- az-header-menu-header -->
             <ul class="nav">
-                <li class="nav-item active show">
+                <li class="nav-item {{ $title == 'Dashboard | Developer Kamp Sewa' ? 'active' : '' }} show">
                     <a href="index.html" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
                 </li>
                 <li class="nav-item">
@@ -21,8 +21,8 @@
                         <a href="page-signup.html" class="nav-link">Set Lokasi Toko</a>
                     </nav>
                 </li>
-                <li class="nav-item">
-                    <a href="chart-chartjs.html" class="nav-link"><i class="typcn typcn-shopping-cart"></i>
+                <li class="nav-item {{ $title == 'Produk Menu | KampSewa' ? 'active' : '' }}">
+                    <a href="{{ route('menu-produk.index') }}" class="nav-link"><i class="typcn typcn-shopping-cart"></i>
                         Produk</a>
                 </li>
                 <li class="nav-item">
