@@ -13,7 +13,7 @@
 <body>
     <div class="_container w-full h-screen flex justify-center items-center">
         <div class="_form w-[400px]">
-            <form action="{{ route('lupa-password.send-email') }}" method="POST" class="flex flex-col gap-4">
+            <form action="{{ route('lupa-password.send-otp') }}" method="POST" class="flex flex-col gap-4">
                 @csrf
                 <div class="_image w-full flex justify-center">
                     <img class="w-[250px] object-cover" src="{{ asset('assets/vector/grapy-online-meetings.png') }}"
@@ -21,25 +21,32 @@
                 </div>
                 <div class="_title">
                     <h1 class="text-[24px] text-center font-medium">Lupa Password?</h1>
-                    <p class="text-[14px] text-center">Untuk mendapatkan link reset password masukkan email yang telah
+                    <p class="text-[14px] text-center">Untuk mendapatkan link reset password masukkan <b>nomor
+                            telephone</b> yang telah
                         anda daftarkan.</p>
                 </div>
                 <div class="_feild-email flex flex-col gap-2">
-                    <label for="email" class="text-[14px] font-medium">Masukkan Email:</label>
+                    <label for="email" class="text-[14px] font-medium">Masukkan Nomor:</label>
                     <div class="_email w-full">
-                        <input placeholder="ex: agungklewang26@gmail.com"
+                        <input placeholder="ex: 08xxxxxxxxx"
                             class="border focus:outline-[#5038ED] w-full border-solid rounded-[10px] text-[14px] p-4"
-                            type="email" name="email" id="email">
+                            type="number" name="nomor_telephone" id="number">
+                        @error('nomor_telephone')
+                            <div class="text-red-500 mt-2 text-sm font-medium">Input belum anda masukkan!</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="_button-submit w-full">
                     <button type="submit"
                         class="w-full p-4 bg-gradient-to-bl rounded-[10px] from-[#B381F4] to-[#5038ED] text-white text-[14px] font-medium">Selanjutnya</button>
                 </div>
-                <p class="text-[14px] font-medium text-center">Sudah punya akun? <a href="{{ route('login') }}" class="text-[#5038ED] hover:underline">Login</a></p>
+                <p class="text-[14px] font-medium text-center">Sudah punya akun? <a href="{{ route('login') }}"
+                        class="text-[#5038ED] hover:underline">Login</a></p>
             </form>
         </div>
     </div>
+
+    @include('sweetalert::alert')
 </body>
 
 </html>

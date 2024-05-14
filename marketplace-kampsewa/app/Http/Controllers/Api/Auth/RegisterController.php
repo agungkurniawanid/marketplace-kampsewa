@@ -67,6 +67,7 @@ class RegisterController extends Controller
         $request->merge([
             'type' => 0,
             'status' => 'active',
+            'is_verified' => 0,
         ]);
 
         $user = new User($request->all());

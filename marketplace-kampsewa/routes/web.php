@@ -18,13 +18,17 @@ use App\Http\Controllers\Developer\RekapKeuanganController;
 use Illuminate\Support\Facades\Route;
 
 // -- auth route
-Route::get('/', [AuthController::class, 'index']);
+Route::get('/login', [AuthController::class, 'index']);
 Route::get('/login', [AuthController::class, 'index'])->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post("/logout", [AuthController::class, 'logout'])->name('logout');
 Route::get('/lupa-password', [LupaPassword::class, 'index'])->name('lupa-password');
-Route::post('/lupa-password/send-email', [LupaPassword::class, 'sendEmail'])->name('lupa-password.send-email');
-Route::get('/lupa-password/kode-otp/{id_user}', [LupaPassword::class, 'kodeOTP'])->name('lupa-password.kode-otp');
+Route::post('/lupa-password/send-otp', [LupaPassword::class, 'sendOTP'])->name('lupa-password.send-otp');
+Route::get('/lupa-password/check-kode-otp/{nomor_telephone}', [LupaPassword::class, 'indexCheckOTP'])->name('lupa-password.kode-otp');
+Route::post('/lupa-password/check-kode-otp/{nomor_telephone}', [LupaPassword::class, 'checkOTP'])->name('lupa-password.check-otp');
+Route::post('/lupa-password/kirim-ulang/{nomor_telephone}', [LupaPassword::class, 'kirimUlang'])->name('lupa-password.kirim-ulang');
+Route::get('/lupa-password/reset-password/{nomor_telephone}', [LupaPassword::class, 'indexResetPassword'])->name('lupa-password.reset-password');
+Route::post('/lupa-password/reset-password/{nomor_telephone}', [LupaPassword::class, 'resetPassword'])->name('lupa-password.change-password');
 
 // -- developer route
 Route::get('/developer/dashboard/home', [DashboardController::class, 'index'])->name('home.index')->middleware('auth');

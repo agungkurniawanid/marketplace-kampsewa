@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_user')->nullable(false);
             $table->foreign('id_user')->references('id')->on('users');
+            $table->string('nomor_telephone')->nullable(false);
             $table->string('otp', 6)->nullable(false);
+            $table->timestamp('expired_at')->nullable(false);
             $table->timestamps();
         });
     }

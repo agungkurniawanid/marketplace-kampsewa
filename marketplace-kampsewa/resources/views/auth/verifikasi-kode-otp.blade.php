@@ -12,7 +12,7 @@
 <body>
     <div class="_container w-full h-screen flex justify-center items-center">
         <div class="_form w-[400px]">
-            <form action="" method="POST" class="flex flex-col gap-4">
+            <form action="{{ route('lupa-password.check-otp', ['nomor_telephone' => $nomor_telephone]) }}" method="POST" class="flex flex-col gap-4">
                 @csrf
                 <div class="_image w-full flex justify-center">
                     <img class="w-[250px] object-cover" src="{{ asset('images/grapy-young-man-coding-on-laptop.png') }}"
@@ -25,21 +25,28 @@
                 <div class="_feild-email flex flex-col gap-2">
                     <label for="email" class="text-[14px] font-medium">Masukkan Kode OTP:</label>
                     <div class="_email w-full inputs flex gap-2 items-center" id="inputs">
-                        <input class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
-                        <input class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
-                        <input class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
-                        <input class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
-                        <input class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
-                        <input class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
+                        <input name="otp1" class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
+                        <input name="otp2" class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
+                        <input name="otp3" class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
+                        <input name="otp4" class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
+                        <input name="otp5" class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
+                        <input name="otp6" class="input h-[50px] rounded-[10px] w-full bg-gray-100 text-center text-[16px] font-bold" type="text" inputmode="numeric" maxlength="1" />
                     </div>
                 </div>
                 <div class="_button-submit w-full">
                     <button type="submit"
                         class="w-full p-4 bg-gradient-to-bl rounded-[10px] from-[#B381F4] to-[#5038ED] text-white text-[14px] font-medium">Selanjutnya</button>
                 </div>
-                <p class="text-[14px] font-medium text-center">Kembali Halaman Login <a href="{{ route('login') }}"
-                        class="text-[#5038ED] hover:underline">tekan disini!</a></p>
             </form>
+            <div class="w-full flex gap-2 items-center mt-2">
+                <form action="{{ route('lupa-password.kirim-ulang', ['nomor_telephone' => $nomor_telephone]) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="text-[14px] font-medium bg-none text-green-500 underline">Kirim Ulang OTP</button>
+                </form>
+                <div class="w-[3px] h-[15px] bg-gray-200 rounded-full"></div>
+                <p class="text-[14px] font-medium text-center">Kembali Halaman Login <a href="{{ route('login') }}"
+                    class="text-[#5038ED] hover:underline">tekan disini!</a></p>
+            </div>
         </div>
     </div>
     <script>
@@ -77,6 +84,7 @@
             }
         });
     </script>
-</body>
 
+    @include('sweetalert::alert')
+</body>
 </html>

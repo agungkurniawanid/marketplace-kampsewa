@@ -13,6 +13,8 @@ class ResetPassword extends Model
 
     protected $fillable = [
         'id_user',
+        'nomor_telephone',
         'otp',
+        'expired_at',
     ];
 }
