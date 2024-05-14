@@ -31,7 +31,7 @@ class LupaPassword extends Controller
             $resetPassword->id_user = $user->id;
             $resetPassword->nomor_telephone = $user->nomor_telephone;
             $resetPassword->otp = $OTP;
-            $resetPassword->expired_at = now()->addMinutes(2);
+            $resetPassword->expired_at = now()->addMinutes(1);
             $resetPassword->save();
 
             $token = 'RwxiLamgrVPaRCrfSE7k';
@@ -133,7 +133,7 @@ class LupaPassword extends Controller
             $resetPassword->id_user = $user->id;
             $resetPassword->nomor_telephone = $user->nomor_telephone;
             $resetPassword->otp = $OTP;
-            $resetPassword->expired_at = now()->addMinutes(2);
+            $resetPassword->expired_at = now()->addMinutes(1);
             $resetPassword->save();
 
             $token = 'RwxiLamgrVPaRCrfSE7k';

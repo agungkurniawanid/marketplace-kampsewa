@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div class="_container w-full h-screen flex justify-center items-center">
+    <div class="_container w-full h-screen flex justify-center items-center mobile-max:p-4 mobile-max:h-auto">
         <div class="_form w-[400px]">
             <form action="{{ route('lupa-password.check-otp', ['nomor_telephone' => $nomor_telephone]) }}" method="POST" class="flex flex-col gap-4">
                 @csrf
@@ -38,7 +38,7 @@
                         class="w-full p-4 bg-gradient-to-bl rounded-[10px] from-[#B381F4] to-[#5038ED] text-white text-[14px] font-medium">Selanjutnya</button>
                 </div>
             </form>
-            <div class="w-full flex gap-2 items-center mt-2">
+            <div class="w-full flex gap-2 items-center mt-2 mobile-max:flex-col">
                 <form action="{{ route('lupa-password.kirim-ulang', ['nomor_telephone' => $nomor_telephone]) }}" method="POST">
                     @csrf
                     <button type="submit" class="text-[14px] font-medium bg-none text-green-500 underline">Kirim Ulang OTP</button>

@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <div class="_container w-full h-screen flex justify-center items-center">
+    <div class="_container w-full h-screen flex justify-center items-center mobile-max:p-4 mobile-max:h-auto">
         <div class="_form w-[400px] p-2">
             <form action="{{ route('lupa-password.change-password', ['nomor_telephone' => $nomor_telephone]) }}"
                 method="POST" class="flex flex-col gap-4">

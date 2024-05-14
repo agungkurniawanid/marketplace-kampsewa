@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <div class="_container w-full h-screen flex justify-center items-center">
+    <div class="_container w-full h-screen flex justify-center items-center mobile-max:p-4 mobile-max:h-auto">
         <div class="_form w-[400px]">
             <form action="{{ route('lupa-password.send-otp') }}" method="POST" class="flex flex-col gap-4">
                 @csrf
