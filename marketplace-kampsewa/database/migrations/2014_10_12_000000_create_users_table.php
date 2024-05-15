@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('background')->nullable();
             $table->string('jenis_kelamin')->nullable();
+            $table->string('rekening')->nullable();
+            $table->string('bank')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

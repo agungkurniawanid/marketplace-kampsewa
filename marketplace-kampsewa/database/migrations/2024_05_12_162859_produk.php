@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreign('id_user')->references('id')->on('users');
             $table->string('nama', 100)->nullable(false);
             $table->string('deskripsi', 255)->nullable(false);
-            $table->integer('harga')->nullable(false);
             $table->integer('stok')->nullable(false);
             $table->enum('status', ['Tersedia', 'Tidak Tersedia'])->nullable(false);
             $table->string('kategori', 100)->nullable(false);

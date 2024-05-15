@@ -27,6 +27,8 @@ class UserSeeder extends Seeder
             'status' => 'aktif',
             'background' => 'admin.png',
             'jenis_kelamin' => 'Laki-laki',
+            'rekening' => '1234567890',
+            'bank' => 'BCA',
             'remember_token' => Str::random(60),
             'created_at' => now(),
         ]);
@@ -44,6 +46,8 @@ class UserSeeder extends Seeder
                 'status' => 'aktif',
                 'background' => 'user.png',
                 'jenis_kelamin' => 'Laki-laki',
+                'rekening' => '1234567890',
+                'bank' => 'BCA',
                 'remember_token' => Str::random(60),
                 'created_at' => now(),
             ]);

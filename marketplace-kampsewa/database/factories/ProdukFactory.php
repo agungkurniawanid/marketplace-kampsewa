@@ -28,17 +28,20 @@ class ProdukFactory extends Factory
                 [
                     'warna' => $this->faker->colorName,
                     'ukuran' => $this->faker->randomElement(['S', 'M', 'L']),
-                    'stok' => $this->faker->numberBetween(5, 20)
+                    'stok' => $this->faker->numberBetween(5, 20),
+                    'harga_sewa' => $this->faker->numberBetween(10000, 100000)
                 ],
                 [
                     'warna' => $this->faker->colorName,
                     'ukuran' => $this->faker->randomElement(['S', 'M', 'L']),
-                    'stok' => $this->faker->numberBetween(5, 20)
+                    'stok' => $this->faker->numberBetween(5, 20),
+                    'harga_sewa' => $this->faker->numberBetween(10000, 100000)
                 ],
                 [
                     'warna' => $this->faker->colorName,
                     'ukuran' => $this->faker->randomElement(['S', 'M', 'L']),
-                    'stok' => $this->faker->numberBetween(5, 20)
+                    'stok' => $this->faker->numberBetween(5, 20),
+                    'harga_sewa' => $this->faker->numberBetween(10000, 100000)
                 ]
             ]),
             'foto_depan' => $this->faker->imageUrl(),

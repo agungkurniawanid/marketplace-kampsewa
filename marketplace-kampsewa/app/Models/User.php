@@ -29,6 +29,8 @@ class User extends Authenticatable
         'status',
         'background',
         'jenis_kelamin',
+        'rekening',
+        'bank',
     ];
 
     /**
