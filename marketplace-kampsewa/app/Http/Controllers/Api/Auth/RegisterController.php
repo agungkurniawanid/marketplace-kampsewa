@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -68,6 +69,9 @@ class RegisterController extends Controller
             'type' => 0,
             'status' => 'active',
             'is_verified' => 0,
+            'rekening' => 'Belum Di isikan',
+            'bank' => 'Belum Di isikan',
+            'rekember_token' => Str::random(100),
         ]);
 
         $user = new User($request->all());
