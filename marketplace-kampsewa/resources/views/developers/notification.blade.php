@@ -62,7 +62,6 @@
                                                 class="text-[20px] text-[#3C50E0] cursor-pointer fi fi-rr-file-circle-info"></i></a>
                                     </td>
                                 </tr>
-
                             @endfor
                         </tbody>
                     </table>

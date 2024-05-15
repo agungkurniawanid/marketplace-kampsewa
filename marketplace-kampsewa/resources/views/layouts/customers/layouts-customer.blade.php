@@ -10,6 +10,14 @@
     <link href="{{ asset('template/azia/lib/typicons.font/typicons.css') }}" rel="stylesheet">
     <link href="{{ asset('template/azia/lib/flag-icon-css/css/flag-icon.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('template/azia/css/azia.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/input/input-category.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/gradient/gradient-color.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/arsir/corak.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/cdn/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/universeio/input-for-data-feedback.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/input/numbertype.css') }}">
+    <link rel="stylesheet" href=" {{ asset('css/fonts/fonts.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/scrollbar/scrollbar-sidebar.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

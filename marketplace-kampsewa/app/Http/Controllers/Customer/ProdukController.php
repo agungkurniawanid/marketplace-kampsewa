@@ -13,4 +13,10 @@ class ProdukController extends Controller
     public function index() {
         return view('customers.menu-produk.produk', ['title' => 'Produk Menu | KampSewa']);
     }
+    public function kelolaProduk() {
+        return view('customers.menu-produk.kelola-produk', ['title' => 'Kelola Produk | KampSewa']);
+    }
+    public function sedangDisewa() {
+        return view('customers.menu-produk.sedang-disewa', ['title' => 'Sedang Disewa | KampSewa']);
+    }
 }

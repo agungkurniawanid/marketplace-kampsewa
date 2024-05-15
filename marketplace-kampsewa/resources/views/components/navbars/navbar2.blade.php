@@ -11,17 +11,17 @@
             </div><!-- az-header-menu-header -->
             <ul class="nav">
                 <li class="nav-item {{ $title == 'Dashboard | Developer Kamp Sewa' ? 'active' : '' }} show">
-                    <a href="index.html" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
+                    <a href="/customer/dashboard/home" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a href="" class="nav-link with-sub"><i class="typcn typcn-shopping-bag"></i> Transaksi</a>
                     <nav class="az-menu-sub">
                         <a href="page-signin.html" class="nav-link">Penyewaan Peralatan</a>
                         <a href="page-signup.html" class="nav-link">Buat Promosi / Iklan</a>
-                        <a href="page-signup.html" class="nav-link">Set Lokasi Toko</a>
+                        <a href="page-signup.html" class="nav-link">Set Lokasi Toko & Rekening</a>
                     </nav>
                 </li>
-                <li class="nav-item {{ $title == 'Produk Menu | KampSewa' ? 'active' : '' }}">
+                <li class="nav-item {{ $title == 'Sedang Disewa | KampSewa' ? 'active' : '' }} {{ $title == 'Kelola Produk | KampSewa' ? 'active' : '' }} {{ $title == 'Produk Menu | KampSewa' ? 'active' : '' }}">
                     <a href="{{ route('menu-produk.index') }}" class="nav-link"><i class="typcn typcn-shopping-cart"></i>
                         Produk</a>
                 </li>

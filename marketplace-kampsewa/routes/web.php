@@ -50,3 +50,5 @@ Route::get('developer/dashboard/profile/{nama_lengkap}', [ProfileController::cla
 // -- customer route
 Route::get('/customer/dashboard/home', [DashboardCustController::class, 'index'])->middleware('auth');
 Route::get('/customer/dashboard/menu-produk', [ProdukController::class, 'index'])->name('menu-produk.index')->middleware('auth');
+Route::get('/customer/dashboard/kelola-produk', [ProdukController::class, 'kelolaProduk'])->name('menu-produk.kelola-produk')->middleware('auth');
+Route::get('/customer/dashboard/sedang-disewa', [ProdukController::class, 'sedangDisewa'])->name('menu-produk.sedang-disewa')->middleware('auth');
