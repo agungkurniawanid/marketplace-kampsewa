@@ -20,10 +20,10 @@ return new class extends Migration
             $table->tinyInteger('type')->default(0);
             $table->string('nomor_telephone')->nullable();
             $table->date('tanggal_lahir')->nullable();
-            $table->string('alamat')->nullable();
-            $table->string('foto')->nullable();
+            $table->json('alamat')->nullable();
+            $table->string('foto')->nullable()->default('Belum Di isi');
             $table->string('status')->nullable();
-            $table->string('background')->nullable();
+            $table->string('background')->nullable()->default('Belum Di isi');
             $table->string('jenis_kelamin')->nullable();
             $table->string('rekening')->nullable();
             $table->string('bank')->nullable();

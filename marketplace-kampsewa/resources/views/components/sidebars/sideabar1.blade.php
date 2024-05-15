@@ -121,19 +121,24 @@
                             class="{{ $title == 'Pengeluaran' ? 'bg-gradient-to-bl from-[#B381F4] to-[#5038ED]' : '' }} {{ $title == 'Penghasilan' ? 'bg-gradient-to-bl from-[#B381F4] to-[#5038ED]' : '' }} hover:bg-gradient-to-bl hover:from-[#B381F4] hover:to-[#5038ED] hover:text-white relative flex flex-row items-center h-11 focus:outline-none rounded-full text-gray-600 pr-6">
                             <span
                                 class="{{ $title == 'Pengeluaran' ? 'text-white' : '' }} {{ $title == 'Penghasilan' ? 'text-white' : '' }} inline-flex mt-1 justify-center items-center ml-4">
-                                <i class="{{ $title == 'Pengeluaran' ? 'text-white' : '' }} {{ $title == 'Penghasilan' ? 'text-white' : '' }} fi fi-rr-revenue-alt"></i>
+                                <i
+                                    class="{{ $title == 'Pengeluaran' ? 'text-white' : '' }} {{ $title == 'Penghasilan' ? 'text-white' : '' }} fi fi-rr-revenue-alt"></i>
                             </span>
                             <span
-                                class="{{ $title == 'Pengeluaran' ? 'text-white' : '' }} {{ $title == 'Penghasilan' ? 'text-white' : '' }} ml-2 text-sm tracking-wide truncate">Penghasilan & Pengeluaran</span>
+                                class="{{ $title == 'Pengeluaran' ? 'text-white' : '' }} {{ $title == 'Penghasilan' ? 'text-white' : '' }} ml-2 text-sm tracking-wide truncate">Penghasilan
+                                & Pengeluaran</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('rekap-keuangan.index') }}"
                             class="{{ $title == 'Rekap Keuangan | Developer' ? 'bg-gradient-to-bl from-[#B381F4] to-[#5038ED]' : '' }} hover:bg-gradient-to-bl hover:from-[#B381F4] hover:to-[#5038ED] rounded-full relative flex flex-row items-center h-11 focus:outline-none text-gray-600 hover:text-white pr-6">
                             <span class="inline-flex mt-1 justify-center items-center ml-4">
-                                <i class="{{ $title == 'Rekap Keuangan | Developer' ? 'text-white' : '' }} fi fi-rr-book"></i>
+                                <i
+                                    class="{{ $title == 'Rekap Keuangan | Developer' ? 'text-white' : '' }} fi fi-rr-book"></i>
                             </span>
-                            <span class="{{ $title == 'Rekap Keuangan | Developer' ? 'text-white' : '' }} ml-2 text-sm tracking-wide truncate">Rekap Keuangan</span>
+                            <span
+                                class="{{ $title == 'Rekap Keuangan | Developer' ? 'text-white' : '' }} ml-2 text-sm tracking-wide truncate">Rekap
+                                Keuangan</span>
                         </a>
                     </li>
 
@@ -146,7 +151,8 @@
                     <li>
                         <a href="{{ route('profile.index', ['nama_lengkap' => session('nama_lengkap')]) }}"
                             class="{{ $title == 'Profile | Developer Kamp Sewa' ? 'bg-gradient-to-bl from-[#B381F4] to-[#5038ED]' : '' }} rounded-full relative flex flex-row items-center h-11 focus:outline-none hover:bg-gradient-to-bl hover:from-[#B381F4] hover:to-[#5038ED] text-gray-600 hover:text-white pr-6">
-                            <span class="{{ $title == 'Profile | Developer Kamp Sewa' ? 'text-white' : '' }} inline-flex justify-center items-center ml-4">
+                            <span
+                                class="{{ $title == 'Profile | Developer Kamp Sewa' ? 'text-white' : '' }} inline-flex justify-center items-center ml-4">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -154,27 +160,53 @@
                                     </path>
                                 </svg>
                             </span>
-                            <span class="{{ $title == 'Profile | Developer Kamp Sewa' ? 'text-white' : '' }} ml-2 text-sm tracking-wide truncate">Profile</span>
+                            <span
+                                class="{{ $title == 'Profile | Developer Kamp Sewa' ? 'text-white' : '' }} ml-2 text-sm tracking-wide truncate">Profile</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#"
-                            class="relative flex flex-row items-center h-11 focus:outline-none rounded-full hover:bg-gradient-to-bl hover:from-[#B381F4] hover:to-[#5038ED] text-gray-600 hover:text-white pr-6">
-                            <span class="inline-flex justify-center items-center ml-4">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                                    </path>
-                                </svg>
-                            </span>
-                            <span class="ml-2 text-sm tracking-wide truncate">Logout</span>
-                        </a>
+                        <form action="{{ route('logout') }}" method="POST" class="w-full" id="logoutForm">
+                            @csrf
+                            <button id="logoutButton"
+                                class="relative w-full flex flex-row items-center h-11 focus:outline-none rounded-full hover:bg-gradient-to-bl hover:from-[#B381F4] hover:to-[#5038ED] text-gray-600 hover:text-white pr-6">
+                                <span class="inline-flex justify-center items-center ml-4">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <span class="ml-2 text-sm tracking-wide truncate">Logout</span>
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+    <script>
+        const logoutButton = document.getElementById('logoutButton');
+        logoutButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to logout!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, logout!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('logoutForm').submit();
+                } else {
+                    // Handle ketika pengguna membatalkan tindakan logout
+                    Swal.fire('Cancelled', 'Logout cancelled', 'info');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -18,7 +18,7 @@ class RegisterController extends Controller
             'password' => 'required|string|min:8',
             'nomor_telephone' => 'required|string|max:13|min:10|unique:users|regex:/^08[0-9]{1,13}$/',
             'tanggal_lahir' => 'required|date',
-            'alamat' => 'required|string|max:255',
+            'alamat' => 'required|json',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'background' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
@@ -29,69 +29,82 @@ class RegisterController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        if (strlen($request->name) > 30 || strlen($request->name) < 7) {
-            return response()->json(['error' => 'Nama memiliki batas maksimal 30 karakter dan batas minimal 7 karakter'], 400);
-        } else if (preg_match('/[0-9]/', $request->name)) {
-            return response()->json(['error' => 'Nama hanya boleh mengandung huruf'], 400);
-        } else if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
-            return response()->json(['error' => 'Email tidak valid'], 400);
-        } else if (strlen($request->password) < 8 || strlen($request->password) > 16) {
-            return response()->json(['error' => 'Password harus terdiri dari 8 atau 16 karakter'], 400);
-        } else if (strlen($request->nomor_telephone) < 10 || strlen($request->nomor_telephone) > 13) {
-            return response()->json(['error' => 'Nomor telepon harus terdiri dari 10 atau 13 karakter'], 400);
-        } else if (!preg_match('/^08[0-9]{1,13}$/', $request->nomor_telephone)) {
-            return response()->json(['error' => 'Nomor telepon harus dimulai dengan 08'], 400);
-        } else if (!ctype_digit($request->nomor_telephone)) {
-            return response()->json(['error' => 'Nomor telepon hanya boleh berisi angka'], 400);
-        } else if (strlen($request->alamat) > 255) {
-            return response()->json(['error' => 'Alamat tidak boleh melebihi 255 karakter'], 400);
-        } else if (strlen($request->alamat) < 15) {
-            return response()->json(['error' => 'Minimal alamat lengkaplah jangan hanya nama kota atau desa'], 400);
-        } else if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
-            if ($foto->getSize() > 2048 * 1024) {
-                return response()->json(['error' => 'Gambar profil melebihi batas ukuran yang diizinkan.'], 400);
+        $alamat = $request->input('alamat');
+
+        // Jika alamat tidak kosong dan merupakan JSON yang valid
+        if (!empty($alamat) && is_array(json_decode($alamat, true)) && json_last_error() === JSON_ERROR_NONE) {
+            $request->merge([
+                'alamat' => $alamat,
+                'type' => 0,
+                'status' => 'active',
+                'is_verified' => 0,
+                'rekening' => 'Belum Di isikan',
+                'bank' => 'Belum Di isikan',
+                'remember_token' => Str::random(100),
+            ]);
+
+            if (strlen($request->name) > 30 || strlen($request->name) < 7) {
+                return response()->json(['error' => 'Nama memiliki batas maksimal 30 karakter dan batas minimal 7 karakter'], 400);
+            } else if (preg_match('/[0-9]/', $request->name)) {
+                return response()->json(['error' => 'Nama hanya boleh mengandung huruf'], 400);
+            } else if (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+                return response()->json(['error' => 'Email tidak valid'], 400);
+            } else if (strlen($request->password) < 8 || strlen($request->password) > 16) {
+                return response()->json(['error' => 'Password harus terdiri dari 8 atau 16 karakter'], 400);
+            } else if (strlen($request->nomor_telephone) < 10 || strlen($request->nomor_telephone) > 13) {
+                return response()->json(['error' => 'Nomor telepon harus terdiri dari 10 atau 13 karakter'], 400);
+            } else if (!preg_match('/^08[0-9]{1,13}$/', $request->nomor_telephone)) {
+                return response()->json(['error' => 'Nomor telepon harus dimulai dengan 08'], 400);
+            } else if (!ctype_digit($request->nomor_telephone)) {
+                return response()->json(['error' => 'Nomor telepon hanya boleh berisi angka'], 400);
+            } else if ($request->hasFile('foto')) {
+                $foto = $request->file('foto');
+                if ($foto->getSize() > 2048 * 1024) {
+                    return response()->json(['error' => 'Gambar profil melebihi batas ukuran yang diizinkan.'], 400);
+                }
+                if (!in_array($foto->getClientOriginalExtension(), ['jpeg', 'png', 'jpg'])) {
+                    return response()->json(['error' => 'Hanya menudukung format jpeg, png, jpg.'], 400);
+                }
+            } else if ($request->hasFile('background')) {
+                $background = $request->file('background');
+                if ($background->getSize() > 2048 * 1024) {
+                    return response()->json(['error' => 'Gambar latar belakang melebihi batas ukuran yang diizinkan.'], 400);
+                }
+                if (!in_array($background->getClientOriginalExtension(), ['jpeg', 'png', 'jpg'])) {
+                    return response()->json(['error' => 'Hanya menudukun format jpeg, png, jpg'], 400);
+                }
             }
-            if (!in_array($foto->getClientOriginalExtension(), ['jpeg', 'png', 'jpg'])) {
-                return response()->json(['error' => 'Hanya menudukung format jpeg, png, jpg.'], 400);
+
+            $request->merge([
+                'type' => 0,
+                'status' => 'active',
+                'is_verified' => 0,
+                'rekening' => 'Belum Di isikan',
+                'bank' => 'Belum Di isikan',
+                'remember_token' => Str::random(100),
+            ]);
+
+            $user = new User($request->all());
+            $user->password = bcrypt($request->password);
+
+            if ($request->hasFile('foto')) {
+                $foto = $request->file('foto');
+                $fotoName = time() . '.' . $foto->getClientOriginalExtension();
+                $foto->move(public_path('assets/image/customers/profile/'), $fotoName);
+                $user->foto = $fotoName;
             }
-        } else if ($request->hasFile('background')) {
-            $background = $request->file('background');
-            if ($background->getSize() > 2048 * 1024) {
-                return response()->json(['error' => 'Gambar latar belakang melebihi batas ukuran yang diizinkan.'], 400);
+
+            if ($request->hasFile('background')) {
+                $background = $request->file('background');
+                $backgroundName = time() . '.' . $background->getClientOriginalExtension();
+                $background->move(public_path('assets/image/customers/background/'), $backgroundName);
+                $user->background = $backgroundName;
             }
-            if (!in_array($background->getClientOriginalExtension(), ['jpeg', 'png', 'jpg'])) {
-                return response()->json(['error' => 'Hanya menudukun format jpeg, png, jpg'], 400);
-            }
+
+            $user->save();
+            return response()->json(['message' => 'User berhasil didaftarkan'], 201);
+        } else {
+            return response()->json(['error' => 'Format alamat tidak valid'], 401);
         }
-
-        $request->merge([
-            'type' => 0,
-            'status' => 'active',
-            'is_verified' => 0,
-            'rekening' => 'Belum Di isikan',
-            'bank' => 'Belum Di isikan',
-            'rekember_token' => Str::random(100),
-        ]);
-
-        $user = new User($request->all());
-        $user->password = bcrypt($request->password);
-
-        if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
-            $fotoName = time() . '.' . $foto->getClientOriginalExtension();
-            $foto->move(public_path('assets/image/customers/profile/'), $fotoName);
-            $user->foto = $fotoName;
-        }
-
-        if ($request->hasFile('background')) {
-            $background = $request->file('background');
-            $backgroundName = time() . '.' . $background->getClientOriginalExtension();
-            $background->move(public_path('assets/image/customers/background/'), $backgroundName);
-            $user->background = $backgroundName;
-        }
-
-        $user->save();
-        return response()->json(['message' => 'User berhasil didaftarkan'], 201);
     }
 }

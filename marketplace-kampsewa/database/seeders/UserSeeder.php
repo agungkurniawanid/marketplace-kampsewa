@@ -16,14 +16,14 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name' => 'Achmad Bayhaqi Putra',
+            'name' => 'Agung Kurniawan',
             'email' => 'admin@kampsewa',
             'password' => bcrypt('admin'),
             'type' => 1,
             'nomor_telephone' => '089620109794',
             'tanggal_lahir' => '2000-01-01',
             'alamat' => 'Jl. Admin',
-            'foto' => 'admin.png',
+            'foto' => 'agung-kurniawan.jpg',
             'status' => 'aktif',
             'background' => 'admin.png',
             'jenis_kelamin' => 'Laki-laki',
