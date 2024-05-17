@@ -17,11 +17,9 @@ class ProdukFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => $this->faker->numberBetween(1, 10),
+            'id_user' => $this->faker->numberBetween(1, 70),
             'nama' => $this->faker->word,
             'deskripsi' => $this->faker->sentence,
-            'harga' => $this->faker->numberBetween(10000, 100000),
-            'stok' => $this->faker->numberBetween(10, 100),
             'status' => $this->faker->randomElement(['Tersedia', 'Tidak Tersedia']),
             'kategori' => $this->faker->randomElement(['Outdoor', 'Furniture', 'Elektronik']),
             'variants' => json_encode([
@@ -48,6 +46,7 @@ class ProdukFactory extends Factory
             'foto_belakang' => $this->faker->imageUrl(),
             'foto_kiri' => $this->faker->imageUrl(),
             'foto_kanan' => $this->faker->imageUrl(),
+            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];
     }
 }

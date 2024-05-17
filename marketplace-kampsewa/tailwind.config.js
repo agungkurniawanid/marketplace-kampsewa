@@ -36,8 +36,9 @@ export default {
             },
             screens: {
                 "large-screen": { max: "1920px" },
+                "small-desktop": {max: "992px"},
                 "mobile-max": {max:"480px"},
-                "tablet": {max: "768px"}
+                "tablet": {max: "768px"},
             },
         },
     },

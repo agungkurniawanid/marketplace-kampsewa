@@ -25,10 +25,14 @@ class LoginController extends Controller
             }
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('API Token')->plainTextToken;
+                $user_online = User::where('nomor_telephone', $request->identifier)
+                ->orWhere('email', $request->identifier)
+                ->first()->update(['status' => 'online']);
                 return response()->json([
                     'access_token' => $token,
                     'token_type' => 'bearer',
                     'expires_at' => now()->addMinutes(60)->toDateTimeString(),
+                    'user_online' => $user_online,
                     'user' => $user,
                 ]);
             } else {

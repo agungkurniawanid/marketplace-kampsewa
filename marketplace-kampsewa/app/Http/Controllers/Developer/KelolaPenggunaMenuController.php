@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Developer;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class KelolaPenggunaMenuController extends Controller
@@ -17,6 +19,14 @@ class KelolaPenggunaMenuController extends Controller
     }
     public function index()
     {
+          // ambil user berdasarkan yang baru saja terdaftar
+          $user_baru_terdaftar = User::select('users.*')
+          ->join('status_notifikasi_user', 'users.id', '=', 'status_notifikasi_user.id_user')
+          ->where('users.type', 0)
+          ->whereDate('users.created_at', Carbon::today())
+          ->where('status_notifikasi_user.status', 'unread')
+          ->orderByDesc('users.created_at')->limit(10)
+          ->get();
         $data = [
             [
                 'nama' => 'Allysa Safitri',
@@ -111,7 +121,7 @@ class KelolaPenggunaMenuController extends Controller
             ],
         ];
 
-        return view('developers.kelola-pengguna', ['title' => 'Kelola Pengguna | Developer Kamp Sewa', 'data' => $data]);
+        return view('developers.kelola-pengguna', ['title' => 'Kelola Pengguna | Developer Kamp Sewa', 'data' => $data, 'user_baru_terdaftar' => $user_baru_terdaftar]);
     }
 
     /**

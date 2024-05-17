@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ChartWebController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Customer\DashboardCustController;
 use App\Http\Controllers\Customer\ProdukController;
@@ -30,8 +31,18 @@ Route::post('/lupa-password/kirim-ulang/{nomor_telephone}', [LupaPassword::class
 Route::get('/lupa-password/reset-password/{nomor_telephone}', [LupaPassword::class, 'indexResetPassword'])->name('lupa-password.reset-password');
 Route::post('/lupa-password/reset-password/{nomor_telephone}', [LupaPassword::class, 'resetPassword'])->name('lupa-password.change-password');
 
-// -- developer route
+/*
+|--------------------------------------------------------------------------
+| Developer Routes
+*/
+
+// -- dashboard menu route
 Route::get('/developer/dashboard/home', [DashboardController::class, 'index'])->name('home.index')->middleware('auth');
+Route::put('/mark-notification-as-read', [DashboardController::class, 'markNotificationAsRead'])->name('mark-notification-as-read');
+
+// -- chart api web dev
+Route::get('/chart-keuntungan-menu-dashboard', [ChartWebController::class, 'ApiTotalKeuntungan']);
+
 Route::get('developer/dashboard/notification', [NotificationController::class, 'index'])->name('notification.index')->middleware('auth');
 Route::get('developer/dashboard/kelola-pengguna', [KelolaPenggunaMenuController::class, 'index'])->name('kelola-pengguna.index')->middleware('auth');
 Route::get('developer/dashboard/kelola-pengguna/detail-pengguna/{fullname}', [DetailPenggunaController::class, 'index'])->name('detail-pengguna.index')->middleware('auth');

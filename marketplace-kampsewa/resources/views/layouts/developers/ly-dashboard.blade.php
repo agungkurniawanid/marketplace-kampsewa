@@ -40,7 +40,7 @@
 <body class="overflow-x-hidden">
     <div class="_container w-full flex font-poppins">
         {{-- untuk side bar --}}
-        <div class="_sidebar ml-64">
+        <div class="_sidebar ml-64 small-desktop:ml-auto">
             @include('components.sidebars.sideabar1')
         </div>
 
@@ -64,7 +64,6 @@
         <script src="{{ asset('js/chart-totalperminggu.js') }}"></script>
         <script src="{{ asset('js/chart-pengeluaran.js') }}"></script>
         <script src="{{ asset('js/chart-pebandingan-keuntungan.js') }}"></script>
-
     </div>
 
     @include('sweetalert::alert')

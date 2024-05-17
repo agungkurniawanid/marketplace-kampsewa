@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\Auth\LupaPassword;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +23,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // user
     Route::get('/users', [UserController::class, 'getAllUsers']);
     Route::get('/users/{identifier}', [UserController::class, 'getUserByIDOrName']);
+    Route::post('/logout', [LogoutController::class, 'logout']);
+
     // product
     Route::get('/products', [ProductController::class, 'getAllProducts']);
     Route::get('/products/{userId}', [ProductController::class, 'getAllProductsByUserId']);

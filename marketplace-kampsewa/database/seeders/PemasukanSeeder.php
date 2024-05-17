@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Produk;
+use App\Models\Pemasukan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ProdukSeeder extends Seeder
+class PemasukanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Produk::factory(70)->create();
+        Pemasukan::factory(70)->create();
     }
 }

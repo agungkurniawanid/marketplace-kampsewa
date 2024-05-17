@@ -14,24 +14,24 @@
             <div class="w-auto">
                 <p class="text-white text-[16px]">Penghasilan</p>
                 <div class="flex gap-[10px] items-center">
-                    <h1 class="text-white text-[24px]">Rp. 219.000.000</h1>
+                    <h1 class="text-white text-[24px]">Rp. {{ $pemasukan_bulan_ini }}</h1>
                     <div class="p-[5px] bg-[#F2F5FD] rounded-full">
-                        <p class="font-medium text-[#2D53DA] text-[12px]">-14%</p>
+                        <p class="font-medium text-[#2D53DA] text-[12px]">{{ $percentagePemasukanChange }}%</p>
                     </div>
                 </div>
             </div>
             <div
                 class="_icon-more flex justify-center items-center cursor-pointer w-[35px] h-[35px] bg-[#F2F5FD] hover:bg-[#CFDCFF] rounded-full">
-                <i class="text-[14px] mt-[5px] fi fi-br-arrow-up-right"></i>
+                <a href="{{ route('penghasilan.index') }}"><i class="bi bi-arrow-up-right"></i></a>
             </div>
         </div>
 
         {{-- todo bagian statistic --}}
         <div class="_static">
-            <p class="text-[12px] mb-[10px] text-white">Target <strong>Rp. 300.000.000</strong></p>
+            <p class="text-[12px] mb-[10px] text-white">Bulan {{ Carbon\Carbon::now()->subMonth()->format('F') }} <strong>Rp. {{ $pemasukan_bulan_lalu }}</strong></p>
             <div class="w-full h-[40px] bg-[#F2F5FD] rounded-[10px]">
-                <div class="w-[70%] bg-corak flex justify-center items-center rounded-[10px] h-full">
-                    <p class="text-white font-medium text-[16px]">70%</p>
+                <div class="w-[{{ $percentagePemasukanChange }}%] bg-corak flex justify-center items-center rounded-[10px] h-full">
+                    <p class="text-white font-medium text-[16px]">{{ $percentagePemasukanChange }}%</p>
                 </div>
             </div>
         </div>
