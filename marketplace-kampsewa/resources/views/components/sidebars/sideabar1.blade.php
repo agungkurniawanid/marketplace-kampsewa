@@ -47,8 +47,6 @@
                         </span>
                         <span
                             class="ml-2 {{ $title == 'Dashboard | Notification' ? 'text-white' : '' }} text-sm tracking-wide truncate">Notifications</span>
-                        <span
-                            class="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-red-500 bg-red-50 rounded-full">1.2k</span>
                     </a>
                     </li>
 
