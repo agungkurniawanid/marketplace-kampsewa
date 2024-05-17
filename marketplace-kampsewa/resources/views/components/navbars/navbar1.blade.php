@@ -63,7 +63,7 @@
                             <div class="w-full h-full flex justify-center items-center">Tidak ada notifikasi</div>
                         @else
                             @foreach ($user_baru_terdaftar as $user)
-                                <div class="cursor-pointer flex hover:bg-gray-100 justify-between py-6 px-4 bg-white">
+                                <a href="{{ route('detail-pengguna.index', ['fullname' => $user->name]) }}" class="cursor-pointer flex hover:bg-gray-100 justify-between py-6 px-4 bg-white">
                                     <div class="flex items-center space-x-4">
                                         <img src="{{ asset('assets/image/customers/profile/' . $user->foto) }}"
                                             class="rounded-full h-14 w-14" alt="">
@@ -76,7 +76,7 @@
                                     <div class="flex-none px-4 py-2 text-stone-600 text-xs md:text-sm">
                                         {{ $user->created_at->diffForHumans() }}
                                     </div>
-                                </div>
+                                </a>
                             @endforeach
                         @endif
                         <div class="_viewall p-[15px] flex justify-end">

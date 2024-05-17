@@ -36,9 +36,7 @@
             <h1 class="text-[18px] font-bold text-[#343535]">Jumlah Barang Disewakan</h1>
         </div>
         <div class="_body flex justify-start">
-            <p class="text-[40px] font-bold text-[#343535]">120+</p>
-            <div class="w-[35px] gradient-1 h-[35px] rounded-full flex justify-center items-center"><i
-                    class="text-[16px] text-white mt-1 fi fi-rr-box-alt"></i></div>
+            <p class="{{ $data->total_product ? 'text-[40px] text-[#343535]' : 'text-[14px] text-red-500' }} font-bold">{{ $data->total_product ? $data->total_product : 'Belum Diisi' }}</p>
         </div>
         <div class="_footer">
             <p class="text-[14px] font-medium text-[#343535]">Total barang yang diposting dari meja, kursi

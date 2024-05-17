@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class KelolaPenggunaMenuController extends Controller
 {
@@ -17,111 +18,62 @@ class KelolaPenggunaMenuController extends Controller
     {
         $this->middleware('dev');
     }
-    public function index()
+    public function index(Request $request)
     {
-          // ambil user berdasarkan yang baru saja terdaftar
-          $user_baru_terdaftar = User::select('users.*')
-          ->join('status_notifikasi_user', 'users.id', '=', 'status_notifikasi_user.id_user')
-          ->where('users.type', 0)
-          ->whereDate('users.created_at', Carbon::today())
-          ->where('status_notifikasi_user.status', 'unread')
-          ->orderByDesc('users.created_at')->limit(10)
-          ->get();
-        $data = [
-            [
-                'nama' => 'Allysa Safitri',
-                'alamat' => 'Rogojampi, Kota Banyuwangi',
-                'status' => 'Customer',
-                'nomor' => '081331640909',
-                'bergabung' => '13 Agustus 2024',
-                'total-product' => 104,
-                'gender' => 'Perempuan',
-            ],
-            [
-                'nama' => 'Budi Santoso',
-                'alamat' => 'Jalan Merdeka No. 10, Jakarta',
-                'status' => 'Customer',
-                'nomor' => '081234567890',
-                'bergabung' => '20 Januari 2023',
-                'total-product' => 78,
-                'gender' => 'Laki-laki',
-            ],
-            [
-                'nama' => 'Citra Wijaya',
-                'alamat' => 'Bandung, Jawa Barat',
-                'status' => 'Customer',
-                'nomor' => '087654321098',
-                'bergabung' => '5 Mei 2022',
-                'total-product' => 156,
-                'gender' => 'Perempuan',
-            ],
-            // Tambahkan data lainnya di sini sesuai kebutuhan
-            [
-                'nama' => 'Dewi Rahayu',
-                'alamat' => 'Surabaya, Jawa Timur',
-                'status' => 'Customer',
-                'nomor' => '085678954321',
-                'bergabung' => '10 September 2023',
-                'total-product' => 92,
-                'gender' => 'Perempuan',
-            ],
-            [
-                'nama' => 'Eko Prasetyo',
-                'alamat' => 'Yogyakarta',
-                'status' => 'Customer',
-                'nomor' => '081239876543',
-                'bergabung' => '3 Maret 2022',
-                'total-product' => 120,
-                'gender' => 'Laki-laki',
-            ],
-            [
-                'nama' => 'Fitriani',
-                'alamat' => 'Medan, Sumatera Utara',
-                'status' => 'Customer',
-                'nomor' => '082165478932',
-                'bergabung' => '15 Juli 2023',
-                'total-product' => 84,
-                'gender' => 'Perempuan',
-            ],
-            [
-                'nama' => 'Guntur Wicaksono',
-                'alamat' => 'Semarang, Jawa Tengah',
-                'status' => 'Customer',
-                'nomor' => '089876543210',
-                'bergabung' => '25 November 2022',
-                'total-product' => 68,
-                'gender' => 'Laki-laki',
-            ],
-            [
-                'nama' => 'Hani Fadilah',
-                'alamat' => 'Pekanbaru, Riau',
-                'status' => 'Customer',
-                'nomor' => '081357246801',
-                'bergabung' => '7 April 2023',
-                'total-product' => 102,
-                'gender' => 'Perempuan',
-            ],
-            [
-                'nama' => 'Irfan Abdullah',
-                'alamat' => 'Makassar, Sulawesi Selatan',
-                'status' => 'Customer',
-                'nomor' => '082189765432',
-                'bergabung' => '19 Oktober 2022',
-                'total-product' => 113,
-                'gender' => 'Laki-laki',
-            ],
-            [
-                'nama' => 'Juwita Anggraini',
-                'alamat' => 'Padang, Sumatera Barat',
-                'status' => 'Customer',
-                'nomor' => '087612345678',
-                'bergabung' => '30 Desember 2023',
-                'total-product' => 79,
-                'gender' => 'Perempuan',
-            ],
-        ];
+        $user_baru_terdaftar = User::select('users.*')
+            ->join('status_notifikasi_user', 'users.id', '=', 'status_notifikasi_user.id_user')
+            ->where('users.type', 0)
+            ->whereDate('users.created_at', Carbon::today())
+            ->where('status_notifikasi_user.status', 'unread')
+            ->orderByDesc('users.created_at')->limit(10)
+            ->get();
 
-        return view('developers.kelola-pengguna', ['title' => 'Kelola Pengguna | Developer Kamp Sewa', 'data' => $data, 'user_baru_terdaftar' => $user_baru_terdaftar]);
+        $get_total_user = User::where('type', 0)->count();
+        $cari_customer = $request->query('cari_customer');
+        $filter = $request->query('filter');
+
+        $query = DB::table('produk')
+            ->rightJoin('users', 'produk.id_user', '=', 'users.id')
+            ->whereIn('users.type', [0]) // Filter user dengan type 0 (Customer)
+            ->select(
+                'users.id as user_id',
+                'users.name',
+                'users.nomor_telephone',
+                'users.created_at',
+                'users.jenis_kelamin',
+                'users.foto',
+                'users.alamat',
+                DB::raw('COUNT(produk.id) as total_product') // Menghitung total produk
+            )
+            ->groupBy('users.id', 'users.name', 'users.nomor_telephone', 'users.created_at', 'users.jenis_kelamin', 'users.foto', 'users.alamat');
+
+        // Tambahkan klausa WHERE jika ada kata kunci pencarian
+        if (!empty($cari_customer)) {
+            $query->where(function ($query) use ($cari_customer) {
+                $query->where('users.name', 'like', '%' . $cari_customer . '%')
+                    ->orWhere('users.nomor_telephone', 'like', '%' . $cari_customer . '%')
+                    ->orWhere('users.email', 'like', '%' . $cari_customer . '%');
+            });
+        }
+
+        // Tambahkan urutan berdasarkan filter
+        if ($filter == 'terlama') {
+            $query->orderBy('users.created_at', 'asc');
+        } else {
+            $query->orderBy('users.created_at', 'desc');
+        }
+
+        $results = $query->paginate(10);
+
+
+        return view('developers.kelola-pengguna')->with([
+            'title' => 'Kelola Pengguna | Developer Kamp Sewa',
+            'user_baru_terdaftar' => $user_baru_terdaftar,
+            'get_total_user' => $get_total_user,
+            'data' => $results,
+            'cari_customer' => $cari_customer,
+            'filter' => $filter
+        ]);
     }
 
     /**

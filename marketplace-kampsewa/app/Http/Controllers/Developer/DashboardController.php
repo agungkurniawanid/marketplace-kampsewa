@@ -205,7 +205,7 @@ class DashboardController extends Controller
 
     public function markNotificationAsRead()
     {
-        $statusNotifikasi = StatusNotifikasiUser::whereDate('created_at', Carbon::today())->where('status', 'unread')->get();
+        $statusNotifikasi = StatusNotifikasiUser::where('status', 'unread')->get();
         foreach ($statusNotifikasi as $status) {
             $status->update(['status' => 'read']);
         }
