@@ -74,6 +74,7 @@ class RegisterController extends Controller
             'status' => 'active',
             'is_verified' => 0,
             'remember_token' => Str::random(100),
+            'time_login' => null,
         ]);
 
         $user = new User($request->all());

@@ -1,11 +1,18 @@
 <div class="_wrapper-table w-full p-5 bg-white rounded-[20px]">
     <div class="_heading mb-4 text-[20px] font-medium capitalize">
         <h1>Daftar Pengguna Online</h1>
+        <p>Tota user online : {{ $customer_online->count() == 0 ? 0 : $customer_online->count() }} User.</p>
     </div>
     <!-- component -->
     <div class="overflow-x-auto rounded-lg h-[500px] overflow-y-auto">
         @if (count($customer_online) == 0)
-            <div class="w-full h-full flex justify-center items-center">Tidak ada data</div>
+            <div class="w-full h-full flex justify-center items-center">
+                <img class="w-[300px] h-auto object-cover" src="{{ asset('images/illustration/222社交206气泡水肌理矢量创意插画气泡水-01 1.png') }}" alt="">
+                <div>
+                    <p class="text-[40px] font-bold">OOPS!</p>
+                    <p class="text-[16px]">Tidak User Online Saat ini</p>
+                </div>
+            </div>
         @else
             <table class="w-full border-collapse table-auto bg-white text-left text-sm text-gray-500">
                 <thead class="bg-gray-50">
@@ -43,7 +50,9 @@
                             </td>
                             <td class="px-6 py-4">Customer</td>
                             <td class="px-6 py-4">
-                                {{ $item->created_at->diffForHumans() }}
+                                @if($item->time_login)
+                                {{ \Carbon\Carbon::parse($item->time_login)->diffForHumans() }}
+                            @endif
                             </td>
                         </tr>
                     @endforeach

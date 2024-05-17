@@ -20,11 +20,12 @@ return new class extends Migration
             $table->tinyInteger('type')->default(0);
             $table->string('nomor_telephone')->nullable(false);
             $table->date('tanggal_lahir')->nullable();
-            $table->json('alamat')->nullable()->default('Belum Di isi');
+            $table->json('alamat')->nullable();
             $table->string('foto')->nullable()->default('Belum Di isi');
             $table->string('status')->nullable();
             $table->string('background')->nullable()->default('Belum Di isi');
             $table->string('jenis_kelamin')->nullable();
+            $table->timestamp('time_login')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

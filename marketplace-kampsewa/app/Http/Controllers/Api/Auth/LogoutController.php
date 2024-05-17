@@ -13,6 +13,7 @@ class LogoutController extends Controller
         $user = $request->user();
         if ($user) {
             $user->status = 'offline';
+            $user->time_login = null;
             $user->save();
 
             $user->currentAccessToken()->delete();
