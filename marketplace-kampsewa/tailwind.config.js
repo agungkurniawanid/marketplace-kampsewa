@@ -36,9 +36,21 @@ export default {
             },
             screens: {
                 "large-screen": { max: "1920px" },
-                "small-desktop": {max: "992px"},
-                "mobile-max": {max:"480px"},
-                "tablet": {max: "768px"},
+                "small-desktop": { max: "992px" },
+                "mobile-max": { max: "480px" },
+                tablet: { max: "768px" },
+            },
+            backgroundImage: {
+                "image-one": "url('/images/pexels-alphatradezone-5833304.jpg')",
+            },
+            keyframes: {
+                float: {
+                    "0%, 100%": { transform: "translateY(0)" },
+                    "50%": { transform: "translateY(-10px)" },
+                },
+            },
+            animation: {
+                float: "float 3s ease-in-out infinite",
             },
         },
     },

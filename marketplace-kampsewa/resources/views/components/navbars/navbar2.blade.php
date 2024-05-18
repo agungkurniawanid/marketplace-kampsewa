@@ -36,7 +36,7 @@
                 <a href="#"><i class="typcn typcn-messages"></i></a>
             </div><!-- az-header-message -->
             <div class="dropdown az-profile-menu">
-                <a href="" class="az-img-user"><img src="{{ asset('template/azia/img/faces/face1.jpg') }}" alt=""></a>
+                <a href="" class="az-img-user"><img src="{{ asset('assets/image/customers/profile/' . session('foto')) }}" alt=""></a>
                 <div class="dropdown-menu">
                     <div class="az-dropdown-header d-sm-none">
                         <a href="" class="az-header-arrow"><i class="icon ion-md-arrow-back"></i></a>
