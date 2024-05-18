@@ -10,14 +10,14 @@
                 <a href="" class="close">&times;</a>
             </div><!-- az-header-menu-header -->
             <ul class="nav">
-                <li class="nav-item {{ $title == 'Dashboard | Developer Kamp Sewa' ? 'active' : '' }} show">
+                <li class="nav-item {{ $title == 'Dashboard | Customer' ? 'active' : '' }} show">
                     <a href="/customer/dashboard/home" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ $title == 'Iklan | Customer' ? 'active' : '' }}">
                     <a href="" class="nav-link with-sub"><i class="typcn typcn-shopping-bag"></i> Transaksi</a>
                     <nav class="az-menu-sub">
                         <a href="page-signin.html" class="nav-link">Penyewaan Peralatan</a>
-                        <a href="page-signup.html" class="nav-link">Buat Promosi / Iklan</a>
+                        <a href="{{ route('buat-iklan.index') }}" class="nav-link">Buat Promosi / Iklan</a>
                         <a href="page-signup.html" class="nav-link">Set Lokasi Toko & Rekening</a>
                     </nav>
                 </li>
@@ -54,8 +54,10 @@
                     <a href="" class="dropdown-item"><i class="typcn typcn-time"></i> Activity Logs</a>
                     <a href="" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Account
                         Settings</a>
-                    <a href="page-signin.html" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Sign
-                        Out</a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="dropdown-item"><i class="typcn typcn-power-outline"></i> Sign
+                            Out</button></form>
                 </div><!-- dropdown-menu -->
             </div>
         </div><!-- az-header-right -->

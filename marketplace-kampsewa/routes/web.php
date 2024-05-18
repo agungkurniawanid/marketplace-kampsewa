@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ChartWebController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Customer\DashboardCustController;
+use App\Http\Controllers\Customer\IklanController as CustomerIklanController;
 use App\Http\Controllers\Customer\ProdukController;
 use App\Http\Controllers\Developer\DashboardController;
 use App\Http\Controllers\Developer\DetailPenggunaController;
@@ -68,3 +69,4 @@ Route::get('/customer/dashboard/home', [DashboardCustController::class, 'index']
 Route::get('/customer/dashboard/menu-produk', [ProdukController::class, 'index'])->name('menu-produk.index')->middleware('auth');
 Route::get('/customer/dashboard/kelola-produk', [ProdukController::class, 'kelolaProduk'])->name('menu-produk.kelola-produk')->middleware('auth');
 Route::get('/customer/dashboard/sedang-disewa', [ProdukController::class, 'sedangDisewa'])->name('menu-produk.sedang-disewa')->middleware('auth');
+Route::get('/customer/dashboard/buat-iklan', [CustomerIklanController::class, 'index'])->name('buat-iklan.index')->middleware('auth');

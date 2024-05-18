@@ -61,7 +61,6 @@ class AuthController extends Controller
             'nomor_telfon' => 'The provided credentials do not match our records.',
         ])->onlyInput('nomor_telfon');
     }
-
     public function logout(Request $request)
     {
         Auth::logout();
