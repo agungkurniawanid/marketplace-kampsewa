@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users');
             $table->string('metode_bayar')->default('transfer');
-            $table->string('foto_bukti')->nullable(false);
             $table->integer('total_bayar')->nullable(false);
             $table->string('status_bayar')->nullable(false);
             $table->timestamps();

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('judul')->nullable(false);
             $table->string('sub_judul')->nullable(true);
             $table->text('deskripsi')->nullable(false);
+            $table->string('snap_token')->nullable();
             $table->timestamps();
         });
     }
