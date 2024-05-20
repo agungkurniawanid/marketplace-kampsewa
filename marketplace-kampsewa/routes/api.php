@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\Auth\LupaPassword;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\IklanControlller;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
@@ -29,4 +30,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/products', [ProductController::class, 'getAllProducts']);
     Route::get('/products/{userId}', [ProductController::class, 'getAllProductsByUserId']);
     Route::get('/product/{productId}', [ProductController::class, 'getProductById']);
+
+    // iklan
+    Route::get('/iklan', [IklanControlller::class, 'getAllIklan']);
 });
