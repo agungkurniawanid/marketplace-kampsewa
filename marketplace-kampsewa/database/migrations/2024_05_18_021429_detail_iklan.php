@@ -17,8 +17,6 @@ return new class extends Migration
             $table->foreign('id_iklan')->references('id')->on('iklan');
             $table->date('tanggal_mulai')->nullable(false);
             $table->date('tanggal_akhir')->nullable(false);
-            $table->timestamp('start_date')->nullable(false);
-            $table->timestamp('end_date')->nullable(false);
             $table->integer('harga_iklan')->nullable(false);
             $table->string('status_iklan')->nullable(false);
             $table->timestamps();

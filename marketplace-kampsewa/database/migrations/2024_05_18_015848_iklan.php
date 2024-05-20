@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('poster')->nullable(false);
             $table->string('judul')->nullable(false);
             $table->string('sub_judul')->nullable(true);
-            $table->string('deskripsi')->nullable(false);
+            $table->text('deskripsi')->nullable(false);
             $table->timestamps();
         });
     }

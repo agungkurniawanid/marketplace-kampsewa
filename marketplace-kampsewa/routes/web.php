@@ -71,5 +71,8 @@ Route::get('/customer/dashboard/kelola-produk', [ProdukController::class, 'kelol
 Route::get('/customer/dashboard/sedang-disewa', [ProdukController::class, 'sedangDisewa'])->name('menu-produk.sedang-disewa')->middleware('auth');
 
 // iklan
-Route::get('/customer/dashboard/buat-iklan', [CustomerIklanController::class, 'index'])->name('buat-iklan.index')->middleware('auth');
-Route::get('/customer/dashboard/pilih-durasi-iklan', [CustomerIklanController::class, 'pilihDurasiIklan'])->name('pilih-durasi-iklan.index')->middleware('auth');
+Route::get('/customer/dashboard/buat-iklan/', [CustomerIklanController::class, 'index'])->name('buat-iklan.index')->middleware('auth');
+Route::get('/customer/dashboard/pilih-durasi-iklan/{id_user}', [CustomerIklanController::class, 'pilihDurasiIklan'])->name('pilih-durasi-iklan.index')->middleware('auth');
+Route::get('/customer/dashboard/layanan-iklan/{id_user}/{harga_iklan}', [CustomerIklanController::class, 'layananIklan'])->name('layanan-iklan.index')->middleware('auth');
+Route::post('/customer/dashboard/layanan-iklan/{id_user}/{harga_iklan}/{durasi}', [CustomerIklanController::class, 'simpanIklan'])->name('layanan-iklan.simpan-iklan')->middleware('auth');
+Route::get('/customer/dashboard/input-pembayaran-iklan/{id_user}/{harga_iklan}/{durasi}', [CustomerIklanController::class, 'inputPembayaranIklan'])->name('input-pembayaran-iklan.index')->middleware('auth');

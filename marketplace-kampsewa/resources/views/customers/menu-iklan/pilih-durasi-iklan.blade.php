@@ -3,7 +3,8 @@
     <div class="--container w-full h-auto px-10 py-5 flex flex-col gap-8">
         <h1 class="font-black text-[34px]">Pilih Durasi & Harga Iklan</h1>
         <div class="--wrapper-card grid grid-cols-3 gap-4 w-full">
-            <a href="" class="hover:text-black hover:shadow-box-shadow-7">
+            <a href="{{ route('layanan-iklan.index', ['id_user' => $id_user, 'harga_iklan' => 'paling-murah']) }}"
+                class="hover:text-black hover:shadow-box-shadow-7">
                 <div class="--card w-full h-full bg-[#CCFFF6] p-4 flex items-start justify-between">
                     <div class="flex flex-col h-full justify-between items-start gap-2">
                         <p class="text-[14px] font-medium"><i class="bi bi-currency-bitcoin"></i> Paling Murah</p>
@@ -22,7 +23,8 @@
                 </div>
             </a>
 
-            <a href="" class="hover:text-black hover:shadow-box-shadow-7">
+            <a href="{{ route('layanan-iklan.index', ['id_user' => $id_user, 'harga_iklan' => 'murah']) }}"
+                class="hover:text-black hover:shadow-box-shadow-7">
                 <div class="--card w-full h-full bg-[#FFF7CC] p-4 flex items-start justify-between">
                     <div class="flex flex-col h-full justify-between items-start gap-2">
                         <p class="text-[14px] font-medium"><i class="bi bi-currency-bitcoin"></i> Murah</p>
@@ -34,13 +36,13 @@
                     </div>
                     <div class="h-full flex justify-center items-center">
                         <img class="w-[150px] min-w-[150px] object-cover"
-                            src="{{ asset('images/illustration/Digital-Ads-1--Streamline-Manila.png') }}"
-                            alt="">
+                            src="{{ asset('images/illustration/Digital-Ads-1--Streamline-Manila.png') }}" alt="">
                     </div>
                 </div>
             </a>
 
-            <a href="" class="hover:text-black hover:shadow-box-shadow-7">
+            <a href="{{ route('layanan-iklan.index', ['id_user' => $id_user, 'harga_iklan' => 'sedang']) }}"
+                class="hover:text-black hover:shadow-box-shadow-7">
                 <div class="--card w-full h-full bg-[#CCCDFF] p-4 flex items-start justify-between">
                     <div class="flex flex-col h-full justify-between items-start gap-2">
                         <p class="text-[14px] font-medium"><i class="bi bi-currency-bitcoin"></i> Sedang</p>
@@ -53,13 +55,13 @@
                     </div>
                     <div class="h-full flex justify-center items-center">
                         <img class="w-[150px] min-w-[150px] object-cover"
-                            src="{{ asset('images/illustration/A-B-Testing--Streamline-Manila.png') }}"
-                            alt="">
+                            src="{{ asset('images/illustration/A-B-Testing--Streamline-Manila.png') }}" alt="">
                     </div>
                 </div>
             </a>
 
-            <a href="" class="hover:text-black hover:shadow-box-shadow-7">
+            <a href="{{ route('layanan-iklan.index', ['id_user' => $id_user, 'harga_iklan' => 'ideal']) }}"
+                class="hover:text-black hover:shadow-box-shadow-7">
                 <div class="--card w-full h-full bg-[#FFFFFF] p-4 flex items-start justify-between">
                     <div class="flex flex-col h-full justify-between items-start gap-2">
                         <p class="text-[14px] font-medium"><i class="bi bi-currency-bitcoin"></i> Ideal</p>
@@ -71,13 +73,13 @@
                     </div>
                     <div class="h-full flex justify-center items-center">
                         <img class="w-[150px] min-w-[150px] object-cover"
-                            src="{{ asset('images/illustration/Bar-Graph--Streamline-Manila.png') }}"
-                            alt="">
+                            src="{{ asset('images/illustration/Bar-Graph--Streamline-Manila.png') }}" alt="">
                     </div>
                 </div>
             </a>
 
-            <a href="" class="hover:text-black hover:shadow-box-shadow-7">
+            <a href="{{ route('layanan-iklan.index', ['id_user' => $id_user, 'harga_iklan' => 'populer']) }}"
+                class="hover:text-black hover:shadow-box-shadow-7">
                 <div class="--card w-full h-full bg-[#CCFFF6] p-4 flex items-start justify-between">
                     <div class="flex flex-col h-full justify-between items-start gap-2">
                         <p class="text-[14px] font-medium"><i class="bi bi-currency-bitcoin"></i> Populer</p>
@@ -95,7 +97,8 @@
                 </div>
             </a>
 
-            <a href="" class="hover:text-black hover:shadow-box-shadow-7">
+            <a href="{{ route('layanan-iklan.index', ['id_user' => $id_user, 'harga_iklan' => 'premium']) }}"
+                class="hover:text-black hover:shadow-box-shadow-7">
                 <div class="--card w-full h-full bg-[#FFF7CC] p-4 flex items-start justify-between">
                     <div class="flex flex-col h-full justify-between items-start gap-2">
                         <p class="text-[14px] font-medium"><i class="bi bi-currency-bitcoin"></i> Premium</p>
@@ -114,7 +117,8 @@
                 </div>
             </a>
 
-            <a href="" class="hover:text-black hover:shadow-box-shadow-7">
+            <a href="{{ route('layanan-iklan.index', ['id_user' => $id_user, 'harga_iklan' => 'ultimate']) }}"
+                class="hover:text-black hover:shadow-box-shadow-7">
                 <div class="--card w-full h-full bg-[#CCCDFF] p-4 flex items-start justify-between">
                     <div class="flex flex-col h-full justify-between items-start gap-2">
                         <p class="text-[14px] font-medium"><i class="bi bi-currency-bitcoin"></i> Ultimate</p>
@@ -133,6 +137,5 @@
                 </div>
             </a>
         </div>
-
     </div>
 @endsection

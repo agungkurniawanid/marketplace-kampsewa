@@ -20,7 +20,10 @@
     <link rel="stylesheet" href="{{ asset('css/scrollbar/scrollbar-sidebar.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"
+        integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>{{ $title }}</title>
     @vite('resources/css/app.css')
 </head>
@@ -43,6 +46,8 @@
     <script src="{{ asset('template/azia/js/chart.flot.sampledata.js') }}"></script>
     <script src="{{ asset('template/azia/js/dashboard.sampledata.js') }}"></script>
     <script src="{{ asset('template/azia/js/cookie.js') }}" type="text/javascript"></script>
+
+    @include('sweetalert::alert')
 </body>
 
 </html>

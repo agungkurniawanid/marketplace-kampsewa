@@ -10,7 +10,7 @@
                         <p class="text-[14px]">Ingin menjangkau lebih banyak penyewa di area sekitar anda? anda bisa! dengan
                             cara promosikan peralatan kamping dengan harga promosi iklan yang terjangkau dan yang pasti
                             mencapai semua pengguna.</p>
-                        <div class="mt-2"><a href="{{ route('pilih-durasi-iklan.index') }}"
+                        <div class="mt-2"><a href="{{ route('pilih-durasi-iklan.index', ['id_user' => Crypt::encryptString(session('id_user'))]) }}"
                                 class="text-[14px] bg-gradient-to-bl from-[#B381F4] to-[#5038ED] text-white rounded-[10px] p-[10px] hover:bg-gradient-to-t hover:from-[#B381F4] hover:to-[#5038ED]">Mulai
                                 Buat Iklan!</a></div>
                     </div>
