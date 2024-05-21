@@ -26,31 +26,35 @@ class InformasiPenggunaController extends Controller
             ->get();
 
         // get user pendaftar hari ini
-        $user_pendaftar_hari_ini = User::where('created_at', '>=', Carbon::today())->count();
+        $user_pendaftar_hari_ini = User::where('created_at', '>=', Carbon::today())->where('type', 0)->count();
 
         // get pendaftar kemarin
-        $user_pendaftar_kemarin = User::whereDate('created_at', Carbon::yesterday())->count();
+        $user_pendaftar_kemarin = User::whereDate('created_at', Carbon::yesterday())->where('type', 0)->count();
 
         // get total pendaftar minggu ini
-        $user_pendaftar_minggu_ini = User::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->count();
+        $user_pendaftar_minggu_ini = User::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('type', 0)->count();
 
         // get total pendaftar minggu kemarin
-        $user_pendaftar_minggu_kemarin = User::whereBetween('created_at', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])->count();
+        $user_pendaftar_minggu_kemarin = User::whereBetween('created_at', [Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])->where('type', 0)->count();
 
         // get total pendaftar bulan ini
-        $user_pendaftar_bulan_ini = User::whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
+        $user_pendaftar_bulan_ini = User::whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->where('type', 0)->count();
 
         // get total pendaftar bulan kemarin
-        $user_pendaftar_bulan_kemarin = User::whereBetween('created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])->count();
+        $user_pendaftar_bulan_kemarin = User::whereBetween('created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])->where('type', 0)->count();
 
         // get total pendaftar tahun ini
-        $user_pendaftar_tahun_ini = User::whereBetween('created_at', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()])->count();
+        $user_pendaftar_tahun_ini = User::whereBetween('created_at', [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()])->where('type', 0)->count();
 
         // get total pendaftar tahun kemarin
-        $user_pendaftar_tahun_kemarin = User::whereBetween('created_at', [Carbon::now()->subYear()->startOfYear(), Carbon::now()->subYear()->endOfYear()])->count();
+        $user_pendaftar_tahun_kemarin = User::whereBetween('created_at', [Carbon::now()->subYear()->startOfYear(), Carbon::now()->subYear()->endOfYear()])->where('type', 0)->count();
+
+        // get user online
+        $get_customer_online = User::where('type', 0)->where('status', 'online')->get();
 
         $cari_customer = $request->query('cari');
         $filter_customer = $request->query('filter');
+        $tidak_aktif = $request->query('tidak_aktif_sebulan');
 
         $query = DB::table('users')->where('type', 0);
 
@@ -63,17 +67,8 @@ class InformasiPenggunaController extends Controller
             });
         }
 
-        // Tambahkan filter berdasarkan checkbox yang dipilih
-        if ($request->has('pengguna_baru')) {
-            $query->where('status', 'pengguna_baru');
-        }
-
-        if ($request->has('tidak_aktif_sebulan')) {
-            $query->where('status', 'tidak_aktif_sebulan');
-        }
-
-        if ($request->has('delete_account')) {
-            $query->where('status', 'delete_account');
+        if ($tidak_aktif == 'tidak_aktif_sebulan') {
+            $query->whereBetween('users.last_login', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
         }
 
         // Tambahkan urutan berdasarkan filter
@@ -84,6 +79,7 @@ class InformasiPenggunaController extends Controller
         }
 
         $users = $query->paginate(10);
+        $count = $query->count();
 
 
         return view('developers.informas-pengguna')->with([
@@ -99,7 +95,10 @@ class InformasiPenggunaController extends Controller
             'user_pendaftar_tahun_kemarin' => $user_pendaftar_tahun_kemarin,
             'users' => $users,
             'cari_customer' => $cari_customer,
-            'filter_customer' => $filter_customer
+            'filter_customer' => $filter_customer,
+            'count' => $count,
+            'tidak_aktif_sebulan' => $tidak_aktif,
+            'get_customer_online' => $get_customer_online
         ]);
     }
 }

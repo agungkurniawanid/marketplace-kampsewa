@@ -97,19 +97,19 @@
                             </div>
                         </div>
 
-                        <button id="aksi" class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">Filter</button>
+                        <button type="submit" class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">Lakukan Aksi</button>
                     </div>
 
                     <div class="_component-category w-full flex gap-4 flex-wrap">
                         <div>
                             <label class="cursor-pointer text-[14px] px-4 py-2 font-medium hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white bg-white rounded-full flex items-center transition-colors duration-200">
-                                <input type="checkbox" name="tidak_aktif_sebulan" class="hidden opacity-0 absolute checkbox-input" />
+                                <input type="checkbox" value="tidak_aktif_sebulan" name="tidak_aktif_sebulan" class="hidden opacity-0 absolute checkbox-input"/>
                                 <span class="relative z-10">Tidak Aktif 1 Bulan</span>
                             </label>
                         </div>
                         <div>
                             <label class="cursor-pointer text-[14px] px-4 py-2 font-medium hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white bg-white rounded-full flex items-center transition-colors duration-200">
-                                <input type="checkbox" name="delete_account" class="hidden opacity-0 absolute checkbox-input" />
+                                <input type="checkbox" name="delete_account" class="hidden opacity-0 absolute checkbox-input"/>
                                 <span class="relative z-10">Delete Account</span>
                             </label>
                         </div>
@@ -117,7 +117,7 @@
 
                     <div class="_component-list-data w-full bg-white rounded-[20px] pl-4 pr-4 pt-4">
                         <div class="_wrapper-card flex flex-col gap-2 min-h-[500px] max-h-[500px] overflow-y-auto p-2">
-                            <p class="text-[16px] font-medium">Total Data : 176 Users</p>
+                            <p class="text-[16px] font-medium">Hasil Data : {{ $count }} Users</p>
                             @foreach ($users as $item)
                             <a href="{{ route('detail-pengguna.index', ['fullname' => $item->name]) }}">
                                 <div
@@ -219,11 +219,6 @@
     </div>
 
     <script>
-        document.getElementById('aksi').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('form-filter').submit();
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('.checkbox-input');
 
@@ -246,5 +241,47 @@
                 });
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+    // Fungsi untuk menambahkan kelas gradient-1 ke label
+    function addGradientToLabel(checkboxName) {
+        const label = document.querySelector(`input[name='${checkboxName}']`).closest('label');
+        label.classList.add('gradient-1');
+    }
+
+    // Fungsi untuk menyimpan status checkbox ke penyimpanan
+    function saveCheckboxStatus() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
+            localStorage.setItem(checkbox.name, checkbox.checked);
+        });
+    }
+
+    // Fungsi untuk memeriksa status checkbox dari penyimpanan dan menerapkan kelas jika diperlukan
+    function checkCheckboxStatus() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
+            const isChecked = localStorage.getItem(checkbox.name) === 'true';
+            if (isChecked) {
+                checkbox.checked = true;
+                addGradientToLabel(checkbox.name);
+            }
+        });
+    }
+
+    // Panggil fungsi untuk memeriksa status checkbox saat halaman dimuat
+    checkCheckboxStatus();
+
+    // Tambahkan event listener untuk checkbox agar saat dicentang, status disimpan dan kelas diterapkan
+    document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            saveCheckboxStatus();
+            if (this.checked) {
+                addGradientToLabel(this.name);
+            }
+        });
+    });
+});
+
     </script>
 @endsection
