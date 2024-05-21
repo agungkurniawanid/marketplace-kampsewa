@@ -126,9 +126,6 @@
                                     <span class="mt-[0.15rem]"><i class="fi fi-rr-folder-open"></i></span>
                                     <span>Detail</span>
                                 </a>
-                                {{-- <a href="#" class="hover:text-[#12A4ED] dropdown-item flex gap-1 py-2">
-                                    <span class="mt-[0.15rem]"><i class="fi fi-rr-edit"></i></span>
-                                    <span>Edit</span></a> --}}
                                 <a href="#" class="hover:text-[#12A4ED] dropdown-item flex gap-1 py-2">
                                     <span class="mt-[0.15rem]"><i class="fi fi-rr-trash"></i></span>
                                     <span>Delete</span></a>

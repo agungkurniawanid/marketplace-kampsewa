@@ -51,12 +51,30 @@ class InformasiPenggunaController extends Controller
 
         // get user online
         $get_customer_online = User::where('type', 0)->where('status', 'online')->get();
+        $count_customer_online = $get_customer_online->count();
+
+        // get all users
+        $get_all_user = User::where('type', 0)->count();
 
         $cari_customer = $request->query('cari');
         $filter_customer = $request->query('filter');
         $tidak_aktif = $request->query('tidak_aktif_sebulan');
+        $produk_terbanyak = $request->query('produk_terbanyak');
 
-        $query = DB::table('users')->where('type', 0);
+        $query = $query = DB::table('produk')
+        ->rightJoin('users', 'produk.id_user', '=', 'users.id')
+        ->whereIn('users.type', [0]) // Filter user dengan type 0 (Customer)
+        ->select(
+            'users.id as user_id',
+            'users.name',
+            'users.nomor_telephone',
+            'users.created_at',
+            'users.jenis_kelamin',
+            'users.foto',
+            'users.last_login',
+            DB::raw('COUNT(produk.id) as total_product') // Menghitung total produk
+        )
+        ->groupBy('users.id', 'users.name', 'users.nomor_telephone', 'users.created_at', 'users.jenis_kelamin', 'users.foto');
 
         // Tambahkan klausa WHERE jika ada kata kunci pencarian
         if (!empty($cari_customer)) {
@@ -71,6 +89,10 @@ class InformasiPenggunaController extends Controller
             $query->whereBetween('users.last_login', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
         }
 
+        if ($produk_terbanyak == 'produk_terbanyak') {
+            $query->orderBy('total_product', 'desc');
+        }
+
         // Tambahkan urutan berdasarkan filter
         if ($filter_customer == 'terlama') {
             $query->orderBy('users.created_at', 'asc');
@@ -79,7 +101,6 @@ class InformasiPenggunaController extends Controller
         }
 
         $users = $query->paginate(10);
-        $count = $query->count();
 
 
         return view('developers.informas-pengguna')->with([
@@ -96,9 +117,10 @@ class InformasiPenggunaController extends Controller
             'users' => $users,
             'cari_customer' => $cari_customer,
             'filter_customer' => $filter_customer,
-            'count' => $count,
+            'count' => $get_all_user,
             'tidak_aktif_sebulan' => $tidak_aktif,
-            'get_customer_online' => $get_customer_online
+            'get_customer_online' => $get_customer_online,
+            'count_user_online' => $count_customer_online
         ]);
     }
 }

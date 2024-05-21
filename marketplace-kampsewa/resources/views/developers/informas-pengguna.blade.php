@@ -97,55 +97,76 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">Lakukan Aksi</button>
+                        <button type="submit" class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">Lakukan
+                            Aksi</button>
                     </div>
 
                     <div class="_component-category w-full flex gap-4 flex-wrap">
                         <div>
-                            <label class="cursor-pointer text-[14px] px-4 py-2 font-medium hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white bg-white rounded-full flex items-center transition-colors duration-200">
-                                <input type="checkbox" value="tidak_aktif_sebulan" name="tidak_aktif_sebulan" class="hidden opacity-0 absolute checkbox-input"/>
+                            <label
+                                class="cursor-pointer text-[14px] px-4 py-2 font-medium hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white bg-white rounded-full flex items-center transition-colors duration-200">
+                                <input type="checkbox" value="tidak_aktif_sebulan" name="tidak_aktif_sebulan"
+                                    class="hidden opacity-0 absolute checkbox-input" />
                                 <span class="relative z-10">Tidak Aktif 1 Bulan</span>
                             </label>
                         </div>
                         <div>
-                            <label class="cursor-pointer text-[14px] px-4 py-2 font-medium hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white bg-white rounded-full flex items-center transition-colors duration-200">
-                                <input type="checkbox" name="delete_account" class="hidden opacity-0 absolute checkbox-input"/>
-                                <span class="relative z-10">Delete Account</span>
+                            <label
+                                class="cursor-pointer text-[14px] px-4 py-2 font-medium hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white bg-white rounded-full flex items-center transition-colors duration-200">
+                                <input type="checkbox" value="produk_terbanyak" name="produk_terbanyak"
+                                    class="hidden opacity-0 absolute checkbox-input" />
+                                <span class="relative z-10">Produk Terbanyak</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="_component-list-data w-full bg-white rounded-[20px] pl-4 pr-4 pt-4">
-                        <div class="_wrapper-card flex flex-col gap-2 min-h-[500px] max-h-[500px] overflow-y-auto p-2">
-                            <p class="text-[16px] font-medium">Hasil Data : {{ $count }} Users</p>
-                            @foreach ($users as $item)
-                            <a href="{{ route('detail-pengguna.index', ['fullname' => $item->name]) }}">
-                                <div
-                                    class="_card flex p-2 group rounded-[20px] cursor-pointer hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white gap-4 justify-between items-center">
-                                    <div class="_image-name-kota flex gap-2 items-center">
-                                        <div class="_image">
-                                            <img class="object-cover w-[70px] h-[70px] rounded-[15px]"
-                                                src="{{ asset('assets/image/customers/profile/' . $item->foto) }}"
-                                                alt="">
-                                        </div>
-                                        <div class="_name-kota flex flex-col gap-1">
-                                            <div class="_name-kota">
-                                                <p class="text-[16px] font-medium">{{ $item->name }}</p>
-                                                <p class="text-[14px]">Kota Banyuwangi</p>
+                        <p class="text-[16px] font-medium">Total : {{ $count }} Users</p>
+                        <div
+                            class="_wrapper-card flex flex-col gap-2 {{ $users->count() > 0 ? 'min-h-[500px] max-h-[500px]' : 'h-auto' }} overflow-y-auto p-2">
+                            @if ($users->count() > 0)
+                                @foreach ($users as $item)
+                                    <a href="{{ route('detail-pengguna.index', ['fullname' => $item->name]) }}">
+                                        <div
+                                            class="_card flex p-2 group rounded-[20px] cursor-pointer hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white gap-4 justify-between items-center">
+                                            <div class="_image-name-kota flex gap-2 items-center">
+                                                <div class="_image">
+                                                    <img class="object-cover w-[70px] h-[70px] rounded-[15px]"
+                                                        src="{{ asset('assets/image/customers/profile/' . $item->foto) }}"
+                                                        alt="">
+                                                </div>
+                                                <div class="_name-kota flex flex-col gap-1">
+                                                    <div class="_name-kota">
+                                                        <p class="text-[16px] font-medium">{{ $item->name }}</p>
+                                                        <p class="text-[14px]">Kota Banyuwangi</p>
+                                                    </div>
+                                                    <p
+                                                        class="text-[12px] group-hover:text-black font-medium w-fit px-2 py-1 rounded-full bg-[#EFF2F7]">
+                                                        Customer</p>
+                                                </div>
                                             </div>
-                                            <p
-                                                class="text-[12px] group-hover:text-black font-medium w-fit px-2 py-1 rounded-full bg-[#EFF2F7]">
-                                                Customer</p>
+                                            <div class="_icon-more">
+                                                <p><i class="text-[20px] fi fi-rr-angle-small-right"></i></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="_icon-more">
-                                        <p><i class="text-[20px] fi fi-rr-angle-small-right"></i></p>
+                                    </a>
+                                @endforeach
+                            @else
+                                <div class="w-full h-[300px] flex items-center justify-center">
+                                    <div class="flex items-center gap-4 justify-center">
+                                        <img class="w-[300px] h-auto object-cover"
+                                            src="{{ asset('images/illustration/filling-survey.png') }}" alt="">
+                                        <div>
+                                            <p class="text-[40px] font-black">OOPS!</p>
+                                            <p class="text-[16px] font-medium">Sepertiny Tidak ada data bernama
+                                                <br>{{ $cari_customer }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </a>
-                            @endforeach
+                            @endif
                         </div>
                     </div>
+                    {{ $users->onEachSide(1)->links('components.paginate.custom-pagination') }}
                 </div>
             </form>
             <div class="_component-list-customer-sedang-aktif-sedang-sewa w-full h-full">
@@ -153,32 +174,40 @@
                     <div
                         class="_sedang-aktif bg-white w-full h-[250px] overflow-hidden max-h-[250px] pl-4 pr-4 pt-4 rounded-[20px]">
                         <h1 class="text-[14px] font-medium">Sedang Aktif</h1>
-                        <p class="text-[12px]"><b>164</b> Users sedang beraktifitas</p>
+                        <p class="text-[12px]"><b>{{ $count_user_online }}</b> Users sedang beraktifitas</p>
                         <div class="_card-wrapper overflow-y-scroll max-h-[180px]">
-                            @for ($i = 0; $i < 10; $i++)
-                                <div
-                                    class="_card flex p-2 group rounded-[20px] cursor-pointer hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white gap-4 justify-between items-center">
-                                    <div class="_image-name-kota flex gap-2 items-center">
-                                        <div class="_image">
-                                            <img class="object-cover w-[70px] h-[70px] rounded-[15px]"
-                                                src="{{ asset('assets/image/developers/agung-kurniawan.jpg') }}"
-                                                alt="">
-                                        </div>
-                                        <div class="_name-kota flex flex-col gap-1">
-                                            <div class="_name-kota">
-                                                <p class="text-[16px] font-medium">Agung kurniawan</p>
-                                                <p class="text-[14px]">Kota Banyuwangi</p>
+                            @if ($get_customer_online->count() > 0)
+                                @foreach ($get_customer_online as $item)
+                                    <div
+                                        class="_card flex p-2 group rounded-[20px] cursor-pointer hover:bg-gradient-to-bl from-[#B381F4] to-[#5038ED] hover:text-white gap-4 justify-between items-center">
+                                        <div class="_image-name-kota flex gap-2 items-center">
+                                            <div class="_image">
+                                                <img class="object-cover w-[70px] h-[70px] rounded-[15px]"
+                                                    src="{{ asset('assets/image/customers/profile/' . $item->foto) }}"
+                                                    alt="">
                                             </div>
-                                            <p
-                                                class="text-[12px] group-hover:text-black font-medium w-fit px-2 py-1 rounded-full bg-[#EFF2F7]">
-                                                Customer</p>
+                                            <div class="_name-kota flex flex-col gap-1">
+                                                <div class="_name-kota">
+                                                    <p class="text-[16px] font-medium">{{ $item->name }}</p>
+                                                    <p class="text-[14px]">Kota Banyuwangi</p>
+                                                </div>
+                                                <p
+                                                    class="text-[12px] group-hover:text-black font-medium w-fit px-2 py-1 rounded-full bg-[#EFF2F7]">
+                                                    Customer</p>
+                                            </div>
+                                        </div>
+                                        <div class="_icon-more">
+                                            <p><i class="text-[20px] fi fi-rr-angle-small-right"></i></p>
                                         </div>
                                     </div>
-                                    <div class="_icon-more">
-                                        <p><i class="text-[20px] fi fi-rr-angle-small-right"></i></p>
-                                    </div>
+                                @endforeach
+                            @else
+                                <div class="w-full h-[300px] flex items-center justify-center">
+                                    <img class="w-[200px] h-auto object-cover"
+                                        src="{{ asset('images/illustration/Monster 404 Error-rafiki.png') }}"
+                                        alt="">
                                 </div>
-                            @endfor
+                            @endif
                         </div>
                     </div>
                     <div
@@ -243,45 +272,44 @@
         });
 
         document.addEventListener("DOMContentLoaded", function() {
-    // Fungsi untuk menambahkan kelas gradient-1 ke label
-    function addGradientToLabel(checkboxName) {
-        const label = document.querySelector(`input[name='${checkboxName}']`).closest('label');
-        label.classList.add('gradient-1');
-    }
-
-    // Fungsi untuk menyimpan status checkbox ke penyimpanan
-    function saveCheckboxStatus() {
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(function(checkbox) {
-            localStorage.setItem(checkbox.name, checkbox.checked);
-        });
-    }
-
-    // Fungsi untuk memeriksa status checkbox dari penyimpanan dan menerapkan kelas jika diperlukan
-    function checkCheckboxStatus() {
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(function(checkbox) {
-            const isChecked = localStorage.getItem(checkbox.name) === 'true';
-            if (isChecked) {
-                checkbox.checked = true;
-                addGradientToLabel(checkbox.name);
+            // Fungsi untuk menambahkan kelas gradient-1 ke label
+            function addGradientToLabel(checkboxName) {
+                const label = document.querySelector(`input[name='${checkboxName}']`).closest('label');
+                label.classList.add('gradient-1');
             }
-        });
-    }
 
-    // Panggil fungsi untuk memeriksa status checkbox saat halaman dimuat
-    checkCheckboxStatus();
-
-    // Tambahkan event listener untuk checkbox agar saat dicentang, status disimpan dan kelas diterapkan
-    document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            saveCheckboxStatus();
-            if (this.checked) {
-                addGradientToLabel(this.name);
+            // Fungsi untuk menyimpan status checkbox ke penyimpanan
+            function saveCheckboxStatus() {
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(function(checkbox) {
+                    localStorage.setItem(checkbox.name, checkbox.checked);
+                });
             }
-        });
-    });
-});
 
+            // Fungsi untuk memeriksa status checkbox dari penyimpanan dan menerapkan kelas jika diperlukan
+            function checkCheckboxStatus() {
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(function(checkbox) {
+                    const isChecked = localStorage.getItem(checkbox.name) === 'true';
+                    if (isChecked) {
+                        checkbox.checked = true;
+                        addGradientToLabel(checkbox.name);
+                    }
+                });
+            }
+
+            // Panggil fungsi untuk memeriksa status checkbox saat halaman dimuat
+            checkCheckboxStatus();
+
+            // Tambahkan event listener untuk checkbox agar saat dicentang, status disimpan dan kelas diterapkan
+            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    saveCheckboxStatus();
+                    if (this.checked) {
+                        addGradientToLabel(this.name);
+                    }
+                });
+            });
+        });
     </script>
 @endsection
