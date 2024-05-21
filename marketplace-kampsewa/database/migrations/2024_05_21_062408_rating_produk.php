@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback', function (Blueprint $table) {
+        Schema::create('rating_produk', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user')->nullable(false);
+            $table->unsignedBigInteger('id_produk');
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_produk')->references('id')->on('produk')->onDelete('cascade');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
-            $table->string('deskripsi', 255)->nullable(true);
-            $table->enum('kriteria', ['Sangat Baik', 'Baik', 'Cukup', 'Kurang', 'Sangat Kurang'])->nullable(false);
-            $table->enum('status', ['Dibalas', 'Belum Dibalas'])->nullable(false);
+            $table->integer('rating');
+            $table->text('ulasan');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('rating_produk');
     }
 };

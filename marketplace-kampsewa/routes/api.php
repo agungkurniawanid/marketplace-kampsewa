@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/products/{userId}', [ProductController::class, 'getAllProductsByUserId']);
     Route::get('/product/{productId}', [ProductController::class, 'getProductById']);
     Route::get('/product/kategori/{category}', [ProductController::class, 'getProductByCategory']);
+    Route::get('/product/kategori-rating/rating-tertinggi-limit', [ProductController::class, 'getProductByRatingLimitTwo']);
 
     // iklan
     Route::get('/iklan', [IklanControlller::class, 'getAllIklan']);

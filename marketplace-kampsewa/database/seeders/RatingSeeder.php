@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Produk;
+use App\Models\RatingProduk;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ProdukSeeder extends Seeder
+class RatingSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Produk::factory(100)->create();
+        RatingProduk::factory(100)->create();
     }
 }

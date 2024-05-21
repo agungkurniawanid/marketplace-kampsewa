@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pemasukan', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user')->default(0);
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->string('sumber', 100)->nullable(false);
             $table->string('deskripsi', 255)->nullable(false);
             $table->integer('nominal')->nullable(false);

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('status_notifikasi_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user')->nullable(false);
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->enum('status', ['read', 'unread'])->default('unread');
             $table->timestamps();
         });

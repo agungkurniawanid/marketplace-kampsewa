@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('detail_iklan', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_iklan')->nullable(false);
-            $table->foreign('id_iklan')->references('id')->on('iklan');
+            $table->foreign('id_iklan')->references('id')->on('iklan')->onDelete('cascade');
             $table->date('tanggal_mulai')->nullable(false);
             $table->date('tanggal_akhir')->nullable(false);
             $table->integer('harga_iklan')->nullable(false);

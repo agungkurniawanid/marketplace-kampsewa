@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reset_password', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user')->nullable(false);
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->string('nomor_telephone')->nullable(false);
             $table->string('otp', 6)->nullable(false);
             $table->timestamp('expired_at')->nullable(false);

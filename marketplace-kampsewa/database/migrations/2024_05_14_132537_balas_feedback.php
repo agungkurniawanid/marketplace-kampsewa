@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('balas_feedback', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_feedback')->nullable(false);
-            $table->foreign('id_feedback')->references('id')->on('feedback');
+            $table->foreign('id_feedback')->references('id')->on('feedback')->onDelete('cascade');
             $table->unsignedBigInteger('id_user')->nullable(false);
             $table->foreign('id_user')->references('id')->on('users');
             $table->string('balasan', 255)->nullable(true);
