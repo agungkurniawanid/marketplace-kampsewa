@@ -105,9 +105,9 @@ class IklanController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'poster' => 'required|image|mimes:png,jpg,jpeg|max:2048',
-            'judul' => 'required|string|max:30',
-            'sub_judul' => 'required|string|max:60',
-            'deskripsi' => 'required|string|max:500',
+            'judul' => 'required|string|max:100',
+            'sub_judul' => 'required|string|max:200',
+            'deskripsi' => 'required|string|max:800',
         ], [
             'poster.required' => 'Poster harus diunggah.',
             'poster.image' => 'Poster harus berupa gambar.',
@@ -115,13 +115,13 @@ class IklanController extends Controller
             'poster.max' => 'Ukuran poster tidak boleh lebih dari 2048 kilobytes.',
             'judul.required' => 'Judul iklan harus diisi.',
             'judul.string' => 'Judul iklan harus berupa teks.',
-            'judul.max' => 'Judul iklan tidak boleh lebih dari 30 karakter.',
+            'judul.max' => 'Judul iklan tidak boleh lebih dari 100 karakter.',
             'sub_judul.required' => 'Sub judul iklan harus diisi.',
             'sub_judul.string' => 'Sub judul iklan harus berupa teks.',
-            'sub_judul.max' => 'Sub judul iklan tidak boleh lebih dari 60 karakter.',
+            'sub_judul.max' => 'Sub judul iklan tidak boleh lebih dari 200 karakter.',
             'deskripsi.required' => 'Deskripsi iklan harus diisi.',
             'deskripsi.string' => 'Deskripsi iklan harus berupa teks.',
-            'deskripsi.max' => 'Deskripsi iklan tidak boleh lebih dari 500 karakter.',
+            'deskripsi.max' => 'Deskripsi iklan tidak boleh lebih dari 800 karakter.',
         ]);
 
         if ($validator->fails()) {

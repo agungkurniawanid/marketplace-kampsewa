@@ -12,18 +12,13 @@ class IklanControlller extends Controller
 {
     public function getAllIklan()
     {
-        // Ambil tanggal hari ini
         $today = Carbon::today();
-
-        // Ambil data iklan yang tanggal mulai kurang dari atau sama dengan hari ini,
-        // tanggal akhir lebih dari atau sama dengan hari ini,
-        // dan memiliki status_iklan 'aktif'
         $iklan = DB::table('iklan')
             ->join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
             ->whereDate('detail_iklan.tanggal_mulai', '<=', $today)
             ->whereDate('detail_iklan.tanggal_akhir', '>=', $today)
             ->where('detail_iklan.status_iklan', 'aktif')
-            ->select('iklan.*')
+            ->select('iklan.id', 'iklan.poster', 'iklan.judul')
             ->limit(10)
             ->get();
 
@@ -36,5 +31,23 @@ class IklanControlller extends Controller
 
         // Mengembalikan response JSON
         return response()->json($response);
+    }
+
+    public function getDetailIklan($identifier)
+    {
+        $iklan = Iklan::where('id', $identifier)
+            ->orWhere('judul', $identifier)
+            ->first();
+
+        if (!$iklan) {
+            return response()->json([
+                'message' => 'Iklan not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'iklan' => $iklan,
+            'message' => 'Success',
+        ], 200);
     }
 }

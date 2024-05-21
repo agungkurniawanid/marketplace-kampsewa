@@ -35,4 +35,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // iklan
     Route::get('/iklan', [IklanControlller::class, 'getAllIklan']);
+    Route::get('/iklan/{identifier}', [IklanControlller::class, 'getDetailIklan']);
 });
