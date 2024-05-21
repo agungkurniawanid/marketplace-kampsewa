@@ -15,6 +15,7 @@ class ProductController extends Controller
             'message' => 'Success'
         ], 200);
     }
+
     public function getAllProductsByUserId($userId) {
         $products = Produk::where('id_user', $userId)->get();
         return response()->json([
@@ -22,6 +23,7 @@ class ProductController extends Controller
             'message' => 'Success'
         ], 200);
     }
+
     public function getProductById($productId) {
         $product = Produk::find($productId);
 
@@ -31,6 +33,14 @@ class ProductController extends Controller
 
         return response()->json([
             'product' => $product,
+            'message' => 'Success'
+        ], 200);
+    }
+
+    public function getProductByCategory($category) {
+        $products = Produk::where('kategori', 'like', '%' . $category . '%' )->get();
+        return response()->json([
+            'products' => $products,
             'message' => 'Success'
         ], 200);
     }

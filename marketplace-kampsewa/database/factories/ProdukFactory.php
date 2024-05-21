@@ -21,7 +21,7 @@ class ProdukFactory extends Factory
             'nama' => $this->faker->word,
             'deskripsi' => $this->faker->sentence,
             'status' => $this->faker->randomElement(['Tersedia', 'Tidak Tersedia']),
-            'kategori' => $this->faker->randomElement(['Outdoor', 'Furniture', 'Elektronik']),
+            'kategori' => $this->faker->randomElement(['Tenda', 'Pakaian', 'Tas & Sepatu', 'Perlengkapan']),
             'variants' => json_encode([
                 [
                     'warna' => $this->faker->colorName,
