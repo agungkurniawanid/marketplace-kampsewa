@@ -19,7 +19,6 @@ class RegisterController extends Controller
             'password' => 'required|string|min:8',
             'nomor_telephone' => 'required|string|max:13|min:10|unique:users|regex:/^08[0-9]{1,13}$/',
             'tanggal_lahir' => 'required|date',
-            'alamat' => 'nullable|json',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'background' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'jenis_kelamin' => 'nullable|in:Laki-Laki,Perempuan',
@@ -75,6 +74,7 @@ class RegisterController extends Controller
             'is_verified' => 0,
             'remember_token' => Str::random(100),
             'time_login' => null,
+            'last_login' => null,
         ]);
 
         $user = new User($request->all());

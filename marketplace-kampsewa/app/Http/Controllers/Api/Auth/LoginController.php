@@ -27,11 +27,18 @@ class LoginController extends Controller
                 $token = $user->createToken('API Token')->plainTextToken;
 
                 $user_online = User::where('nomor_telephone', $request->identifier)
-                ->orWhere('email', $request->identifier)
-                ->first()->update(['status' => 'online']);
+                    ->orWhere('email', $request->identifier)
+                    ->first()->update(['status' => 'online']);
 
-                $user_online_time = User::where('nomor_telephone', $request->identifier)
-                ->orWhere('email', $request->identifier)->first()->update(['time_login' => now()]);
+                $user_online = User::where('nomor_telephone', $request->identifier)
+                    ->orWhere('email', $request->identifier)
+                    ->first();
+
+                if ($user_online) {
+                    $user_online->time_login = now();
+                    $user_online->last_login = now();
+                    $user_online->save();
+                }
 
                 return response()->json([
                     'access_token' => $token,

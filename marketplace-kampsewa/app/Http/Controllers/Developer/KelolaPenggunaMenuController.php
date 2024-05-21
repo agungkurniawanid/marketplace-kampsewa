@@ -42,10 +42,9 @@ class KelolaPenggunaMenuController extends Controller
                 'users.created_at',
                 'users.jenis_kelamin',
                 'users.foto',
-                'users.alamat',
                 DB::raw('COUNT(produk.id) as total_product') // Menghitung total produk
             )
-            ->groupBy('users.id', 'users.name', 'users.nomor_telephone', 'users.created_at', 'users.jenis_kelamin', 'users.foto', 'users.alamat');
+            ->groupBy('users.id', 'users.name', 'users.nomor_telephone', 'users.created_at', 'users.jenis_kelamin', 'users.foto');
 
         // Tambahkan klausa WHERE jika ada kata kunci pencarian
         if (!empty($cari_customer)) {

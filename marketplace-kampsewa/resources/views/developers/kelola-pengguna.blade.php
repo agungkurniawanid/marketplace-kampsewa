@@ -82,7 +82,7 @@
                         <div class="_name-address">
                             <div class="_name font-bold text-[#19191b] line-clamp-1">{{ $item->name }}</div>
                             <div class="_address text-gray-400 font-normal text-[12px] line-clamp-1">
-                                {{ $item->alamat ? json_decode($item->alamat)->alamat_1 : 'Belum di isi.' }}
+                            Belum di isi.
                             </div>
                             <div class="_level w-fit mt-2">
                                 <p class="bg-[#FDEAEE] text-[10px] font-bold rounded-full text-[#F5325C] text-center p-1">

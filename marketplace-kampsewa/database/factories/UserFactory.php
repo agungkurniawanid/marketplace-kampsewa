@@ -25,11 +25,6 @@ class UserFactory extends Factory
             'type' => 0,
             'nomor_telephone' => $this->faker->phoneNumber(),
             'tanggal_lahir' => $this->faker->date(),
-            'alamat' => json_encode([
-                'alamat_1' => $this->faker->address(),
-                'alamat_2' => $this->faker->address(),
-                'alamat_3' => $this->faker->address(),
-            ]),
             'foto' => 'man.png',
             'status' => 'offline',
             'background' => $this->faker->sentence(),
