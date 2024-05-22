@@ -85,11 +85,11 @@
                     @if ($user_pending->count() > 0)
                         @foreach ($user_pending as $user)
                             <div
-                                class="_card p-2 rounded-[20px] hover:bg-[#F2F5FD] w-full flex items-center justify-between">
+                                class="_card p-2 rounded-[20px] hover:bg-[#F2F5FD] w-full grid grid-cols-5 items-center justify-between">
                                 <div class="_nomor">
                                     <p
                                         class="flex items-center justify-center text-[12px] font-bold w-[30px] h-[30px] rounded-full p-2 bg-[#EFF2F7]">
-                                        {{ $loop->iteration + 1 }}</p>
+                                        {{ $loop->iteration }}</p>
                                 </div>
                                 <div class="_image-name flex items-center gap-2">
                                     <img class="w-[40px] h-[40px] rounded-[10px] object-cover"
@@ -101,7 +101,7 @@
                                         class="text-[10px] font-bold w-fit rounded-full py-1 px-2 mt-1 bg-[#FEF2F2] text-[#F03E3E]">
                                         {{ $user->status_iklan }}</p>
                                 </div>
-                                <div class="_tanggalmulai">
+                                <div class="_tanggalmulai whitespace-nowrap">
                                     <p class="text-[12px] font-medium p-2 bg-[#F0FDF4] text-[#34D399] rounded-full">
                                         {{ Carbon\Carbon::parse($user->tanggal_mulai)->format('d F Y') }}</p>
                                 </div>
@@ -137,45 +137,51 @@
                 <h1 class="text-[18px] font-medium">Riwayat Transaksi Iklan</h1>
                 <div class="_totaldata-searchfilter w-full flex items-center justify-between">
                     <div class="_total-data">
-                        <p class="text-[14px] font-medium">2475 Data</p>
+                        <p class="text-[14px] font-medium">{{ $get_count_iklan_selesai }} Data</p>
                     </div>
                 </div>
                 <div id="dataItems" class="_data-item w-full h-full flex flex-col gap-2 p-2 overflow-scroll">
-                    @for ($i = 0; $i < 10; $i++)
-                        <div class="_card items-center p-2 rounded-[20px] hover:bg-[#F2F5FD] w-full flex justify-between">
-                            <div class="_nomor">
-                                <p
-                                    class="flex items-center justify-center text-[12px] font-bold w-[30px] h-[30px] rounded-full p-2 bg-[#EFF2F7]">
-                                    {{ $i + 1 }}</p>
+                    @if ($data_iklan_aktif->count() > 0)
+                        @foreach ($data_iklan_selesai as $user)
+                            <div
+                                class="_card p-2 rounded-[20px] hover:bg-[#F2F5FD] w-full grid grid-cols-4 justify-between items-center">
+                                <div class="_nomor">
+                                    <p
+                                        class="flex items-center justify-center text-[12px] font-bold w-[30px] h-[30px] rounded-full p-2 bg-[#EFF2F7]">
+                                        {{ $loop->iteration }}</p>
+                                </div>
+                                <div class="_image-name flex items-center gap-2">
+                                    <img class="w-[40px] h-[40px] rounded-[10px] object-cover"
+                                        src="{{ asset('assets/image/customers/profile/' . $user->foto) }}"
+                                        alt="">
+                                    <p class="text-[12px] font-medium">{{ $user->name }}</p>
+                                </div>
+                                <div class="_judul-iklan-status-iklan">
+                                    <p
+                                        class="text-[10px] font-bold w-fit rounded-full py-1 px-2 text-[#34D399] bg-[#F0FDF4]">
+                                        {{ $user->status_iklan }}</p>
+                                </div>
+                                <div class="_tanggalmulai">
+                                    <p class="text-[12px] font-medium p-2  text-[#F03E3E] bg-[#FEF2F2]  rounded-full">
+                                        {{ $user->tanggal_akhir }}</p>
+                                </div>
                             </div>
-                            <div class="_image-name flex items-center gap-2">
-                                <img class="w-[40px] h-[40px] rounded-[10px] object-cover"
-                                    src="{{ asset('assets/image/developers/agung-kurniawan.jpg') }}" alt="">
-                                <p class="text-[12px] font-medium">Agung Kurniawan</p>
-                            </div>
-                            <div class="_judul-iklan-status-iklan">
-                                <p class="text-[12px] font-medium max-w-[200px] line-clamp-2">Promo 50% Tenda Adidas</p>
-                                <p class="text-[10px] font-bold w-fit rounded-full py-1 px-2 text-[#34D399] bg-[#F0FDF4]">
-                                    Selesai</p>
-                            </div>
-                            <div class="_tanggalmulai">
-                                <p class="text-[12px] font-medium p-2  text-[#F03E3E] bg-[#FEF2F2]  rounded-full">12
-                                    Januari
-                                    2022</p>
-                            </div>
-                            <div class="_action flex items-center gap-2">
-                                <form action="" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <div class="_delete"><a href=""
-                                            class="w-[30px] h-[30px] rounded-full items-center justify-center flex bg-[#EFF2F7] cursor-pointer"><i
-                                                class="bi bi-trash-fill"></i></a></div>
-                                </form>
+                        @endforeach
+                    @else
+                        <div class="w-full h-[300px] flex items-center justify-center">
+                            <div class="flex items-center gap-4 justify-center">
+                                <img class="w-[300px] h-auto object-cover"
+                                    src="{{ asset('images/illustration/filling-survey.png') }}" alt="">
+                                <div>
+                                    <p class="text-[40px] font-black">OOPS!</p>
+                                    <p class="text-[16px] font-medium">Sepertinya Tidak ada data</p>
+                                </div>
                             </div>
                         </div>
-                    @endfor
+                    @endif
                 </div>
             </div>
+            {{ $data_iklan_selesai->onEachSide(1)->links('components.paginate.custom-pagination') }}
         </div>
         <div class="_grid-2 w-full">
             <div id="ongoing-advert" class="_ongoing-advert sticky top-4 w-full h-screen">
@@ -186,7 +192,7 @@
                     </div>
                     <div class="_divider w-full h-[2px] bg-[#E5E7EB]"></div>
                     <div class="_card-wrapper w-full h-full overflow-scroll p-2 flex flex-col gap-6">
-                        @for ($i = 0; $i < 10; $i++)
+                        @foreach ($data_iklan_aktif as $user)
                             <div class="_card flex flex-col gap-2">
                                 <a href="" class="group">
                                     <div class="_header relative w-full rounded-[20px] overflow-hidden">
@@ -199,14 +205,12 @@
                                             </p>
                                         </div>
                                         <img class="w-full rounded-[20px] object-cover h-[200px]"
-                                            src="{{ asset('assets/image/customers/advert/Banner Mua Ghế Massage _ PSD Tải xuống miễn phí - Pikbest.jpg') }}"
+                                            src="{{ asset('assets/image/customers/advert/' . $user->poster) }}"
                                             alt="">
                                     </div>
                                     <div class="_body mt-2 flex flex-col gap-2">
                                         <div class="_judul-iklan">
-                                            <p class="text-[16px] line-clamp-2 font-medium">Promo 50% Terbaru Tenda Dari
-                                                Penyewaan
-                                                Patrang Jaya dan Alat Berkualitas</p>
+                                            <p class="text-[16px] line-clamp-2 font-medium">{{ $user->judul }}</p>
                                         </div>
                                         <div class="_user-status-iklan flex items-center justify-between w-full">
                                             <div class="_user flex items-center gap-2">
@@ -214,33 +218,36 @@
                                                     src="{{ asset('assets/image/developers/agung-kurniawan.jpg') }}"
                                                     alt="">
                                                 <div class="_name-address">
-                                                    <p class="text-[14px] font-medium">Agung Kurniawan</p>
+                                                    <p class="text-[14px] font-medium">{{ $user->name }}</p>
                                                     <p class="text-[12px] font-medium text-[#6B7280]">Surabaya</p>
                                                 </div>
                                             </div>
                                             <div class="_status-iklan">
                                                 <p
                                                     class="py-2 px-4 text-center text-[12px] font-bold text-white gradient-1 rounded-full">
-                                                    Aktif</p>
+                                                    {{ $user->status_iklan }}</p>
                                             </div>
                                         </div>
+                                        @php
+                                            $total_hari = Carbon\Carbon::parse($user->tanggal_akhir)->diffInDays($user->tanggal_mulai);
+                                        @endphp
                                         <div class="_waktu-sewa">
                                             <span class="text-[12px] font-medium">Waktu Iklan Ditampilkan : </span>
-                                            <span class="text-[12px] font-medium">3 Hari</span>
+                                            <span class="text-[12px] font-medium">{{ $total_hari }} Hari</span>
                                         </div>
                                         <div class="_start-finish w-full flex justify-between gap-2 items-center">
                                             <p
                                                 class="text-[12px] font-bold p-2  text-[#F03E3E] bg-[#FEF2F2]  rounded-full">
-                                                12 Januari 2024</p>
+                                                {{ Carbon\Carbon::parse($user->tanggal_mulai)->format('d F Y') }}</p>
                                             <p class="text-[12px] font-medium">sampai</p>
                                             <p
                                                 class="text-[12px] font-bold p-2  text-[#34D399] bg-[#ECFDF5]  rounded-full">
-                                                15 Januari 2024</p>
+                                                {{ Carbon\Carbon::parse($user->tanggal_akhir)->format('d F Y') }}</p>
                                         </div>
                                     </div>
                                 </a>
                             </div>
-                        @endfor
+                        @endforeach
                     </div>
                 </div>
             </div>

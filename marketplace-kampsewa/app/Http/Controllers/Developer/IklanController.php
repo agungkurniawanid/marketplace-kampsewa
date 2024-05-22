@@ -40,6 +40,21 @@ class IklanController extends Controller
         // ambil request input cari
         $cari = $request->query('cari');
 
+        // get data user iklan selesai
+        $data_iklan_selesai = User::join('iklan', 'users.id', '=', 'iklan.id_user')
+        ->join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
+        ->where('detail_iklan.status_iklan', 'like', '%selesai%')
+        ->select('users.*', 'iklan.judul', 'iklan.id as id_iklan_main', 'detail_iklan.*')
+        ->distinct()->paginate(10);
+        $get_count_iklan_selesai = $data_iklan_selesai->count();
+
+        // get data iklan aktif
+        $data_iklan_aktif = User::join('iklan', 'users.id', '=', 'iklan.id_user')
+        ->join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
+        ->where('detail_iklan.status_iklan', 'like', '%aktif%')
+        ->select('users.*', 'iklan.judul', 'iklan.id as id_iklan_main', 'detail_iklan.*')
+        ->distinct()->limit(10)->get();
+
         // get data user iklan pending
         $user_pending = User::join('iklan', 'users.id', '=', 'iklan.id_user')
             ->join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
@@ -65,7 +80,10 @@ class IklanController extends Controller
             'get_count_total_iklan_pending' => $get_count_total_iklan_pending,
             'get_count_total_iklan_selesai' => $get_count_total_iklan_selesai,
             'user_pending' => $user_pending,
-            'cari' => $cari
+            'cari' => $cari,
+            'data_iklan_selesai' => $data_iklan_selesai,
+            'data_iklan_aktif' => $data_iklan_aktif,
+            'get_count_iklan_selesai' => $get_count_iklan_selesai
         ]);
     }
 
