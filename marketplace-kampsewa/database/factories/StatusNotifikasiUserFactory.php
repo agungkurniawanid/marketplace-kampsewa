@@ -18,8 +18,8 @@ class StatusNotifikasiUserFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => $this->faker->numberBetween(1, 100),
-            'status' => 'unread',
+            'id_user' => $this->faker->numberBetween(1, 200),
+            'status' => $this->faker->randomElement(['read', 'unread']),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];
     }

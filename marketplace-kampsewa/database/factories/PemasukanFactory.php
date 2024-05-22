@@ -17,7 +17,7 @@ class PemasukanFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => $this->faker->numberBetween(1, 70),
+            'id_user' => $this->faker->numberBetween(1, 200),
             'sumber' => $this->faker->randomElement(['Iklan', 'Transaksi Penyewaan', 'Modal']),
             'deskripsi' => $this->faker->sentence,
             'nominal' => $this->faker->numberBetween(1000000, 100000000),

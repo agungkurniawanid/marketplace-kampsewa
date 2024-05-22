@@ -17,8 +17,8 @@ class RatingProdukFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_produk' => $this->faker->numberBetween(1, 100), // Assume each user can have up to 3 products
-            'id_user' => $this->faker->numberBetween(1, 100),
+            'id_produk' => $this->faker->numberBetween(1, 200),
+            'id_user' => $this->faker->numberBetween(1, 200),
             'rating' => $this->faker->numberBetween(1, 10),
             'ulasan' => $this->faker->sentence,
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

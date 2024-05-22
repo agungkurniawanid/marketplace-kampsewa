@@ -17,7 +17,7 @@ class DetailIklanFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_iklan' => 1,
+            'id_iklan' => $this->faker->numberBetween(1, 200),
             'tanggal_mulai' => $this->faker->date(),
             'tanggal_akhir' => $this->faker->date(),
             'harga_iklan' => $this->faker->numberBetween(10000, 100000),

@@ -17,7 +17,7 @@ class AlamatFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => $this->faker->numberBetween(1, 100),
+            'id_user' => $this->faker->numberBetween(1, 200),
             'longitude' => $this->faker->longitude(),
             'latitude' => $this->faker->latitude(),
             'detail_lainnya' => $this->faker->sentence(),

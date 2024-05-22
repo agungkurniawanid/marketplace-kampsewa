@@ -13,6 +13,6 @@ class PengeluaranSeeder extends Seeder
      */
     public function run(): void
     {
-        Pengeluaran::factory(100)->create();
+        Pengeluaran::factory(200)->create();
     }
 }

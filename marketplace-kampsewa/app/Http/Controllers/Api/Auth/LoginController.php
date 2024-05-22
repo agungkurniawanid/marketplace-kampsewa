@@ -45,6 +45,7 @@ class LoginController extends Controller
                     'token_type' => 'bearer',
                     'expires_at' => now()->addMinutes(60)->toDateTimeString(),
                     'user_online' => $user_online,
+                    'message' => 'Login Berhasil',
                     'user' => $user,
                 ]);
             } else {

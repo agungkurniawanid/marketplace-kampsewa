@@ -13,6 +13,6 @@ class DetailIklanSeeder extends Seeder
      */
     public function run(): void
     {
-        DetailIklan::factory(1)->create();
+        DetailIklan::factory(200)->create();
     }
 }
