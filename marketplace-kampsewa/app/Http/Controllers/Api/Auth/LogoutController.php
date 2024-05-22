@@ -15,10 +15,9 @@ class LogoutController extends Controller
             $user->status = 'offline';
             $user->time_login = null;
             $user->save();
-
             $user->currentAccessToken()->delete();
         }
-        return response()->json(['message' => 'Logged Out'], 200);
+        return response()->json(['message' => 'Berhasil LogOut'], 200);
     }
 
 }
