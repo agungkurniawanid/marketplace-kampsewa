@@ -26,11 +26,12 @@ class UserFactory extends Factory
             'nomor_telephone' => $this->faker->phoneNumber(),
             'tanggal_lahir' => $this->faker->date(),
             'foto' => 'man.png',
-            'status' => 'offline',
+            'status' => $this->faker->randomElement(['Online', 'Offline']),
             'background' => $this->faker->sentence(),
             'jenis_kelamin' => $this->faker->randomElement(['Laki-laki', 'Perempuan']),
             'time_login' => null,
             'last_login' => $this->faker->dateTime(),
+            'name_store' => $this->faker->name(),
             'remember_token' => Str::random(10),
             'created_at' => now(),
         ];

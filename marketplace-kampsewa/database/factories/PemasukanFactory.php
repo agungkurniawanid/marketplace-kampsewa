@@ -18,7 +18,7 @@ class PemasukanFactory extends Factory
     {
         return [
             'id_user' => $this->faker->numberBetween(1, 70),
-            'sumber' => $this->faker->word,
+            'sumber' => $this->faker->randomElement(['Iklan', 'Transaksi Penyewaan', 'Modal']),
             'deskripsi' => $this->faker->sentence,
             'nominal' => $this->faker->numberBetween(1000000, 100000000),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

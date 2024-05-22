@@ -17,7 +17,7 @@ class IklanFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => $this->faker->numberBetween(1, 10),
+            'id_user' => 1,
             'poster' => $this->faker->imageUrl(),
             'judul' => $this->faker->sentence(),
             'sub_judul' => $this->faker->sentence(),

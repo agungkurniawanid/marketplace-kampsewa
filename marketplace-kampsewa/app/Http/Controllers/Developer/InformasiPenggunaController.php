@@ -61,7 +61,7 @@ class InformasiPenggunaController extends Controller
         $tidak_aktif = $request->query('tidak_aktif_sebulan');
         $produk_terbanyak = $request->query('produk_terbanyak');
 
-        $query = $query = DB::table('produk')
+        $query = DB::table('produk')
         ->rightJoin('users', 'produk.id_user', '=', 'users.id')
         ->whereIn('users.type', [0]) // Filter user dengan type 0 (Customer)
         ->select(

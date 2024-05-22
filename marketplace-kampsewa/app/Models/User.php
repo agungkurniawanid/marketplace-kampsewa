@@ -31,7 +31,9 @@ class User extends Authenticatable
         'jenis_kelamin',
         'rekening',
         'bank',
-        'time_login'
+        'time_login',
+        'last_login',
+        'name_store',
     ];
 
     /**

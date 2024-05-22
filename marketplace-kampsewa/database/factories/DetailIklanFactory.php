@@ -17,11 +17,11 @@ class DetailIklanFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_iklan' => $this->faker->numberBetween(1, 10),
-            'tanggal_mulai' => '2024-05-19',
-            'tanggal_akhir' => '2024-05-21',
+            'id_iklan' => 1,
+            'tanggal_mulai' => $this->faker->date(),
+            'tanggal_akhir' => $this->faker->date(),
             'harga_iklan' => $this->faker->numberBetween(10000, 100000),
-            'status_iklan' => 'Aktif',
+            'status_iklan' => $this->faker->randomElement(['Aktif', 'Pending', 'Selesai']),
         ];
     }
 }

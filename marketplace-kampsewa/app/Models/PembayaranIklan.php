@@ -15,7 +15,6 @@ class PembayaranIklan extends Model
         'id_iklan',
         'id_user',
         'metode_bayar',
-        'fotos_bukti',
         'total_bayar',
         'status_bayar',
     ];

@@ -13,6 +13,6 @@ class StatusNotifikasiUserSeeder extends Seeder
      */
     public function run(): void
     {
-        StatusNotifikasiUser::factory(200)->create();
+        StatusNotifikasiUser::factory(100)->create();
     }
 }

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('jenis_kelamin')->nullable();
             $table->timestamp('time_login')->nullable();
             $table->timestamp('last_login')->nullable();
+            $table->string('name_store')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

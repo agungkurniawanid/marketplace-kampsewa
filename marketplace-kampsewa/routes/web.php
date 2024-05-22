@@ -57,7 +57,11 @@ Route::get('developer/dashboard/kelola-pengguna/detail-pengguna/{fullname}/detai
 Route::post('/delete-selected-products', [DetailPenggunaController::class, 'deleteSelectedProducts'])->name('delete_selected_products')->middleware('auth');
 
 Route::get('developer/dashboard/informasi-pengguna', [InformasiPenggunaController::class, 'index'])->name('informasi-pengguna.index')->middleware('auth');
+
+// iklan
 Route::get('developer/dashboard/iklan', [IklanController::class, 'index'])->name('iklan.index')->middleware('auth');
+Route::delete('developer/dashboard/iklan/delete-iklan-pending/{id_iklan}', [IklanController::class, 'deleteIklanPending'])->name('iklan.delete-iklan-pending')->middleware('auth');
+
 Route::get('developer/dashboard/penyewaan', [Penyewaan::class, 'index'])->name('penyewaan.index')->middleware('auth');
 Route::get('developer/dashboard/penghasilan', [PenghasilanController::class, 'index'])->name('penghasilan.index')->middleware('auth');
 Route::get('developer/dashboard/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran.index')->middleware('auth');

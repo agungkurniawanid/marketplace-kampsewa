@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Pengeluaran;
+use App\Models\PembayaranIklan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PengeluaranSeeder extends Seeder
+class PembayaranIklanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Pengeluaran::factory(100)->create();
+        PembayaranIklan::factory(1)->create();
     }
 }

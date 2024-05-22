@@ -75,6 +75,7 @@ class RegisterController extends Controller
             'remember_token' => Str::random(100),
             'time_login' => null,
             'last_login' => null,
+            'name_store' => null,
         ]);
 
         $user = new User($request->all());
