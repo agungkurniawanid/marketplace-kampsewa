@@ -4,8 +4,10 @@
         <div class="--component-filter w-full">
             <ul class="flex items-center gap-2">
                 <li class="text-[12px] font-medium">Filter:</li>
-                <li><a class="{{ $title == 'Penghasilan' ? 'bg-[#F8F7F4]' : '' }} text-[14px] font-medium px-4 py-2 rounded-full" href="{{ route('penghasilan.index') }}">Penghasilan</a></li>
-                <li><a class="text-[14px] font-medium px-4 py-2 rounded-full" href="{{ route('pengeluaran.index') }}">Pengeluaran</a></li>
+                <li><a class="{{ $title == 'Penghasilan' ? 'bg-[#F8F7F4]' : '' }} text-[14px] font-medium px-4 py-2 rounded-full"
+                        href="{{ route('penghasilan.index') }}">Penghasilan</a></li>
+                <li><a class="text-[14px] font-medium px-4 py-2 rounded-full"
+                        href="{{ route('pengeluaran.index') }}">Pengeluaran</a></li>
             </ul>
         </div>
         <hr>
@@ -13,7 +15,7 @@
             <div class="--card-penghasilan-tahun-ini w-full h-auto m-auto">
                 <div class="--title-heading mb-4 flex items-center justify-between">
                     <p class="font-bold text-[18px]">Total Pertahun</p>
-                    <div class="--filter-export flex items-center gap-2">
+                    {{-- <div class="--filter-export flex items-center gap-2">
                         <div><button
                                 class="cursor-pointer gap-2 flex items-center px-4 py-2 bg-gradient-to-r from-[#B381F4] to-[#5038ED] rounded-[5px]">
                                 <p class="mt-1"><i class="text-white fi fi-rr-inbox-out"></i></p>
@@ -24,22 +26,31 @@
                                 <p class="mt-1"><i class="text-white fi fi-rr-settings-sliders"></i></p>
                                 <p class="text-white text-[14px] font-medium">Filter</p>
                             </button></div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div
                     class="--card w-full {{-- bg-[#E5F1FD]  --}} shadow-box-shadow-8 rounded-[20px] flex flex-col justify-between gap-4">
                     <div class="--header flex justify-between items-center">
                         <div class="--sub-1 p-4">
                             <p class="text-gray-400 font-medium text-[14px]">Tahun 2024:</p>
-                            <p class="text-[24px] font-bold mb-2">Rp. 951.564.382,00</p>
+                            <p class="text-[24px] font-bold mb-2">Rp.
+                                {{ number_format($penghasilan_tahun_ini, 0, ',', '.') }}</p>
                             <div class="--penghasilan-tahun-lalu">
                                 <p class="text-[12px]  font-normal">Total penghasilan tahun lalu:</p>
-                                <p class="font-bold text-[16px]">545.455.43,00</p>
+                                <p class="font-bold text-[16px]">Rp.
+                                    {{ number_format($penghasilan_tahun_lalu, 0, ',', '.') }}</p>
                             </div>
                         </div>
                         <div class="--sub-2 p-4">
-                            <p class="py-2 px-4 bg-[#F0FDF4] text-[#4AD07B] text-[14px] font-medium rounded-full">Naik :
-                                88,90% <i class="fi fi-rr-arrow-up-right"></i></p>
+                            @if ($persentase_perubahan >= 0)
+                                <p class="py-2 px-4 bg-[#F0FDF4] text-[#4AD07B] text-[14px] font-medium rounded-full">Naik :
+                                    {{ number_format($persentase_perubahan, 2) }}% <i class="bi bi-arrow-up-right"></i></p>
+                            @else
+                                <p class="py-2 px-4 bg-[#FEF2F2] text-[#EF4444] text-[14px] font-medium rounded-full">Turun
+                                    :
+                                    {{ number_format($persentase_perubahan, 2) }} % <i class="bi bi-arrow-down-right"></i>
+                                </p>
+                            @endif
                         </div>
                     </div>
                     <div class="--body">
@@ -62,9 +73,18 @@
                         <div class="--header">
                             <p class="text-white font-medium text-[16px] mb-1">Total Perbulan</p>
                             <div class="--total">
-                                <p class="text-[12px] font-bold text-gray-400">Bulan <b>Mei</b> 2024</p>
-                                <p class="text-white text-[18px] font-medium">Rp. 254.550.240,00</p>
-                                <p class="text-white text-[12px]">Naik <b>34%</b> dari 3 bulan kemarin.</p>
+                                <p class="text-[12px] font-bold text-gray-400">Bulan <b>{{ date('F') }}</b> 2024</p>
+                                <p class="text-white text-[18px] font-medium">Rp.
+                                    {{ number_format($monthCurrentTotal, 0, ',', '.') }}</p>
+                                @if ($totalPemasukanPerbulanSebelumBulanSaatIni >= 0)
+                                    <p class="text-white text-[12px]">Naik
+                                        <b>{{ number_format($totalPemasukanPerbulanSebelumBulanSaatIni, 2) }}%</b> dari 3
+                                        bulan kemarin.</p>
+                                @else
+                                    <p class="text-white text-[12px]">Turun
+                                        <b>{{ number_format($totalPemasukanPerbulanSebelumBulanSaatIni, 2) }}%</b> dari 3
+                                        bulan kemarin.</p>
+                                @endif
                             </div>
                         </div>
                         <div class="--body mb-4">
@@ -74,8 +94,10 @@
                             <p class="text-white text-[14px] font-semibold">Total Bulan lalu</p>
                             <div class="--card-total-bulan-lalu bg-white rounded-[10px] flex items-center justify-between">
                                 <div class="-total p-4">
-                                    <p class="font-bold text-gray-400 text-[12px]">Bulan April</p>
-                                    <p class="text-[#080E2E] font-medium">Rp. 15.550.266,00</p>
+                                    <p class="font-bold text-gray-400 text-[12px]">Bulan
+                                        {{ date('F', strtotime('-1 month')) }}</p>
+                                    <p class="text-[#080E2E] font-medium">Rp.
+                                        {{ number_format($monthPreviousTotal, 0, ',', '.') }}</p>
                                 </div>
                                 <div class="--icon bg-[#080E2E] rounded-tl-[10px] rounded-bl-[10px]">
                                     <i class="text-[20px] text-white p-2 bi bi-currency-exchange"></i>
@@ -113,7 +135,8 @@
                     class="--card-total-penghasilan-hari-ini flex items-center justify-between p-4 h-full rounded-[18px] bg-[#86C6CF]">
                     <div class="-image-title flex gap-2 items-center">
                         <div class="--image w-[40px] h-[40px] rounded-[10px] flex items-center justify-center bg-[#A4D4DB]">
-                            <i class="text-white bi bi-calendar-week-fill"></i></div>
+                            <i class="text-white bi bi-calendar-week-fill"></i>
+                        </div>
                         <div class="--title">
                             <p class="font-medium text-white text-[14px]">Penghasilan Hari ini - Selasa</p>
                             <p class="text-white text-[12px]">Mendapatkan <b>Rp. 6.564.245,00 Minggu lalu.</b></p>
@@ -224,8 +247,8 @@
                     </div>
                 </div>
             </div>
-              {{-- todo wrapper btn delete all, btn export data bentuk ke excel --}}
-              <div class="flex items-center gap-4 w-full">
+            {{-- todo wrapper btn delete all, btn export data bentuk ke excel --}}
+            <div class="flex items-center gap-4 w-full">
                 {{-- todo btn export --}}
                 <div><button
                         class="cursor-pointer gap-2 flex items-center px-4 py-2 bg-gradient-to-r from-[#B381F4] to-[#5038ED] rounded-[5px]">
@@ -249,8 +272,7 @@
                                 <tr>
                                     <th scope="col" class="px-3 py-3 max-w-[50px]">
                                         <div class="inline-flex items-center">
-                                            <label
-                                                class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                            <label class="relative flex items-center p-3 rounded-full cursor-pointer"
                                                 htmlFor="check">
                                                 <input type="checkbox"
                                                     class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-gray-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
@@ -258,8 +280,8 @@
                                                 <span
                                                     class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
-                                                        viewBox="0 0 20 20" fill="currentColor"
-                                                        stroke="currentColor" stroke-width="1">
+                                                        viewBox="0 0 20 20" fill="currentColor" stroke="currentColor"
+                                                        stroke-width="1">
                                                         <path fill-rule="evenodd"
                                                             d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
                                                             clip-rule="evenodd"></path>
@@ -278,7 +300,7 @@
                                         Deskripi
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                    Nominal
+                                        Nominal
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Aksi
@@ -290,17 +312,15 @@
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <td class="px-3">
                                             <div class="inline-flex items-center">
-                                                <label
-                                                    class="relative flex items-center p-3 rounded-full cursor-pointer"
+                                                <label class="relative flex items-center p-3 rounded-full cursor-pointer"
                                                     htmlFor="check">
                                                     <input type="checkbox"
                                                         class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-gray-500 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
                                                         id="check" />
                                                     <span
                                                         class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="h-3.5 w-3.5" viewBox="0 0 20 20"
-                                                            fill="currentColor" stroke="currentColor"
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                            viewBox="0 0 20 20" fill="currentColor" stroke="currentColor"
                                                             stroke-width="1">
                                                             <path fill-rule="evenodd"
                                                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"

@@ -4,8 +4,8 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\Auth\LupaPassword;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\ChartWebController;
 use App\Http\Controllers\Api\IklanControlller;
-use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 // auth
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
+
+// -- chart api web dev
+Route::get('/chart-keuntungan-menu-dashboard', [ChartWebController::class, 'ApiTotalKeuntungan']);
+Route::get('/chart-penghasilan-menu-penghasilan', [ChartWebController::class, 'apiChartMenuPenghasilan']);
+Route::get('/chart-penghasilan-perbulan-menu-penghasilan', [ChartWebController::class, 'apiChartTotalPenghasilanPerbulanSaatIniMenuPenghasilan']);
 
 // lupa password api
 Route::post('/lupa-password', [LupaPassword::class, 'verifikasiPhone']);

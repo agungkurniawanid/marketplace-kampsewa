@@ -42,9 +42,6 @@ Route::post('/lupa-password/reset-password/{nomor_telephone}', [LupaPassword::cl
 Route::get('/developer/dashboard/home', [DashboardController::class, 'index'])->name('home.index')->middleware('auth');
 Route::put('/mark-notification-as-read', [DashboardController::class, 'markNotificationAsRead'])->name('mark-notification-as-read');
 
-// -- chart api web dev
-Route::get('/chart-keuntungan-menu-dashboard', [ChartWebController::class, 'ApiTotalKeuntungan']);
-
 // -- notification
 Route::get('developer/dashboard/notification', [NotificationController::class, 'index'])->name('notification.index')->middleware('auth');
 

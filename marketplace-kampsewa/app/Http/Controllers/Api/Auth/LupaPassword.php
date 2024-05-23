@@ -174,7 +174,7 @@ class LupaPassword extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Konfirmasi password tidak cocok!'
-            ]);
+            ], 400);
         }
 
         // check apakah data user ada
@@ -188,13 +188,13 @@ class LupaPassword extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Password anda telah diperbarui!'
-            ]);
+            ], 200);
         } else {
             // kirimkan respon bahwa user tidak ditemukan
             return response()->json([
                 'status' => 'error',
                 'message' => 'User tidak ditemukan!'
-            ]);
+            ], 400);
         }
     }
 

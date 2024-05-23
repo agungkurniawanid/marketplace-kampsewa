@@ -97,7 +97,7 @@
                                 Customer</span>
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('penyewaan.index') }}"
                             class="{{ $title == 'Penyewaan' ? 'bg-gradient-to-bl from-[#B381F4] to-[#5038ED]' : '' }} relative flex flex-row items-center h-11 hover:bg-gradient-to-bl hover:from-[#B381F4] hover:to-[#5038ED] text-gray-600 hover:text-white border-transparent rounded-full pr-6">
                             <span class="inline-flex mt-1 justify-center items-center ml-4">
@@ -106,7 +106,7 @@
                             <span
                                 class="{{ $title == 'Penyewaan' ? 'text-white' : '' }} ml-2 text-sm tracking-wide truncate">Penyewaan</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     {{-- todo MENU KEUANGAN --}}
                     <li class="px-5">

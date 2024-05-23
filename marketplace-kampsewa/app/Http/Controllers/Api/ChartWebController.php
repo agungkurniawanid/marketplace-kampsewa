@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Pemasukan;
 use App\Models\Pengeluaran;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChartWebController extends Controller
 {
@@ -61,5 +63,42 @@ class ChartWebController extends Controller
                 ],
             ],
         ]);
+    }
+
+    public function apiChartMenuPenghasilan()
+    {
+        $year = Carbon::now()->year;
+        $totalPemasukanPerBulan = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $total = DB::table('pemasukan')
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->sum('nominal');
+
+            $totalPemasukanPerBulan[] = [
+                'month' => Carbon::create()->month($month)->format('F'),
+                'total' => $total
+            ];
+        }
+        return response()->json(['total_pemasukan_per_bulan' => $totalPemasukanPerBulan], 200);
+    }
+
+    public function apiChartTotalPenghasilanPerbulanSaatIniMenuPenghasilan()
+    {
+        $time = Carbon::now()->month;
+
+        for ($month = 1; $month <= $time; $month++) {
+            $total = DB::table('pemasukan')
+                ->whereYear('created_at', Carbon::now()->year)
+                ->whereMonth('created_at', $month)
+                ->sum('nominal');
+            $totalPemasukanPerBulan[] = [
+                'month' => Carbon::create()->month($month)->format('F'),
+                'total' => $total
+            ];
+        }
+
+        return response()->json(['total_pemasukan_per_bulan' => $totalPemasukanPerBulan], 200);
     }
 }
