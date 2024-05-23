@@ -47,7 +47,7 @@ class LoginController extends Controller
                     'user_online' => $user_online,
                     'message' => 'Login Berhasil',
                     'user' => $user,
-                ]);
+                ], 200);
             } else {
                 return response()->json(['message' => 'Password anda salah.'], 401);
             }
