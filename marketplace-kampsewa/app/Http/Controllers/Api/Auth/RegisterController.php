@@ -41,7 +41,7 @@ class RegisterController extends Controller
         $user_check_nomor = $check_nomor_telepone->nomor_telephone;
         if($request->nomor_telephone === $user_check_nomor) {
             return response()->json([
-                'message' => 'Nomor Sudah Terdaftar',
+                'error' => 'Nomor Sudah Terdaftar',
             ], 409);
         }
 
