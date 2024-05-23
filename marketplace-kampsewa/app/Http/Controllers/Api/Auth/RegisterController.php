@@ -37,14 +37,13 @@ class RegisterController extends Controller
         ]);
 
         // check apakah nomor telephone sudah ada
-        $check_nomor_telepone = new User();
-        $user_check_nomor = $check_nomor_telepone->nomor_telephone;
-        if($request->nomor_telephone === $user_check_nomor) {
+        $nomor_telephone = $request->nomor_telephone;
+        $user_nomor = User::where('nomor_telephone', $nomor_telephone)->first();
+        if ($user_nomor) {
             return response()->json([
                 'error' => 'Nomor Sudah Terdaftar',
             ], 409);
         }
-
 
         if (strlen($request->name) > 30 || strlen($request->name) < 7) {
             return response()->json(['error' => 'Nama memiliki batas maksimal 30 karakter dan batas minimal 7 karakter'], 400);
