@@ -36,6 +36,16 @@ class RegisterController extends Controller
             'remember_token' => Str::random(100),
         ]);
 
+        // check apakah nomor telephone sudah ada
+        $check_nomor_telepone = new User();
+        $user_check_nomor = $check_nomor_telepone->nomor_telephone;
+        if($request->nomor_telephone === $check_nomor_telepone ) {
+            return response()->json([
+                'message' => 'Nomor Sudah Terdaftar',
+            ], 409);
+        }
+
+
         if (strlen($request->name) > 30 || strlen($request->name) < 7) {
             return response()->json(['error' => 'Nama memiliki batas maksimal 30 karakter dan batas minimal 7 karakter'], 400);
         } else if (preg_match('/[0-9]/', $request->name)) {
