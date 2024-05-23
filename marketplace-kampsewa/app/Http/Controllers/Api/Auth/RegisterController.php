@@ -39,7 +39,7 @@ class RegisterController extends Controller
         // check apakah nomor telephone sudah ada
         $check_nomor_telepone = new User();
         $user_check_nomor = $check_nomor_telepone->nomor_telephone;
-        if($request->nomor_telephone === $check_nomor_telepone ) {
+        if($request->nomor_telephone === $user_check_nomor) {
             return response()->json([
                 'message' => 'Nomor Sudah Terdaftar',
             ], 409);
