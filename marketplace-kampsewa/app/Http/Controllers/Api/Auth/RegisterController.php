@@ -15,7 +15,7 @@ class RegisterController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:30|regex:/^[a-zA-Z\s]*$/',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'required|string|min:8',
             'nomor_telephone' => 'required|string|max:13|min:10|regex:/^08[0-9]{1,13}$/',
             'tanggal_lahir' => 'required|date',
@@ -42,6 +42,15 @@ class RegisterController extends Controller
         if ($user_nomor) {
             return response()->json([
                 'error' => 'Nomor Sudah Terdaftar',
+            ], 409);
+        }
+
+        // check email
+        $email_user = $request->email;
+        $check_email_user = User::where('email', $email_user)->first();
+        if($check_email_user) {
+            return response()->json([
+                'error' => 'Email Sudah Terdaftar Masrbo!',
             ], 409);
         }
 
