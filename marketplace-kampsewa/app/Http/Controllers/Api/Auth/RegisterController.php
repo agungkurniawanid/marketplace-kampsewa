@@ -17,7 +17,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:30|regex:/^[a-zA-Z\s]*$/',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:8',
-            'nomor_telephone' => 'required|string|max:13|min:10|unique:users|regex:/^08[0-9]{1,13}$/',
+            'nomor_telephone' => 'required|string|max:13|min:10|regex:/^08[0-9]{1,13}$/',
             'tanggal_lahir' => 'required|date',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'background' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
