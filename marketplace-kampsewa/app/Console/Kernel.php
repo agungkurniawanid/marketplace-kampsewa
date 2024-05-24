@@ -14,10 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->call(function () {
-            DetailIklan::where('tanggal_mulai', date('Y-m-d'))->update(['status_iklan' => 'aktif']);
-            DetailIklan::where('tanggal_akhir', '<', date('Y-m-d'))->update(['status_iklan' => 'selesai']);
-        })->everyMinute();
+        // Jalankan command `app:update-status-iklan` setiap menit
+        $schedule->command('app:update-status-iklan')->everyMinute();
     }
 
     /**
@@ -26,7 +24,6 @@ class Kernel extends ConsoleKernel
     protected function commands(): void
     {
         $this->load(__DIR__ . '/Commands');
-
         require base_path('routes/console.php');
     }
 }
