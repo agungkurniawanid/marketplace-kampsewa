@@ -9,91 +9,29 @@ use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-    public function getAllProducts()
-    {
-        $products = Produk::leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
-            ->select(
-                'produk.*',
-                'rating_produk.rating',
-            )
-            ->get();
+    // fungsi untuk menampilkan 2 produk rating tertinggi
+    // di halaman pertama dashboard mobile
+    public function duaProdukRatingTertinggi(){
+        // ambil data produk
+        $produk = Produk::leftJoin('rating_produk', 'produk.id' , '=', 'rating_produk.id_produk')
+        ->leftJoin('users', 'users.id' , '=', 'produk.id_user')
+        ->select('produk.*', 'rating_produk.rating', 'users.name', 'users.name_store')
+        ->orderByDesc('rating_produk.rating')->limit(2)->get();
 
-        return response()->json([
-            'products' => $products,
-            'message' => 'Success'
-        ], 200);
-    }
-
-
-    public function getAllProductsByUserId($userId)
-    {
-        $products = DB::table('produk')
-            ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
-            ->select(
-                'produk.*',
-                'rating_produk.rating'
-            )
-            ->where('produk.id_user', $userId)
-            ->get();
-
-        return response()->json([
-            'products' => $products,
-            'message' => 'Success'
-        ], 200);
-    }
-
-    public function getProductById($productId)
-    {
-        $product = DB::table('produk')
-            ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
-            ->select(
-                'produk.*',
-                'rating_produk.*'
-            )
-            ->where('produk.id', $productId)->orWhere('produk.nama', $productId)
-            ->first();
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+        // check apakah data ada
+        if(!$produk){
+            // jika tidak ada maka response 404
+            return response()->json(['message' => 'Data tidak ditemukan!'], 404);
         }
 
+        // jika data ada maka respnose 200
         return response()->json([
-            'product' => $product,
-            'message' => 'Success'
+            'message' => 'success',
+            'data_produk' => $produk
         ], 200);
     }
 
-
-    public function getProductByCategory($category)
-    {
-        $products = DB::table('produk')
-            ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
-            ->select(
-                'produk.*',
-                'rating_produk.rating'
-            )
-            ->where('kategori', 'like', '%' . $category . '%')
-            ->get();
-
-        return response()->json([
-            'products' => $products,
-            'message' => 'Success'
-        ], 200);
-    }
-
-    public function getProductByRatingLimitTwo()
-    {
-        $produk = DB::table('produk')
-            ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
-            ->select(
-                'produk.*',
-                DB::raw('AVG(rating_produk.rating) as rating_rata_rata')
-            )
-            ->groupBy('produk.id')
-            ->orderBy('rating_rata_rata', 'desc')
-            ->limit(2)
-            ->get();
-
-        return response()->json($produk);
-    }
+    // fungsi untuk menampilkan product berdasarkan
+    // kategori: tenda, pakaian, tas & sepatu, perlengkapan,
+    // berdasarkan: semua, rating, termurah, termahal,
 }
