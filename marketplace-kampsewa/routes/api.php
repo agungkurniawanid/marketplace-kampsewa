@@ -33,6 +33,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // product
     Route::get('/produk/dua-produk-rating-tertinggi', [ProductController::class, 'duaProdukRatingTertinggi']);
+    Route::get('/produk/{kategori}/{filter?}/{search?}', [ProductController::class, 'getProdukByFilter']);
 
     // iklan
     Route::get('/iklan', [IklanControlller::class, 'getAllIklan']);
