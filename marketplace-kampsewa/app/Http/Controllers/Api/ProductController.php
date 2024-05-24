@@ -62,10 +62,10 @@ class ProductController extends Controller
                 $produk->orderBy('rating_produk.rating', 'desc');
                 break;
             case 'termurah':
-                $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].harga_sewa')) AS UNSIGNED) ASC");
+                $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) ASC");
                 break;
             case 'termahal':
-                $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].harga_sewa')) AS UNSIGNED) DESC");
+                $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) DESC");
                 break;
             case 'semua':
             default:
@@ -79,5 +79,12 @@ class ProductController extends Controller
             'message' => 'success',
             'data' => $data,
         ], 200);
+    }
+
+
+    // fungsi untuk menampilkan detial : nama, stok, harga, warna, ukuran
+    // saat user clik icon keranjang produk
+    public function getDetailProdukKeranjang($parameter, $warna, $ukuran)
+    {
     }
 }
