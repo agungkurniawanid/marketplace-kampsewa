@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\ChartWebController;
 use App\Http\Controllers\Api\IklanControlller;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\RiwayatPencarianController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,4 +39,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // iklan
     Route::get('/iklan', [IklanControlller::class, 'getAllIklan']);
     Route::get('/iklan/{identifier}', [IklanControlller::class, 'getDetailIklan']);
+
+    // riwayat pencarian
+    Route::post('/riwayat-pencarian/insert/{id_user}', [RiwayatPencarianController::class, 'insert']);
+    Route::get('/riwayat-pencarian/show/{id_user}', [RiwayatPencarianController::class, 'show']);
 });

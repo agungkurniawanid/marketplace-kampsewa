@@ -8,4 +8,5 @@ php artisan db:seed --class=PemasukanSeeder &&
 php artisan db:seed --class=PengeluaranSeeder &&
 php artisan db:seed --class=ProdukSeeder &&
 php artisan db:seed --class=RatingSeeder &&
-php artisan db:seed --class=StatusNotifikasiUserSeeder
+php artisan db:seed --class=StatusNotifikasiUserSeeder &&
+php artisan db:seed --class=RiwayatPencarianSeeder
