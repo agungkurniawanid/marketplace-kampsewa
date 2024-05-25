@@ -16,7 +16,7 @@ class ProductController extends Controller
         // ambil data produk
         $produk = Produk::leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
             ->leftJoin('users', 'users.id', '=', 'produk.id_user')
-            ->select('produk.*', 'rating_produk.rating', 'users.name', 'users.name_store')
+            ->select('produk.*', 'rating_produk.rating', 'users.name as nama_user', 'users.name_store as nama_toko')
             ->orderByDesc('rating_produk.rating')->limit(6)->get();
 
         // check apakah data ada
