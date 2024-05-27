@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('deskripsi', 255)->nullable(false);
             $table->enum('status', ['Tersedia', 'Tidak Tersedia'])->nullable(false);
             $table->string('kategori', 100)->nullable(false);
-            $table->json('variants')->nullable();
             $table->string('foto_depan', 255)->nullable();
             $table->string('foto_belakang', 255)->nullable();
             $table->string('foto_kiri', 255)->nullable();
