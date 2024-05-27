@@ -11,13 +11,28 @@ class ProductController extends Controller
 {
     // fungsi untuk menampilkan 2 produk rating tertinggi
     // di halaman pertama dashboard mobile
-    public function duaProdukRatingTertinggi()
+    public function enamProdukRatingTertinggi()
     {
         // ambil data produk
         $produk = Produk::leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
             ->leftJoin('users', 'users.id', '=', 'produk.id_user')
-            ->select('produk.*', 'rating_produk.rating', 'users.name as nama_user', 'users.name_store as nama_toko')
-            ->orderByDesc('rating_produk.rating')->limit(6)->get();
+            ->leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+            ->select(
+                'produk.id as id_produk',
+                'produk.id_user as id_user',
+                'rating_produk.id as id_rating_produk',
+                'variant_produk.id as id_variant_produk',
+                'detail_variant_produk.id as id_detail_variant_produk',
+                'produk.nama as nama_produk',
+                'produk.foto_depan',
+                'rating_produk.rating',
+                'detail_variant_produk.harga_sewa',
+            )
+            ->whereNotNull('rating_produk.rating')
+            ->whereNotNull('detail_variant_produk.harga_sewa')
+            ->orderByDesc('rating_produk.rating')
+            ->orderBy('detail_variant_produk.harga_sewa')->limit(6)->get();
 
         // check apakah data ada
         if (!$produk) {
@@ -36,64 +51,64 @@ class ProductController extends Controller
     // kategori: tenda, pakaian, tas & sepatu, perlengkapan, semua
     // berdasarkan: rating, termurah, termahal, terdekat
     public function getProdukByFilter($kategori = 'semua')
-{
-    $filter = request()->query('filter', 'semua');
-    $search = request()->query('search', null);
-    $hargaMin = request()->query('hargaMin', null);
-    $hargaMax = request()->query('hargaMax', null);
+    {
+        $filter = request()->query('filter', 'semua');
+        $search = request()->query('search', null);
+        $hargaMin = request()->query('hargaMin', null);
+        $hargaMax = request()->query('hargaMax', null);
 
-    // Ambil data dengan join table produk, users, alamat
-    $produk = Produk::leftJoin('users', 'users.id', '=', 'produk.id_user')
-        ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
-        ->leftJoin('alamat', 'users.id', '=', 'alamat.id_user')
-        ->select('produk.*', 'users.id as id_user', 'users.name', 'users.name_store', 'alamat.id as id_alamat', 'alamat.longitude', 'alamat.latitude', 'rating_produk.rating');
+        // Ambil data dengan join table produk, users, alamat
+        $produk = Produk::leftJoin('users', 'users.id', '=', 'produk.id_user')
+            ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
+            ->leftJoin('alamat', 'users.id', '=', 'alamat.id_user')
+            ->select('produk.*', 'users.id as id_user', 'users.name', 'users.name_store', 'alamat.id as id_alamat', 'alamat.longitude', 'alamat.latitude', 'rating_produk.rating');
 
-    // Filter kategori jika bukan 'semua'
-    if ($kategori !== 'semua') {
-        $produk->where('produk.kategori', 'like', '%' . $kategori . '%');
+        // Filter kategori jika bukan 'semua'
+        if ($kategori !== 'semua') {
+            $produk->where('produk.kategori', 'like', '%' . $kategori . '%');
+        }
+
+        // Pencarian berdasarkan nama atau deskripsi produk
+        if ($search) {
+            $produk->where(function ($query) use ($search) {
+                $query->where('produk.nama', 'like', '%' . $search . '%')
+                    ->orWhere('produk.deskripsi', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter berdasarkan harga minimal dan maksimal
+        if ($hargaMin !== null) {
+            $produk->whereRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) >= ?", [$hargaMin]);
+        }
+
+        if ($hargaMax !== null) {
+            $produk->whereRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) <= ?", [$hargaMax]);
+        }
+
+        // Filter berdasarkan metode urutan
+        switch ($filter) {
+            case 'rating':
+                $produk->orderBy('rating_produk.rating', 'desc');
+                break;
+            case 'termurah':
+                $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) ASC");
+                break;
+            case 'termahal':
+                $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) DESC");
+                break;
+            case 'semua':
+            default:
+                break;
+        }
+
+        // Eksekusi query dan ambil hasil
+        $data = $produk->get();
+
+        return response()->json([
+            'message' => 'success',
+            'data' => $data,
+        ], 200);
     }
-
-    // Pencarian berdasarkan nama atau deskripsi produk
-    if ($search) {
-        $produk->where(function ($query) use ($search) {
-            $query->where('produk.nama', 'like', '%' . $search . '%')
-                ->orWhere('produk.deskripsi', 'like', '%' . $search . '%');
-        });
-    }
-
-    // Filter berdasarkan harga minimal dan maksimal
-    if ($hargaMin !== null) {
-        $produk->whereRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) >= ?", [$hargaMin]);
-    }
-
-    if ($hargaMax !== null) {
-        $produk->whereRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) <= ?", [$hargaMax]);
-    }
-
-    // Filter berdasarkan metode urutan
-    switch ($filter) {
-        case 'rating':
-            $produk->orderBy('rating_produk.rating', 'desc');
-            break;
-        case 'termurah':
-            $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) ASC");
-            break;
-        case 'termahal':
-            $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) DESC");
-            break;
-        case 'semua':
-        default:
-            break;
-    }
-
-    // Eksekusi query dan ambil hasil
-    $data = $produk->get();
-
-    return response()->json([
-        'message' => 'success',
-        'data' => $data,
-    ], 200);
-}
 
 
 
