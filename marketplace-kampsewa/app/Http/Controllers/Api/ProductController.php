@@ -57,11 +57,24 @@ class ProductController extends Controller
         $hargaMin = request()->query('hargaMin', null);
         $hargaMax = request()->query('hargaMax', null);
 
-        // Ambil data dengan join table produk, users, alamat
+        // Ambil data dengan join table produk, users, variant_produk, detail_variant_produk, rating_produk
         $produk = Produk::leftJoin('users', 'users.id', '=', 'produk.id_user')
             ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
-            ->leftJoin('alamat', 'users.id', '=', 'alamat.id_user')
-            ->select('produk.*', 'users.id as id_user', 'users.name', 'users.name_store', 'alamat.id as id_alamat', 'alamat.longitude', 'alamat.latitude', 'rating_produk.rating');
+            ->leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+            ->select(
+                'produk.id as id_produk',
+                'produk.id_user as id_user',
+                'rating_produk.id as id_rating_produk',
+                'variant_produk.id as id_variant_produk',
+                'detail_variant_produk.id as id_detail_variant_produk',
+                'produk.nama as nama_produk',
+                'produk.foto_depan',
+                'rating_produk.rating',
+                'detail_variant_produk.harga_sewa'
+            )
+            ->whereNotNull('rating_produk.rating')
+            ->whereNotNull('detail_variant_produk.harga_sewa');
 
         // Filter kategori jika bukan 'semua'
         if ($kategori !== 'semua') {
@@ -78,11 +91,11 @@ class ProductController extends Controller
 
         // Filter berdasarkan harga minimal dan maksimal
         if ($hargaMin !== null) {
-            $produk->whereRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) >= ?", [$hargaMin]);
+            $produk->where('detail_variant_produk.harga_sewa', '>=', $hargaMin);
         }
 
         if ($hargaMax !== null) {
-            $produk->whereRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) <= ?", [$hargaMax]);
+            $produk->where('detail_variant_produk.harga_sewa', '<=', $hargaMax);
         }
 
         // Filter berdasarkan metode urutan
@@ -91,10 +104,10 @@ class ProductController extends Controller
                 $produk->orderBy('rating_produk.rating', 'desc');
                 break;
             case 'termurah':
-                $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) ASC");
+                $produk->orderBy('detail_variant_produk.harga_sewa', 'asc');
                 break;
             case 'termahal':
-                $produk->orderByRaw("CAST(JSON_UNQUOTE(JSON_EXTRACT(produk.variants, '$[0].ukuran[0].harga_sewa')) AS UNSIGNED) DESC");
+                $produk->orderBy('detail_variant_produk.harga_sewa', 'desc');
                 break;
             case 'semua':
             default:
