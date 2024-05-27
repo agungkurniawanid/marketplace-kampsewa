@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     // fungsi untuk menampilkan 2 produk rating tertinggi
     // di halaman pertama dashboard mobile
-    public function enamProdukRatingTertinggi()
+    public function produkRatingTertinggi()
     {
         // ambil data produk
         $produk = Produk::leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')

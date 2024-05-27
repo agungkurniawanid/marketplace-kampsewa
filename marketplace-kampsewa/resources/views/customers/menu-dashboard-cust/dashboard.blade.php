@@ -1,11 +1,11 @@
 @extends('layouts.customers.layouts-customer')
 @section('customer-content')
-    <div class="--container px-10 py-5 w-full h-auto flex flex-col gap-4">
+    <div class="--container px-10 py-5 w-full h-auto flex flex-col mobile-max:px-5 mobile-max:py-5 gap-4">
         <div class="--header">
             <h2 class="az-dashboard-title">Hi, Selamat Pagi Agung!</h2>
             <p class="az-dashboard-text">Lihat dahulu informasi dashboard anda.</p>
         </div>
-        <div class="--component-awal grid grid-cols-2 gap-4 w-full h-auto">
+        <div class="--component-awal grid grid-cols-2 gap-4 w-full h-auto mobile-max:grid-cols-1">
             <div class="--chart-pemasukan-perbandingan-tahunini-tahunsebelumnya w-full">
                 <div class="--design w-full">
                     <div class="--card shadow-box-shadow-8 p-4 rounded-[15px] bg-white w-full flex flex-col gap-4">
@@ -17,7 +17,7 @@
                             <div class="--total-nominal flex items-center gap-6">
                                 <div class="--tahun-ini">
                                     <p class="text-[14px] text-[#808995]">Tahun Kemarin - 2023</p>
-                                    <p class="text-[18px] font-bold">Rp. 430.550.240,00</p>
+                                    <p class="text-[18px] small-desktop:text-[16px] mobile-max:font-medium font-bold">Rp. 430.550.240</p>
                                     <div class="flex items-center gap-1 mt-1">
                                         <p
                                             class="p-1 rounded-full bg-[#D8EDDC] w-[22px] h-[22px] flex items-center justify-center">
@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="--tahun-sebelumnya">
                                     <p class="text-[14px] text-[#808995]">Tahun Saat ini - 2024</p>
-                                    <p class="text-[18px] font-bold">Rp. 265.606.245,00</p>
+                                    <p class="text-[18px] small-desktop:text-[16px] mobile-max:font-medium font-bold">Rp. 265.606.245</p>
                                     <div class="flex items-center gap-1 mt-1">
                                         <p
                                             class="p-1 rounded-full bg-[#D8EDDC] w-[22px] h-[22px] flex items-center justify-center">
@@ -67,7 +67,7 @@
                             <div class="--total-nominal flex items-center gap-6">
                                 <div class="--tahun-ini">
                                     <p class="text-[14px] text-[#808995]">Bulan Kemarin - Mei</p>
-                                    <p class="text-[18px] font-bold">Rp. 430.550.240,00</p>
+                                    <p class="text-[18px] small-desktop:text-[16px] mobile-max:font-medium font-bold">Rp. 430.550.240</p>
                                     <div class="flex items-center gap-1 mt-1">
                                         <p
                                             class="p-1 rounded-full bg-[#D8EDDC] w-[22px] h-[22px] flex items-center justify-center">
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="--tahun-sebelumnya">
                                     <p class="text-[14px] text-[#808995]">Bulan Saat ini - April</p>
-                                    <p class="text-[18px] font-bold">Rp. 265.606.245,00</p>
+                                    <p class="text-[18px] small-desktop:text-[16px] mobile-max:font-medium font-bold">Rp. 265.606.245</p>
                                     <div class="flex items-center gap-1 mt-1">
                                         <p
                                             class="p-1 rounded-full bg-[#D8EDDC] w-[22px] h-[22px] flex items-center justify-center">
@@ -112,7 +112,7 @@
                 <p class="text-[22px] font-medium">Peralatan Terlaris</p>
                 <p><a href="" class="text-[14px] text-blue-400 underline">Lihat Semua</a></p>
             </div>
-            <div class="--wrapper-card w-full grid grid-cols-5 gap-2">
+            <div class="--wrapper-card w-full grid grid-cols-5 gap-2 mobile-max:grid-cols-2">
                 @for ($i = 1; $i <= 5; $i++)
                     <div class="--card">
                         <div class="block bg-white shadow-box-shadow-8 rounded-[15px] overflow-hidden dark:bg-surface-dark">
@@ -120,8 +120,8 @@
                                 <img src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
                             </a>
                             <div class="p-2 text-surface dark:text-white">
-                                <h5 class="mb-2 text-[16px] font-medium leading-tight">Tenda Gunung REI Co-op Half Dome</h5>
-                                <p class="text-[12px] line-clamp-3">
+                                <h5 class="mb-2 text-[16px] small-desktop:line-clamp-1 font-medium leading-tight">Tenda Gunung REI Co-op Half Dome</h5>
+                                <p class="text-[12px] line-clamp-3 small-desktop:line-clamp-2">
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus itaque, tenetur enim
                                     aliquid amet voluptate alias doloribus! Excepturi impedit sapiente, alias rerum
                                     asperiores rem consequatur quod quos, explicabo, ad iste?
@@ -133,7 +133,7 @@
             </div>
         </div>
 
-        <div class="--component-ketiga w-full h-auto grid grid-cols-3 gap-4">
+        <div class="--component-ketiga w-full h-auto small-desktop:grid-cols-2 grid grid-cols-3 gap-4 mobile-max:grid-cols-1">
             <div class="--card-user-sewa-berlangsung p-4 shadow-box-shadow-11 flex flex-col justify-between rounded-[15px]">
                 <div class="--header">
                     <h1 class="text-[22px] font-medium">Penyewa Berlangsung</h1>
@@ -199,7 +199,7 @@
                                 </div>
                             </div>
                             <div class="--bagian-2">
-                                <p class="text-[12px] font-medium py-1 px-2 bg-[#F04444] text-white rounded-full">2 Hari</p>
+                                <p class="text-[12px] font-medium small-desktop:text-[10px] small-desktop:font-normal py-1 px-2 bg-[#F04444] text-white rounded-full whitespace-nowrap">2 Hari</p>
                             </div>
                         </div>
                     @endfor
