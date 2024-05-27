@@ -21,9 +21,6 @@ return new class extends Migration
             $table->foreign('id_variant_produk')->references('id')->on('variant_produk');
             $table->integer('qty');
             $table->integer('subtotal');
-            $table->text('pesan');
-            $table->integer('biaya_admin');
-            $table->string('jenis_transaksi')->default('ambil ditempat');
             $table->timestamps();
         });
     }

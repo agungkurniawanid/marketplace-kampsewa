@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('bukti_pembayaran');
             $table->integer('jumlah_pembayaran');
             $table->integer('kembalian_pembayaran');
+            $table->integer('biaya_admin');
             $table->integer('kurang_pembayaran');
             $table->integer('total_pembayaran');
             $table->string('metode')->default('transfer');
+            $table->string('jenis_transaksi')->default('ambil ditempat');
             $table->string('status_pembayaran');
             $table->timestamps();
         });

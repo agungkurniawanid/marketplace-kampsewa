@@ -25,6 +25,8 @@ class PembayaranPenyewaanFactory extends Factory
             'total_pembayaran'=>$this->faker->numberBetween(10000,100000),
             'metode'=>$this->faker->randomElement(['transfer', 'bayar_ditempat']),
             'status_pembayaran'=>$this->faker->randomElement(['lunas', 'belum lunas']),
+            'jenis_transaksi'=>$this->faker->randomElement(['ambil ditempat', 'antar ditempat']),
+            'biaya_admin'=>$this->faker->numberBetween(10000, 100000),
             'created_at'=>$this->faker->dateTimeBetween('-1 year', 'now'),
         ];
     }

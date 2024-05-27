@@ -22,9 +22,6 @@ class DetailPenyewaanFactory extends Factory
             'id_variant_produk'=>$this->faker->numberBetween(1,200),
             'qty'=>$this->faker->numberBetween(1,200),
             'subtotal'=>$this->faker->numberBetween(10000,100000),
-            'pesan'=>$this->faker->sentence(),
-            'biaya_admin'=>$this->faker->numberBetween(10000, 100000),
-            'jenis_transaksi'=>$this->faker->randomElement(['ambil ditempat', 'antar ditempat']),
             'created_at'=>$this->faker->dateTimeBetween('-1 year','now'),
         ];
     }

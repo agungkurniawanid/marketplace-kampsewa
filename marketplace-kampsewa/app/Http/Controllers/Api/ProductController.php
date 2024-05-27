@@ -32,7 +32,7 @@ class ProductController extends Controller
             ->whereNotNull('rating_produk.rating')
             ->whereNotNull('detail_variant_produk.harga_sewa')
             ->orderByDesc('rating_produk.rating')
-            ->orderBy('detail_variant_produk.harga_sewa')->limit(6)->get();
+            ->orderBy('detail_variant_produk.harga_sewa')->get();
 
         // check apakah data ada
         if (!$produk) {
@@ -122,8 +122,6 @@ class ProductController extends Controller
             'data' => $data,
         ], 200);
     }
-
-
 
     // fungsi untuk menampilkan detial : nama, stok, harga, warna, ukuran
     // saat user clik icon keranjang produk

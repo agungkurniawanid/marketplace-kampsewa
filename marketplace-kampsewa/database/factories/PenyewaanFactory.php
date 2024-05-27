@@ -21,6 +21,7 @@ class PenyewaanFactory extends Factory
             'tanggal_mulai'=>$this->faker->date(),
             'tanggal_selesai'=>$this->faker->date(),
             'status_penyewaan'=>$this->faker->randomElement(['pending', 'berlangsung', 'selesai']),
+            'pesan'=>$this->faker->sentence(),
             'created_at'=>$this->faker->dateTimeBetween('-1 year', 'now'),
         ];
     }
