@@ -135,6 +135,7 @@ class ProductController extends Controller
             ->select(
                 'produk.id as id_produk',
                 'produk.nama as nama_produk',
+                'produk.foto_depan',
                 'variant_produk.id as id_variant_produk',
                 'variant_produk.warna',
                 'detail_variant_produk.id as id_detail_variant_produk',
