@@ -24,14 +24,13 @@ class ProductController extends Controller
                 'produk.nama as nama_produk',
                 'produk.foto_depan',
                 DB::raw('AVG(rating_produk.rating) as rata_rating'),
-                'detail_variant_produk.harga_sewa'
+                DB::raw('MIN(detail_variant_produk.harga_sewa) as harga_sewa_terendah')
             )
             ->whereNotNull('rating_produk.rating')
             ->whereNotNull('detail_variant_produk.harga_sewa')
-            ->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.foto_depan', 'detail_variant_produk.harga_sewa')
-            ->orderByDesc('rata_rating')
-            ->orderBy('detail_variant_produk.harga_sewa')
-            ->distinct()
+            ->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.foto_depan')
+            ->orderByDesc(DB::raw('AVG(rating_produk.rating)'))
+            ->orderBy(DB::raw('MIN(detail_variant_produk.harga_sewa)'))
             ->get();
 
         // Check apakah data ada
@@ -46,6 +45,7 @@ class ProductController extends Controller
             'data_produk' => $produk
         ], 200);
     }
+
 
 
     // fungsi untuk menampilkan product berdasarkan
