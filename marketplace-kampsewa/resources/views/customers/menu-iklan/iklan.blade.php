@@ -1,7 +1,7 @@
 @extends('layouts.customers.layouts-customer')
 @section('customer-content')
     <div class="--container w-full px-10 py-5 h-auto">
-        <div class="--wrapper-card-main-wrapper-card-get-manajemen-iklan w-full grid grid-cols-[2fr_1fr] gap-6">
+        <div class="--wrapper-card-main-wrapper-card-get-manajemen-iklan w-full grid grid-cols-[2fr_1fr] small-desktop:grid-cols-1 gap-6">
             <div class="--card-main w-full flex flex-col gap-10">
                 <div
                     class="--card-design flex relative justify-content-between items-center w-full h-[300px] bg-white shadow-box-shadow-11 rounded-[30px] p-4">

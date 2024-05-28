@@ -124,8 +124,48 @@ class ProductController extends Controller
     }
 
     // fungsi untuk menampilkan detial : nama, stok, harga, warna, ukuran
-    // saat user clik icon keranjang produk
-    public function getDetailProdukKeranjang($parameter, $warna, $ukuran)
+    // saat user clik icon keranjang produk, $parameter berdasarkan id/nama produk
+    public function getDetailProdukKeranjang($parameter)
     {
+        $warna = request()->query('warna');
+        $ukuran = request()->query('ukuran');
+
+        $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+            ->select(
+                'produk.id as id_produk',
+                'produk.nama as nama_produk',
+                'variant_produk.id as id_variant_produk',
+                'variant_produk.warna',
+                'detail_variant_produk.id as id_detail_variant_produk',
+                'detail_variant_produk.ukuran',
+                'detail_variant_produk.stok',
+                'detail_variant_produk.harga_sewa'
+            )
+            ->where(function ($query) use ($parameter) {
+                $query->where('produk.nama', $parameter)
+                    ->orWhere('produk.id', $parameter);
+            });
+
+        if ($warna) {
+            $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
+        }
+
+        if ($ukuran) {
+            $tb_produk->where('detail_variant_produk.ukuran', 'like', $ukuran);
+        }
+
+        $result = $tb_produk->get();
+
+        if ($result->isEmpty()) {
+            return response()->json([
+                'message' => 'Data tidak ditemukan!',
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'success',
+            'data_produk' => $result,
+        ], 200);
     }
 }

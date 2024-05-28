@@ -18,7 +18,6 @@
                     <nav class="az-menu-sub">
                         <a href="page-signin.html" class="nav-link">Penyewaan Peralatan</a>
                         <a href="{{ route('buat-iklan.index') }}" class="nav-link">Buat Promosi / Iklan</a>
-                        <a href="{{ route('lengkapi-data.index') }}" class="nav-link">Set Lokasi Toko & Rekening</a>
                     </nav>
                 </li>
                 <li class="nav-item {{ $title == 'Sedang Disewa | KampSewa' ? 'active' : '' }} {{ $title == 'Kelola Produk | KampSewa' ? 'active' : '' }} {{ $title == 'Produk Menu | KampSewa' ? 'active' : '' }}">
