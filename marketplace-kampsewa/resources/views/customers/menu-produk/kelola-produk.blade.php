@@ -94,10 +94,12 @@
 
                     {{-- todo untuk tombol tambah data --}}
                     <div class="_btn-tambah-data">
-                        <button onclick="" class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">
+                        <a href="{{ route('menu-produk.tambah-produk', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">
+                        <button class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">
                             <div class="_icon-plus"></div>
                             <span>Tambah Produk</span>
                         </button>
+                        </a>
                     </div>
                 </div>
             </div>

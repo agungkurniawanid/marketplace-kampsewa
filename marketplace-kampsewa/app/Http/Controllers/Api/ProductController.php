@@ -13,7 +13,7 @@ class ProductController extends Controller
     // di halaman pertama dashboard mobile
     public function produkRatingTertinggi()
     {
-        // ambil data produk
+        // Ambil data produk dengan rata-rata rating
         $produk = Produk::leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
             ->leftJoin('users', 'users.id', '=', 'produk.id_user')
             ->leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
@@ -21,31 +21,32 @@ class ProductController extends Controller
             ->select(
                 'produk.id as id_produk',
                 'produk.id_user as id_user',
-                'rating_produk.id as id_rating_produk',
-                'variant_produk.id as id_variant_produk',
-                'detail_variant_produk.id as id_detail_variant_produk',
                 'produk.nama as nama_produk',
                 'produk.foto_depan',
-                'rating_produk.rating',
-                'detail_variant_produk.harga_sewa',
+                DB::raw('AVG(rating_produk.rating) as rata_rating'),
+                'detail_variant_produk.harga_sewa'
             )
             ->whereNotNull('rating_produk.rating')
             ->whereNotNull('detail_variant_produk.harga_sewa')
-            ->orderByDesc('rating_produk.rating')
-            ->orderBy('detail_variant_produk.harga_sewa')->get();
+            ->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.foto_depan', 'detail_variant_produk.harga_sewa')
+            ->orderByDesc('rata_rating')
+            ->orderBy('detail_variant_produk.harga_sewa')
+            ->distinct()
+            ->get();
 
-        // check apakah data ada
-        if (!$produk) {
-            // jika tidak ada maka response 404
+        // Check apakah data ada
+        if ($produk->isEmpty()) {
+            // Jika tidak ada maka response 404
             return response()->json(['message' => 'Data tidak ditemukan!'], 404);
         }
 
-        // jika data ada maka respnose 200
+        // Jika data ada maka response 200
         return response()->json([
             'message' => 'success',
             'data_produk' => $produk
         ], 200);
     }
+
 
     // fungsi untuk menampilkan product berdasarkan
     // kategori: tenda, pakaian, tas & sepatu, perlengkapan, semua
@@ -169,4 +170,6 @@ class ProductController extends Controller
             'data_produk' => $result,
         ], 200);
     }
+
+    // fungsi untuk get detail produk
 }
