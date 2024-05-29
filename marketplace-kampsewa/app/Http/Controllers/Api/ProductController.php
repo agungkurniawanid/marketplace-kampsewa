@@ -102,19 +102,19 @@ class ProductController extends Controller
 
         // Filter berdasarkan metode urutan
         switch ($filter) {
-            case 'rekomendasi':
+            case 'Rekomendasi':
                 $produk->orderBy('rata_rating', 'desc');
                 break;
-            case 'termurah':
+            case 'Termurah':
                 $produk->orderBy('harga_sewa', 'asc');
                 break;
-            case 'termahal':
+            case 'Termahal':
                 $produk->orderBy('harga_sewa', 'desc');
                 break;
-            case 'terbaru':
+            case 'Terbaru':
                 $produk->orderBy('produk.created_at', 'desc');
                 break;
-            case 'semua':
+            case 'Semua':
             default:
                 break;
         }
