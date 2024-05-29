@@ -5,7 +5,7 @@
             <h1 class="text-[20px] font-bold">Tambah Barang Penyewaan</h1>
             <p>Tambahkan barang penyewaan! anda bisa memasukkan data barang dengan banyak ukuran dan jenis, seperti warna,
                 stok, dan harga sewa yang berbeda.</p>
-            <form action="{{ route('menu-produk.tambah-produk-post') }}" class="w-full flex flex-col gap-6 h-auto mt-4"
+            <form id="simpan-produk" action="{{ route('menu-produk.tambah-produk-post') }}" class="w-full flex flex-col gap-6 h-auto mt-4"
                 method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id_user" value="{{ $id }}">
@@ -16,7 +16,7 @@
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             type="text" name="nama_produk" placeholder="Masukkan nama produk">
                         @error('nama_produk')
-                            <p class="text-red-500 text-xs mt-1">Foto Harus Di isi!</p>
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="--input-deskripsi w-full">
@@ -25,7 +25,7 @@
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             type="text" name="deskripsi_produk" placeholder="Masukkan deskripsi produk">
                         @error('deskripsi_produk')
-                            <p class="text-red-500 text-xs mt-1">Foto Harus Di isi!</p>
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="--input-kategori relative w-full">
@@ -46,7 +46,7 @@
                             </svg>
                         </div>
                         @error('kategori_produk')
-                            <p class="text-red-500 text-xs mt-1">Foto Harus Di isi!</p>
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="--input-foto-depan flex flex-col">
@@ -58,7 +58,7 @@
                                     src="{{ asset('images/product-example.jpg') }}" alt="">
                             </div>
                             <label class="block">
-                                <input type="file" name="foto_depan" value="{{ old('foto_depan') }}" id="file-input"
+                                <input type="file" name="foto_depan" value="{{ old('foto_depan') }}" id="foto-depan"
                                     onchange="previewImageFotoDepan(event)"
                                     class="block w-full text-sm text-gray-500
                               file:me-4 file:py-2 file:px-4
@@ -73,7 +73,7 @@
                             ">
                             </label>
                             @error('foto_depan')
-                                <p class="text-red-500 text-xs mt-1">Foto Harus Di isi!</p>
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -129,7 +129,7 @@
                             ">
                             </label>
                             @error('foto_kiri')
-                                <p class="text-red-500 text-xs mt-1">Foto Harus Di isi!</p>
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -157,7 +157,7 @@
                             ">
                             </label>
                             @error('foto_kanan')
-                                <p class="text-red-500 text-xs mt-1">Foto Harus Di isi!</p>
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -166,12 +166,11 @@
                 <div class="--input-table-variant-detail-variant" id="variantContainer">
                     <div class="variant">
                         <div class="w-1/2">
-                            <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Warna Produk
-                            </p>
+                            <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Warna Produk</p>
                             <input
                                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                type="text" name="" placeholder="contoh: Merah">
-                            @error('deskripsi_produk')
+                                type="text" name="variants[0][warna]" placeholder="contoh: Merah" required>
+                            @error('variants.*.warna')
                                 <p class="text-red-500 text-xs mt-1">Warna Harus Di isi!</p>
                             @enderror
                         </div>
@@ -182,29 +181,30 @@
                                     </p>
                                     <input
                                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        type="text" name="" placeholder="contoh: 3x4/XXL">
-                                    @error('deskripsi_produk')
+                                        type="text" name="variants[0][sizes][0][ukuran]" placeholder="contoh: 3x4/XXL"
+                                        required>
+                                    @error('variants.*.sizes.*.ukuran')
                                         <p class="text-red-500 text-xs mt-1">Ukuran Harus Di isi!</p>
                                     @enderror
                                 </div>
                                 <div class="w-full">
-                                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Stok
-                                    </p>
+                                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Stok</p>
                                     <input
                                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        type="text" name="" placeholder="contoh: 20">
-                                    @error('stok')
+                                        type="number" name="variants[0][sizes][0][stok]" placeholder="contoh: 20"
+                                        required>
+                                    @error('variants.*.sizes.*.stok')
                                         <p class="text-red-500 text-xs mt-1">Stok Harus Di isi!</p>
                                     @enderror
                                 </div>
                                 <div class="w-full">
                                     <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga
-                                        Sewa
-                                    </p>
+                                        Sewa</p>
                                     <input
                                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        type="text" name="" placeholder="contoh: 3x4/XXL">
-                                    @error('harga_sewa')
+                                        type="number" name="variants[0][sizes][0][harga_sewa]"
+                                        placeholder="contoh: 10000" required>
+                                    @error('variants.*.sizes.*.harga_sewa')
                                         <p class="text-red-500 text-xs mt-1">Harga Harus Di isi!</p>
                                     @enderror
                                 </div>
@@ -225,10 +225,128 @@
                 <div class="w-full flex items-center gap-2">
                     <button type="button" class="p-2 bg-blue-500 rounded text-white font-medium text-[14px]"
                         onclick="addVariant()">Tambah Warna</button>
-                    <button class="p-2 bg-green-500 rounded text-white font-medium text-[14px]" type="submit">Simpan
+                    <button class="p-2 bg-green-500 rounded text-white font-medium text-[14px]" id="simpan-data-produk">Simpan
                         Data</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <script>
+
+        function previewImageFotoDepan(event) {
+            const input = event.target;
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('foto-depan');
+                preview.src = reader.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+        function previewImageFotoBelakang(event) {
+            const input = event.target;
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('foto-belakang');
+                preview.src = reader.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+        function previewImageFotoKiri(event) {
+            const input = event.target;
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('foto-kiri');
+                preview.src = reader.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+        function previewImageFotoKanan(event) {
+            const input = event.target;
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('foto-kanan');
+                preview.src = reader.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        document.getElementById('simpan-data-produk').addEventListener('click', (event) => {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Apakah sudah yakin?',
+                text: "Kamu akan save data ini dan bisa inputkan data produk lainnya!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('simpan-produk').submit();
+                } else {
+                    Swal.fire('Cancelled', 'Save cancelled', 'info');
+                }
+            })
+        });
+
+        function addVariant() {
+            const variantContainer = document.getElementById('variantContainer');
+            const variantCount = document.querySelectorAll('.variant').length;
+            const newVariant = `
+                <div class="variant">
+                    <div class="w-1/2">
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Warna Produk</p>
+                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            type="text" name="variants[${variantCount}][warna]" placeholder="contoh: Merah" required>
+                    </div>
+                    <div class="sizeContainer mt-2">
+                        <button type="button" class="p-2 bg-blue-500 rounded mt-2 text-white font-medium text-[14px]" onclick="addSize(this.parentElement)">Tambah Detail Variant</button>
+                        <button type="button" class="p-2 bg-red-500 rounded mt-2 text-white font-medium text-[14px]" onclick="removeVariant(this)">Hapus Warna</button>
+                    </div>
+                </div>
+            `;
+            variantContainer.insertAdjacentHTML('beforeend', newVariant);
+        }
+
+        function addSize(sizeContainer) {
+            const variantIndex = Array.from(document.querySelectorAll('.variant')).indexOf(sizeContainer.parentElement);
+            const sizeCount = sizeContainer.querySelectorAll('.size').length;
+            const newSize = `
+                <div class="size flex items-center gap-4">
+                    <div class="w-full">
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Ukuran</p>
+                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            type="text" name="variants[${variantIndex}][sizes][${sizeCount}][ukuran]" placeholder="contoh: 3x4/XXL" required>
+                    </div>
+                    <div class="w-full">
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Stok</p>
+                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            type="number" name="variants[${variantIndex}][sizes][${sizeCount}][stok]" placeholder="contoh: 20" required>
+                    </div>
+                    <div class="w-full">
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Sewa</p>
+                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            type="number" name="variants[${variantIndex}][sizes][${sizeCount}][harga_sewa]" placeholder="contoh: 10000" required>
+                    </div>
+                    <div>
+                        <p class="opacity-0">button</p>
+                        <button type="button" class="py-3 px-4 rounded flex items-center justify-center h-full bg-red-100 text-red-500"
+                            onclick="removeSize(this)"><i class="bi bi-trash3-fill"></i></button>
+                    </div>
+                </div>
+            `;
+            sizeContainer.insertAdjacentHTML('beforebegin', newSize);
+        }
+
+        function removeVariant(button) {
+            const variant = button.parentElement.parentElement;
+            variant.remove();
+        }
+
+        function removeSize(button) {
+            const size = button.parentElement.parentElement;
+            size.remove();
+        }
+    </script>
 @endsection

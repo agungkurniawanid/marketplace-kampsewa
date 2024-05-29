@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     // fungsi untuk menampilkan 2 produk rating tertinggi
     // di halaman pertama dashboard mobile
-    public function produkRatingTertinggi()
+    public function produkRatingTertinggiLimit6()
     {
         // Ambil data produk dengan rata-rata rating
         $produk = Produk::leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
@@ -31,6 +31,7 @@ class ProductController extends Controller
             ->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.foto_depan')
             ->orderByDesc(DB::raw('AVG(rating_produk.rating)'))
             ->orderBy(DB::raw('MIN(detail_variant_produk.harga_sewa)'))
+            ->limit(6)
             ->get();
 
         // Check apakah data ada
@@ -71,6 +72,7 @@ class ProductController extends Controller
                 DB::raw('MAX(detail_variant_produk.id) as id_detail_variant_produk'),
                 'produk.nama as nama_produk',
                 'produk.foto_depan',
+                'produk.created_at',
                 DB::raw('AVG(rating_produk.rating) as rata_rating'),
                 DB::raw('MIN(detail_variant_produk.harga_sewa) as harga_sewa')
             )
@@ -101,7 +103,7 @@ class ProductController extends Controller
 
         // Filter berdasarkan metode urutan
         switch ($filter) {
-            case 'rating':
+            case 'rekomendasi':
                 $produk->orderBy('rata_rating', 'desc');
                 break;
             case 'termurah':
@@ -109,6 +111,9 @@ class ProductController extends Controller
                 break;
             case 'termahal':
                 $produk->orderBy('harga_sewa', 'desc');
+                break;
+            case 'terbaru':
+                $produk->orderBy('produk.created_at', 'desc');
                 break;
             case 'semua':
             default:
