@@ -24,8 +24,9 @@ class ProdukController extends Controller
         $id_user_dec = Crypt::decrypt($id_user);
         return view('customers.menu-produk.tambah-produk')->with([
             'title' => 'Tambah Produk',
+            'id' => $id_user_dec,
         ]);
     }
-    public function tambahProdukPost($id_user) {
+    public function tambahProdukPost() {
     }
 }

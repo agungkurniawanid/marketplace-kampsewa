@@ -136,6 +136,7 @@ class ProductController extends Controller
         $warna = request()->query('warna');
         $ukuran = request()->query('ukuran');
 
+        // Query untuk mendapatkan semua produk dan variannya
         $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
             ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
             ->select(
@@ -154,17 +155,39 @@ class ProductController extends Controller
                     ->orWhere('produk.id', $parameter);
             });
 
+        // Filter berdasarkan warna
         if ($warna) {
             $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
         }
 
+        // Filter berdasarkan ukuran
         if ($ukuran) {
             $tb_produk->where('detail_variant_produk.ukuran', 'like', $ukuran);
         }
 
-        $result = $tb_produk->get();
+        $filtered_results = $tb_produk->get();
 
-        if ($result->isEmpty()) {
+        // Query untuk mendapatkan semua varian produk tanpa filter warna dan ukuran
+        $all_variants = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+            ->select(
+                'produk.id as id_produk',
+                'produk.nama as nama_produk',
+                'produk.foto_depan',
+                'variant_produk.id as id_variant_produk',
+                'variant_produk.warna',
+                'detail_variant_produk.id as id_detail_variant_produk',
+                'detail_variant_produk.ukuran',
+                'detail_variant_produk.stok',
+                'detail_variant_produk.harga_sewa'
+            )
+            ->where(function ($query) use ($parameter) {
+                $query->where('produk.nama', $parameter)
+                    ->orWhere('produk.id', $parameter);
+            })
+            ->get();
+
+        if ($all_variants->isEmpty()) {
             return response()->json([
                 'message' => 'Data tidak ditemukan!',
             ], 404);
@@ -172,7 +195,8 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'success',
-            'data_produk' => $result,
+            'semua_data_variant' => $all_variants,
+            'hasil_filter' => $filtered_results,
         ], 200);
     }
 
