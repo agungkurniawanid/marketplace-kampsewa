@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\DetailVariantProduk;
 use App\Models\Produk;
 use App\Models\VariantProduk;
+use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ProdukController extends Controller
@@ -38,58 +40,94 @@ class ProdukController extends Controller
     }
     public function tambahProdukPost(Request $request)
     {
-        // Validasi data jika diperlukan
-        $request->validate([
-            'id_user' => 'required|string',
-            'nama_produk' => 'required|string|max:100',
-            'deskripsi_produk' => 'required|string|max:1000',
-            'kategori_produk' => 'required|string',
-            'foto_depan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'foto_belakang' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'foto_kiri' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'foto_kanan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        try {
+            // Validasi data jika diperlukan
+            $request->validate([
+                'id_user' => 'required|string',
+                'nama_produk' => 'required|string|max:100',
+                'deskripsi_produk' => 'required|string|max:1000',
+                'kategori_produk' => 'required|string',
+                'foto_depan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto_belakang' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto_kiri' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto_kanan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'variants.*.warna' => 'required|string',
+                'variants.*.sizes.*.ukuran' => 'required|string',
+                'variants.*.sizes.*.stok' => 'required|integer',
+                'variants.*.sizes.*.harga_sewa' => 'required|integer',
+            ]);
 
-        $request->merge([
-            'status' => 'Tersedia',
-        ]);
-
-        // Simpan gambar-gambar
-        $fotoDepanPath = $request->file('foto_depan')->store('assets/image/customers/produk/', 'public');
-        $fotoBelakangPath = $request->file('foto_belakang')->store('assets/image/customers/produk/', 'public');
-        $fotoKiriPath = $request->file('foto_kiri')->store('assets/image/customers/produk/', 'public');
-        $fotoKananPath = $request->file('foto_kanan')->store('assets/image/customers/produk/', 'public');
-
-        // Simpan data produk
-        $produk = new Produk();
-        $produk->id_user = $request->input('id_user');
-        $produk->nama = $request->input('nama_produk');
-        $produk->deskripsi = $request->input('deskripsi_produk');
-        $produk->kategori = $request->input('kategori_produk');
-        $produk->foto_depan = $fotoDepanPath;
-        $produk->foto_belakang = $fotoBelakangPath;
-        $produk->foto_kiri = $fotoKiriPath;
-        $produk->foto_kanan = $fotoKananPath;
-        $produk->save();
-
-        // Simpan detail varian produk
-        foreach ($request->variants as $index => $variant) {
-            $varian = new VariantProduk();
-            $varian->id_produk = $produk->id;
-            $varian->warna = $variant['warna'];
-            $varian->save();
-
-            foreach ($variant['sizes'] as $sizeIndex => $size) {
-                $detailVarian = new DetailVariantProduk();
-                $detailVarian->id_variant_produk = $varian->id;
-                $detailVarian->ukuran = $size['ukuran'];
-                $detailVarian->stok = $size['stok'];
-                $detailVarian->harga_sewa = $size['harga_sewa'];
-                $detailVarian->save();
+            if(empty($request->input('nama_produk'))) {
+                Alert::toast('Nama Produk Tidak Boleh Kosong!', 'warning');
+                return back();
             }
-        }
 
-        Alert::toast('Data berhasil disimpan', 'success');
-        return back();
+            $request->merge([
+                'status' => 'Tersedia',
+            ]);
+
+            // Simpan data produk
+            $produk = new Produk();
+            $produk->id_user = $request->input('id_user');
+            $produk->nama = $request->input('nama_produk');
+            $produk->deskripsi = $request->input('deskripsi_produk');
+            $produk->kategori = $request->input('kategori_produk');
+
+            // Simpan gambar-gambar
+            if ($request->hasFile('foto_depan')) {
+                $foto_depan = $request->file('foto_depan');
+                $fotoDepanName = time() . '_depan.' . $foto_depan->getClientOriginalExtension();
+                $foto_depan->move(public_path('assets/image/customers/produk/'), $fotoDepanName);
+                $produk->foto_depan = $fotoDepanName;
+            }
+
+            if ($request->hasFile('foto_belakang')) {
+                $foto_belakang = $request->file('foto_belakang');
+                $fotoBelakangName = time() . '_belakang.' . $foto_belakang->getClientOriginalExtension();
+                $foto_belakang->move(public_path('assets/image/customers/produk/'), $fotoBelakangName);
+                $produk->foto_belakang = $fotoBelakangName;
+            }
+
+            if ($request->hasFile('foto_kiri')) {
+                $foto_kiri = $request->file('foto_kiri');
+                $fotoKiriName = time() . '_kiri.' . $foto_kiri->getClientOriginalExtension();
+                $foto_kiri->move(public_path('assets/image/customers/produk/'), $fotoKiriName);
+                $produk->foto_kiri = $fotoKiriName;
+            }
+
+            if ($request->hasFile('foto_kanan')) {
+                $foto_kanan = $request->file('foto_kanan');
+                $fotoKananName = time() . '_kanan.' . $foto_kanan->getClientOriginalExtension();
+                $foto_kanan->move(public_path('assets/image/customers/produk/'), $fotoKananName);
+                $produk->foto_kanan = $fotoKananName;
+            }
+
+            $produk->save();
+
+            // Simpan detail varian produk
+            foreach ($request->variants as $variant) {
+                $varian = new VariantProduk();
+                $varian->id_produk = $produk->id;
+                $varian->warna = $variant['warna'];
+                $varian->save();
+
+                foreach ($variant['sizes'] as $size) {
+                    $detailVarian = new DetailVariantProduk();
+                    $detailVarian->id_variant_produk = $varian->id;
+                    $detailVarian->ukuran = $size['ukuran'];
+                    $detailVarian->stok = $size['stok'];
+                    $detailVarian->harga_sewa = $size['harga_sewa'];
+                    $detailVarian->save();
+                }
+            }
+
+
+            Alert::toast('Data berhasil disimpan', 'success');
+            return back();
+        } catch (\Exception $e) {
+            // Tangani pengecualian di sini
+            Log::error('Error: ' . $e->getMessage());
+            return back();
+        }
     }
 }
