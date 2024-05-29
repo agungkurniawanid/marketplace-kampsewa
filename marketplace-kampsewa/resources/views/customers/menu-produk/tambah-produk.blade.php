@@ -177,12 +177,10 @@
                         <div class="sizeContainer mt-2">
                             <div class="size flex items-center gap-4">
                                 <div class="w-full">
-                                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Ukuran
-                                    </p>
+                                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Ukuran</p>
                                     <input
                                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        type="text" name="variants[0][sizes][0][ukuran]" placeholder="contoh: 3x4/XXL"
-                                        required>
+                                        type="text" name="variants[0][sizes][0][ukuran]" placeholder="contoh: 3x4/XXL" required>
                                     @error('variants.*.sizes.*.ukuran')
                                         <p class="text-red-500 text-xs mt-1">Ukuran Harus Di isi!</p>
                                     @enderror
@@ -191,19 +189,16 @@
                                     <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Stok</p>
                                     <input
                                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        type="number" name="variants[0][sizes][0][stok]" placeholder="contoh: 20"
-                                        required>
+                                        type="number" name="variants[0][sizes][0][stok]" placeholder="contoh: 20" required>
                                     @error('variants.*.sizes.*.stok')
                                         <p class="text-red-500 text-xs mt-1">Stok Harus Di isi!</p>
                                     @enderror
                                 </div>
                                 <div class="w-full">
-                                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga
-                                        Sewa</p>
+                                    <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Sewa</p>
                                     <input
                                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        type="number" name="variants[0][sizes][0][harga_sewa]"
-                                        placeholder="contoh: 10000" required>
+                                        type="number" name="variants[0][sizes][0][harga_sewa]" placeholder="contoh: 10000" required>
                                     @error('variants.*.sizes.*.harga_sewa')
                                         <p class="text-red-500 text-xs mt-1">Harga Harus Di isi!</p>
                                     @enderror

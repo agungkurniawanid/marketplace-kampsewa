@@ -72,7 +72,6 @@ class ProductController extends Controller
                 DB::raw('MAX(detail_variant_produk.id) as id_detail_variant_produk'),
                 'produk.nama as nama_produk',
                 'produk.foto_depan',
-                'produk.created_at',
                 DB::raw('AVG(rating_produk.rating) as rata_rating'),
                 DB::raw('MIN(detail_variant_produk.harga_sewa) as harga_sewa')
             )

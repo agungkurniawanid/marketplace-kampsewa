@@ -12,26 +12,32 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class ProdukController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('cust');
     }
-    public function index() {
+    public function index()
+    {
         return view('customers.menu-produk.produk', ['title' => 'Produk Menu | KampSewa']);
     }
-    public function kelolaProduk() {
+    public function kelolaProduk()
+    {
         return view('customers.menu-produk.kelola-produk', ['title' => 'Kelola Produk | KampSewa']);
     }
-    public function sedangDisewa() {
+    public function sedangDisewa()
+    {
         return view('customers.menu-produk.sedang-disewa', ['title' => 'Sedang Disewa | KampSewa']);
     }
-    public function tambahProduk($id_user) {
+    public function tambahProduk($id_user)
+    {
         $id_user_dec = Crypt::decrypt($id_user);
         return view('customers.menu-produk.tambah-produk')->with([
             'title' => 'Tambah Produk',
             'id' => $id_user_dec,
         ]);
     }
-    public function tambahProdukPost(Request $request) {
+    public function tambahProdukPost(Request $request)
+    {
         // Validasi data jika diperlukan
         $request->validate([
             'id_user' => 'required|string',
@@ -49,10 +55,10 @@ class ProdukController extends Controller
         ]);
 
         // Simpan gambar-gambar
-        $fotoDepanPath = $request->file('foto_depan')->store('assets/image/customers/produk');
-        $fotoBelakangPath = $request->file('foto_belakang')->store('asset/images/customers/produk');
-        $fotoKiriPath = $request->file('foto_kiri')->store('assets/image/customers/produk');
-        $fotoKananPath = $request->file('foto_kanan')->store('assets/image/customers/produk');
+        $fotoDepanPath = $request->file('foto_depan')->store('assets/image/customers/produk/', 'public');
+        $fotoBelakangPath = $request->file('foto_belakang')->store('assets/image/customers/produk/', 'public');
+        $fotoKiriPath = $request->file('foto_kiri')->store('assets/image/customers/produk/', 'public');
+        $fotoKananPath = $request->file('foto_kanan')->store('assets/image/customers/produk/', 'public');
 
         // Simpan data produk
         $produk = new Produk();
@@ -67,14 +73,13 @@ class ProdukController extends Controller
         $produk->save();
 
         // Simpan detail varian produk
-        foreach ($request->variants as $variant) {
+        foreach ($request->variants as $index => $variant) {
             $varian = new VariantProduk();
             $varian->id_produk = $produk->id;
             $varian->warna = $variant['warna'];
             $varian->save();
 
-            // Simpan detail varian sesuai kebutuhan
-            foreach ($variant['sizes'] as $size) {
+            foreach ($variant['sizes'] as $sizeIndex => $size) {
                 $detailVarian = new DetailVariantProduk();
                 $detailVarian->id_variant_produk = $varian->id;
                 $detailVarian->ukuran = $size['ukuran'];
