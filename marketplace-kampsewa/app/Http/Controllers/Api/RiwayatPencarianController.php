@@ -11,7 +11,8 @@ class RiwayatPencarianController extends Controller
 {
     // fungsi untuk ketika user mengetikkan pencarian
     // maka kata kunci pencarian tersebut akan disimpan
-    public function insert($id_user, Request $request) {
+    public function insert($id_user, Request $request)
+    {
         $validasi = Validator::make($request->all(), [
             'kata_kunci' => 'nullable|string|max:30',
         ]);
@@ -31,11 +32,12 @@ class RiwayatPencarianController extends Controller
     }
 
     // fungsi untuk menampilkan riwayat pencarian
-    public function show($id_user) {
+    public function show($id_user)
+    {
         $table_riwayat_pencarian = RiwayatPencarian::where('id_user', $id_user)
-        ->select('kata_kunci')->limit(5)->get();
+            ->select('kata_kunci')->limit(5)->get();
 
-        if(!$table_riwayat_pencarian) {
+        if (!$table_riwayat_pencarian) {
             return response()->json([
                 'message' => 'Data tidak ditemukan',
             ], 404);
@@ -45,5 +47,35 @@ class RiwayatPencarianController extends Controller
             'message' => "success",
             'data' => $table_riwayat_pencarian,
         ]);
+    }
+
+    public function delete($id_user)
+    {
+        try {
+            $query_keyword = request()->query('keyword');
+            $keyword = $query_keyword;
+
+            if ($keyword) {
+                RiwayatPencarian::leftJoin('users', 'users.id', '=', 'riwayat_pencarian.id_user')
+                    ->where('riwayat_pencarian.id_user', $id_user)
+                    ->where('riwayat_pencarian.kata_kunci', 'like', '%' . $keyword . '%')
+                    ->delete();
+
+                return response()->json([
+                    'message' => 'Data terhapus',
+                ], 200);
+            } else {
+                RiwayatPencarian::leftJoin('users', 'users.id', '=', 'riwayat_pencarian.id_user')
+                    ->where('riwayat_pencarian.id_user', $id_user)
+                    ->delete();
+                return response()->json([
+                    'message' => 'Semua data terhapus',
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal menghapus data: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }

@@ -20,10 +20,8 @@
                         <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Deskripsi Produk</p>
                         <input
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            type="text" name="deskripsi_produk" placeholder="Masukkan deskripsi produk">
-                        @error('deskripsi_produk')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
+                            type="text" id="deskripsi_produk" name="deskripsi_produk"
+                            placeholder="Masukkan deskripsi produk">
                     </div>
                     <div class="--input-kategori relative w-full">
                         <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Kategori Produk</p>
@@ -182,7 +180,7 @@
             <div class="w-1/2">
                 <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Warna Produk</p>
                 <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    type="text" name="variants[${variantCount}][warna]" placeholder="contoh: Merah" required>
+                    type="text" id="warna${variantCount}" name="variants[${variantCount}][warna]" placeholder="contoh: Merah" required>
             </div>
             <div class="sizeContainer mt-2">
                 <button type="button" class="p-2 bg-blue-500 rounded mt-2 text-white font-medium text-[14px]" onclick="addSize(this.parentElement)">Tambah Detail Variant</button>
@@ -293,19 +291,23 @@
             })
         });
 
-        // Ambil elemen input
-var namaProdukInput = document.getElementById('nama_produk');
+        function capitalizeFirstLetter(string) {
+            return string.replace(/\b\w/g, function(char) {
+                return char.toUpperCase();
+            });
+        }
 
-// Tambahkan event listener untuk mendengarkan setiap kali pengguna mengetikkan sesuatu di input
-namaProdukInput.addEventListener('input', function(event) {
-    // Ambil nilai yang dimasukkan oleh pengguna
-    var inputValue = event.target.value;
+        var namaProdukInput = document.getElementById('nama_produk');
+        namaProdukInput.addEventListener('input', function(event) {
+            var inputValue = event.target.value;
+            var capitalizedValue = capitalizeFirstLetter(inputValue);
+            event.target.value = capitalizedValue;
+        });
 
-    // Ubah nilai menjadi format huruf kapital di awal
-    var capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1);
-
-    // Setel kembali nilai input dengan format huruf kapital
-    event.target.value = capitalizedValue;
-});
+        document.getElementById('deskripsi_produk').addEventListener('input', function(event) {
+                    var inputValue = event.target.value;
+                    var capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1);
+                    event.target.value = capitalizedValue;
+        });
     </script>
 @endsection

@@ -57,11 +57,6 @@ class ProdukController extends Controller
                 'variants.*.sizes.*.harga_sewa' => 'required|integer',
             ]);
 
-            if(empty($request->input('nama_produk'))) {
-                Alert::toast('Nama Produk Tidak Boleh Kosong!', 'warning');
-                return back();
-            }
-
             $request->merge([
                 'status' => 'Tersedia',
             ]);
@@ -120,7 +115,6 @@ class ProdukController extends Controller
                     $detailVarian->save();
                 }
             }
-
 
             Alert::toast('Data berhasil disimpan', 'success');
             return back();

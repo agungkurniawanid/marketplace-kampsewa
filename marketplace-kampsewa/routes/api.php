@@ -44,4 +44,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // riwayat pencarian
     Route::post('/riwayat-pencarian/insert/{id_user}', [RiwayatPencarianController::class, 'insert']);
     Route::get('/riwayat-pencarian/show/{id_user}', [RiwayatPencarianController::class, 'show']);
+    Route::delete('/riwayat-pencarian/delete/{id_user}', [RiwayatPencarianController::class, 'delete']);
 });
