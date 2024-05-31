@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -140,7 +141,27 @@ class ProductController extends Controller
         $warna = request()->query('warna');
         $ukuran = request()->query('ukuran');
 
-        // Query untuk mendapatkan semua produk dan variannya
+        // Query untuk mendapatkan semua produk dan variannya tanpa filter
+        $all_variants = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+            ->select(
+                'produk.id as id_produk',
+                'produk.nama as nama_produk',
+                'produk.foto_depan',
+                'variant_produk.id as id_variant_produk',
+                'variant_produk.warna',
+                'detail_variant_produk.id as id_detail_variant_produk',
+                'detail_variant_produk.ukuran',
+                'detail_variant_produk.stok',
+                'detail_variant_produk.harga_sewa'
+            )
+            ->where(function ($query) use ($parameter) {
+                $query->where('produk.nama', $parameter)
+                    ->orWhere('produk.id', $parameter);
+            })
+            ->get();
+
+        // Query untuk mendapatkan produk dan variannya dengan filter
         $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
             ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
             ->select(
@@ -171,26 +192,6 @@ class ProductController extends Controller
 
         $filtered_results = $tb_produk->get();
 
-        // Query untuk mendapatkan semua varian produk tanpa filter warna dan ukuran
-        $all_variants = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
-            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
-            ->select(
-                'produk.id as id_produk',
-                'produk.nama as nama_produk',
-                'produk.foto_depan',
-                'variant_produk.id as id_variant_produk',
-                'variant_produk.warna',
-                'detail_variant_produk.id as id_detail_variant_produk',
-                'detail_variant_produk.ukuran',
-                'detail_variant_produk.stok',
-                'detail_variant_produk.harga_sewa'
-            )
-            ->where(function ($query) use ($parameter) {
-                $query->where('produk.nama', $parameter)
-                    ->orWhere('produk.id', $parameter);
-            })
-            ->get();
-
         if ($all_variants->isEmpty()) {
             return response()->json([
                 'message' => 'Data tidak ditemukan!',
@@ -204,5 +205,114 @@ class ProductController extends Controller
         ], 200);
     }
 
+
     // fungsi untuk get detail produk
+    public function getDetailProduct($parameter)
+    {
+        try {
+            $warna = request()->query('warna');
+            $ukuran = request()->query('ukuran');
+
+            // Base query for all variants
+            $all_variants = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+                ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+                ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
+                ->leftJoin('users', 'users.id', '=', 'rating_produk.id_user')
+                ->select(
+                    'produk.id as id_produk',
+                    'produk.nama as nama_produk',
+                    'produk.deskripsi as deskripsi_produk',
+                    'produk.foto_depan',
+                    'produk.foto_belakang',
+                    'produk.foto_kiri',
+                    'produk.foto_kanan',
+                    'variant_produk.id as id_variant_produk',
+                    'variant_produk.warna',
+                    'detail_variant_produk.id as id_detail_variant_produk',
+                    'detail_variant_produk.ukuran',
+                    'detail_variant_produk.stok',
+                    'detail_variant_produk.harga_sewa',
+                    DB::raw('AVG(rating_produk.rating) as rating'),
+                    DB::raw('COUNT(rating_produk.ulasan) as total_ulasan'),
+                    'users.id as id_user',
+                    'users.foto as foto_user',
+                    'users.name as nama_user',
+                )
+                ->where(function ($query) use ($parameter) {
+                    $query->where('produk.id', $parameter)
+                        ->orWhere('produk.nama', $parameter);
+                })
+                ->groupBy(
+                    'produk.id',
+                    'variant_produk.id',
+                    'detail_variant_produk.id',
+                    'users.id'
+                )
+                ->get();
+
+            // Base query for filtered variants
+            $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+                ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+                ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
+                ->leftJoin('users', 'users.id', '=', 'rating_produk.id_user')
+                ->select(
+                    'produk.id as id_produk',
+                    'produk.nama as nama_produk',
+                    'produk.deskripsi as deskripsi_produk',
+                    'produk.foto_depan',
+                    'produk.foto_belakang',
+                    'produk.foto_kiri',
+                    'produk.foto_kanan',
+                    'variant_produk.id as id_variant_produk',
+                    'variant_produk.warna',
+                    'detail_variant_produk.id as id_detail_variant_produk',
+                    'detail_variant_produk.ukuran',
+                    'detail_variant_produk.stok',
+                    'detail_variant_produk.harga_sewa',
+                    DB::raw('AVG(rating_produk.rating) as rating'),
+                    DB::raw('COUNT(rating_produk.ulasan) as total_ulasan'),
+                    'users.id as id_user',
+                    'users.foto as foto_user',
+                    'users.name as nama_user',
+                )
+                ->where(function ($query) use ($parameter) {
+                    $query->where('produk.id', $parameter)
+                        ->orWhere('produk.nama', $parameter);
+                });
+
+            // Apply filters for color and size
+            if ($warna) {
+                $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
+            }
+
+            if ($ukuran) {
+                $tb_produk->where('detail_variant_produk.ukuran', 'like', $ukuran);
+            }
+
+            $filtered_results = $tb_produk
+                ->groupBy(
+                    'produk.id',
+                    'variant_produk.id',
+                    'detail_variant_produk.id',
+                    'users.id'
+                )
+                ->get();
+
+            if ($all_variants->isEmpty()) {
+                return response()->json([
+                    'message' => 'Data tidak ditemukan!',
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'success',
+                'detail_produk' => $all_variants,
+                'hasil_filter' => $filtered_results,
+            ], 200);
+        } catch (\Exception $error) {
+            // Handle the error appropriately, e.g., log it and return an error response
+            Log::error($error->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan saat mengambil detail produk'], 500);
+        }
+    }
 }
