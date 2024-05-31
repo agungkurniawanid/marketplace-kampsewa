@@ -58,7 +58,7 @@ class RiwayatPencarianController extends Controller
             if ($keyword) {
                 RiwayatPencarian::leftJoin('users', 'users.id', '=', 'riwayat_pencarian.id_user')
                     ->where('riwayat_pencarian.id_user', $id_user)
-                    ->where('riwayat_pencarian.kata_kunci', 'like', '%' . $keyword . '%')
+                    ->where('riwayat_pencarian.kata_kunci', $keyword)
                     ->delete();
 
                 return response()->json([

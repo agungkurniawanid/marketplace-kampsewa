@@ -1,6 +1,6 @@
 @extends('layouts.customers.layouts-customer')
 @section('customer-content')
-    <div class="--container w-full h-auto flex justify-center px-10 py-5">
+    <div class="--container w-full h-auto flex justify-center px-10 py-5 mobile-max:px-5 mobile-max:py-2">
         <div class="--wrapper-form w-[800px] h-auto bg-white shadow-box-shadow-11 p-4">
             <h1 class="text-[20px] font-bold">Tambah Barang Penyewaan</h1>
             <p>Tambahkan barang penyewaan! anda bisa memasukkan data barang dengan banyak ukuran dan jenis, seperti warna,
@@ -9,7 +9,7 @@
                 class="w-full flex flex-col gap-6 h-auto mt-4" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id_user" value="{{ $id }}">
-                <div class="--input-table-produk grid grid-cols-3 gap-x-2 gap-y-4">
+                <div class="--input-table-produk grid grid-cols-3 gap-x-2 gap-y-4 mobile-max:grid-cols-1">
                     <div class="--input-nama-produk w-full">
                         <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Nama Produk</p>
                         <input
@@ -73,7 +73,8 @@
                         </div>
                     </div>
                     <div class="--input-foto-belakang flex flex-col">
-                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Belakang <sup>Opsional</sup></p>
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Belakang
+                            <sup>Opsional</sup></p>
                         <p class="text-[12px] font-medium mb-2">Disarankan memiliki rasio ukuran 1:1</p>
                         <div>
                             <div>
@@ -101,7 +102,8 @@
                         </div>
                     </div>
                     <div class="--input-foto-kiri flex flex-col">
-                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Kiri <sup>Opsional</sup></p>
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Kiri
+                            <sup>Opsional</sup></p>
                         <p class="text-[12px] font-medium mb-2">Disarankan memiliki rasio ukuran 1:1</p>
                         <div>
                             <div>
@@ -129,7 +131,8 @@
                         </div>
                     </div>
                     <div class="--input-foto-kanan flex flex-col">
-                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Kanan <sup>Opsional</sup></p>
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Kanan
+                            <sup>Opsional</sup></p>
                         <p class="text-[12px] font-medium mb-2">Disarankan memiliki rasio ukuran 1:1</p>
                         <div>
                             <div>
@@ -159,11 +162,54 @@
                 </div>
 
                 <div class="--input-table-variant-detail-variant" id="variantContainer">
+                    <div class="variant">
+                        <div class="w-1/2 mobile-max:w-full">
+                            <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Warna Produk</p>
+                            <input
+                                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                type="text" id="warna0" name="variants[0][warna]" placeholder="contoh: Merah"
+                                required>
+                        </div>
+                        <div class="size flex items-center gap-4 mt-2 mobile-max:flex-col">
+                            <div class="w-full">
+                                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Ukuran</p>
+                                <input
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    type="text" id="ukuran" name="variants[0][sizes][0][ukuran]"
+                                    placeholder="contoh: 3x4/XXL" required>
+                            </div>
+                            <div class="w-full">
+                                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Stok</p>
+                                <input
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    type="number" id="stok" name="variants[0][sizes][0][stok]"
+                                    placeholder="contoh: 20" required>
+                            </div>
+                            <div class="w-full">
+                                <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Harga Sewa
+                                </p>
+                                <input
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    type="number" id="harga_sewa" name="variants[0][sizes][0][harga_sewa]"
+                                    placeholder="contoh: 10000" required>
+                            </div>
+                            {{-- <div>
+                                <p class="opacity-0">button</p>
+                                <button type="button" class="py-3 px-4 rounded flex items-center justify-center h-full bg-red-100 text-red-500"
+                                    onclick="removeSize(this)"><i class="bi bi-trash3-fill"></i></button>
+                            </div> --}}
+                        </div>
+                        <div class="sizeContainer mt-2 mobile-max:w-full">
+                            <button type="button" class="mobile-max:w-full p-2 bg-blue-500 rounded mt-2 text-white font-medium text-[14px]"
+                                onclick="addSize(this.parentElement)">Tambah Detail Variant</button>
+                            {{-- <button type="button" class="p-2 bg-red-500 rounded mt-2 text-white font-medium text-[14px]" onclick="removeVariant(this)">Hapus Warna</button> --}}
+                        </div>
+                    </div>
                 </div>
                 <div class="w-full flex items-center gap-2">
-                    <button type="button" class="p-2 bg-blue-500 rounded text-white font-medium text-[14px]"
+                    <button type="button" class="mobile-max:w-full p-2 bg-blue-500 rounded text-white font-medium text-[14px]"
                         onclick="addVariant()">Tambah Warna</button>
-                    <button class="p-2 bg-green-500 rounded text-white font-medium text-[14px]"
+                    <button class="mobile-max:w-full p-2 bg-green-500 rounded text-white font-medium text-[14px]"
                         id="simpan-data-produk">Simpan
                         Data</button>
                 </div>
@@ -177,14 +223,14 @@
             const variantCount = document.querySelectorAll('.variant').length;
             const newVariant = `
         <div class="variant">
-            <div class="w-1/2">
+            <div class="w-1/2 mt-4 mobile-max:w-full">
                 <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Warna Produk</p>
                 <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     type="text" id="warna${variantCount}" name="variants[${variantCount}][warna]" placeholder="contoh: Merah" required>
             </div>
-            <div class="sizeContainer mt-2">
-                <button type="button" class="p-2 bg-blue-500 rounded mt-2 text-white font-medium text-[14px]" onclick="addSize(this.parentElement)">Tambah Detail Variant</button>
-                <button type="button" class="p-2 bg-red-500 rounded mt-2 text-white font-medium text-[14px]" onclick="removeVariant(this)">Hapus Warna</button>
+            <div class="sizeContainer mt-2 mobile-max:w-full">
+                <button type="button" class="mobile-max:w-full p-2 bg-blue-500 rounded mt-2 text-white font-medium text-[14px]" onclick="addSize(this.parentElement)">Tambah Detail Variant</button>
+                <button type="button" class="mobile-max:w-full p-2 bg-red-500 rounded mt-2 text-white font-medium text-[14px]" onclick="removeVariant(this)">Hapus Warna</button>
             </div>
         </div>
     `;
@@ -193,9 +239,9 @@
 
         function addSize(sizeContainer) {
             const variantIndex = Array.from(document.querySelectorAll('.variant')).indexOf(sizeContainer.parentElement);
-            const sizeCount = sizeContainer.parentElement.querySelectorAll('.size').length;
+            const sizeCount = sizeContainer.parentElement.querySelectorAll('.size').length + 1;
             const newSize = `
-        <div class="size flex items-center gap-4">
+        <div class="size flex items-center gap-4 mt-2 mobile-max:flex-col">
             <div class="w-full">
                 <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Ukuran</p>
                 <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
@@ -213,12 +259,13 @@
             </div>
             <div>
                 <p class="opacity-0">button</p>
-                <button type="button" class="py-3 px-4 rounded flex items-center justify-center h-full bg-red-100 text-red-500"
+                <button type="button" class="py-3 px-4 rounded flex items-center justify-center h-full bg-red-100 text-red-500 mobile-max:w-fit"
                     onclick="removeSize(this)"><i class="bi bi-trash3-fill"></i></button>
             </div>
         </div>
     `;
             sizeContainer.insertAdjacentHTML('beforebegin', newSize);
+            sizeContainer.querySelector('.size:last-child button').style.display = 'inline-block';
         }
 
         function removeVariant(button) {
@@ -278,6 +325,9 @@
             let deskripsiProduk = document.getElementById('deskripsi_produk').value;
             let kategoriProduk = document.getElementById('grid-state').value;
             let fotoDepan = document.getElementById('foto_depan').files[0];
+            let warna = document.getElementById('warna0').value;
+            let stok = document.getElementById('stok').value;
+            let hargaSewa = document.getElementById('harga_sewa').value;
 
             if (!namaProduk) {
                 Swal.fire({
@@ -307,6 +357,30 @@
                 Swal.fire({
                     title: 'Belum Mengisi Foto Depan',
                     text: 'Silakan isikan foto produk sebelum menyimpan.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else if (!warna) {
+                Swal.fire({
+                    title: 'Belum Mengisi Warna Produk',
+                    text: 'Silakan isikan warna produk sebelum menyimpan.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else if (!ukuran) {
+                Swal.fire({
+                    title: 'Belum Mengisi Ukuran Produk',
+                    text: 'Silakan isikan ukuran produk sebelum menyimpan.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else if (!hargaSewa) {
+                Swal.fire({
+                    title: 'Belum Mengisi Harga Sewa Produk',
+                    text: 'Silakan isikan harga sewa produk sebelum menyimpan.',
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });

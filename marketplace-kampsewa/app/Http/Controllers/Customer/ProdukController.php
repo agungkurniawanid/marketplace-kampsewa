@@ -109,6 +109,9 @@ class ProdukController extends Controller
                 foreach ($variant['sizes'] as $size) {
                     $detailVarian = new DetailVariantProduk();
                     $detailVarian->id_variant_produk = $varian->id;
+                    if($size['ukuran'] === null) {
+                        $size['ukuran'] = 'Belum di isi';
+                    }
                     $detailVarian->ukuran = $size['ukuran'];
                     $detailVarian->stok = $size['stok'];
                     $detailVarian->harga_sewa = $size['harga_sewa'];
