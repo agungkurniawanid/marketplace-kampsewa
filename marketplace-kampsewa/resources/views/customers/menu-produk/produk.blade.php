@@ -20,11 +20,11 @@
         <div class="--wrapper-navigation-menu w-full">
             <ul class="flex items-center gap-2">
                 <li><a class="{{ $title == 'Produk Menu | KampSewa' ? 'bg-[#F8F7F4] font-medium' : '' }} hover:font-medium hover:bg-[#F8F7F4] hover:text-[#0F172A] text-[14px] px-4 py-2 rounded-full"
-                        href="{{ route('menu-produk.index') }}">Semua Produk</a></li>
+                        href="{{ route('menu-produk.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Semua Produk</a></li>
                 <li><a class="text-[14px] hover:font-medium px-4 py-2 rounded-full hover:bg-[#F8F7F4] hover:text-[#0F172A]"
-                        href="{{ route('menu-produk.kelola-produk') }}">Kelola Produk</a></li>
+                        href="{{ route('menu-produk.kelola-produk', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Kelola Produk</a></li>
                 <li><a class="text-[14px] hover:font-medium px-4 py-2 rounded-full hover:bg-[#F8F7F4] hover:text-[#0F172A]"
-                        href="{{ route('menu-produk.sedang-disewa') }}">Sedang Disewa</a></li>
+                        href="{{ route('menu-produk.sedang-disewa', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Sedang Disewa</a></li>
             </ul>
         </div>
 

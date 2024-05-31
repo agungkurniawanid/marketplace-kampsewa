@@ -21,7 +21,7 @@
                     </nav>
                 </li>
                 <li class="nav-item {{ $title == 'Tambah Produk' ? 'active' : '' }} {{ $title == 'Sedang Disewa | KampSewa' ? 'active' : '' }} {{ $title == 'Kelola Produk | KampSewa' ? 'active' : '' }} {{ $title == 'Produk Menu | KampSewa' ? 'active' : '' }}">
-                    <a href="{{ route('menu-produk.index') }}" class="nav-link"><i class="typcn typcn-shopping-cart"></i>
+                    <a href="{{ route('menu-produk.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link"><i class="typcn typcn-shopping-cart"></i>
                         Produk</a>
                 </li>
                 <li class="nav-item">

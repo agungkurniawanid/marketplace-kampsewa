@@ -70,9 +70,9 @@ Route::get('developer/dashboard/profile/{nama_lengkap}', [ProfileController::cla
 Route::get('/customer/dashboard/home', [DashboardCustController::class, 'index'])->middleware('auth');
 
 // produk
-Route::get('/customer/dashboard/menu-produk', [ProdukController::class, 'index'])->name('menu-produk.index')->middleware('auth');
-Route::get('/customer/dashboard/kelola-produk', [ProdukController::class, 'kelolaProduk'])->name('menu-produk.kelola-produk')->middleware('auth');
-Route::get('/customer/dashboard/sedang-disewa', [ProdukController::class, 'sedangDisewa'])->name('menu-produk.sedang-disewa')->middleware('auth');
+Route::get('/customer/dashboard/menu-produk/{id_user}', [ProdukController::class, 'index'])->name('menu-produk.index')->middleware('auth');
+Route::get('/customer/dashboard/kelola-produk/{id_user}', [ProdukController::class, 'kelolaProduk'])->name('menu-produk.kelola-produk')->middleware('auth');
+Route::get('/customer/dashboard/sedang-disewa/{id_user}', [ProdukController::class, 'sedangDisewa'])->name('menu-produk.sedang-disewa')->middleware('auth');
 Route::get('/customer/dashboard/kelola-produk/tambah-produk/{id_user}', [ProdukController::class, 'tambahProduk'])->name('menu-produk.tambah-produk')->middleware('auth');
 Route::post('/customer/dashboard/kelola-produk/tambah-produk-post', [ProdukController::class, 'tambahProdukPost'])->name('menu-produk.tambah-produk-post')->middleware('auth');
 

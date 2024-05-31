@@ -2,6 +2,7 @@
 @section('customer-content')
     <div class="--container w-full h-auto flex justify-center px-10 py-5 mobile-max:px-5 mobile-max:py-2">
         <div class="--wrapper-form w-[800px] h-auto bg-white shadow-box-shadow-11 p-4">
+            <div class="mb-6"><a href="{{ route('menu-produk.kelola-produk') }}"><i class="bi bi-arrow-left-short"></i> Kembali</a></div>
             <h1 class="text-[20px] font-bold">Tambah Barang Penyewaan</h1>
             <p>Tambahkan barang penyewaan! anda bisa memasukkan data barang dengan banyak ukuran dan jenis, seperti warna,
                 stok, dan harga sewa yang berbeda.</p>

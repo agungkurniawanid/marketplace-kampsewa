@@ -16,11 +16,14 @@
         <div class="--wrapper-navigation-menu w-full">
             <ul class="flex items-center gap-2">
                 <li><a class="{{ $title == 'Produk Menu | KampSewa' ? 'bg-[#F8F7F4] font-medium' : '' }} hover:font-medium hover:bg-[#F8F7F4] hover:text-[#0F172A] text-[14px] px-4 py-2 rounded-full"
-                        href="{{ route('menu-produk.index') }}">Semua Produk</a></li>
+                        href="{{ route('menu-produk.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Semua
+                        Produk</a></li>
                 <li><a class="{{ $title == 'Kelola Produk | KampSewa' ? 'bg-[#F8F7F4] font-medium' : '' }} text-[14px] hover:font-medium px-4 py-2 rounded-full hover:bg-[#F8F7F4] hover:text-[#0F172A]"
-                        href="{{ route('menu-produk.kelola-produk') }}">Kelola Produk</a></li>
+                        href="{{ route('menu-produk.kelola-produk', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Kelola
+                        Produk</a></li>
                 <li><a class="text-[14px] hover:font-medium px-4 py-2 rounded-full hover:bg-[#F8F7F4] hover:text-[#0F172A]"
-                        href="{{ route('menu-produk.sedang-disewa') }}">Sedang Disewa</a></li>
+                        href="{{ route('menu-produk.sedang-disewa', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Sedang
+                        Disewa</a></li>
             </ul>
         </div>
 
@@ -94,11 +97,12 @@
 
                     {{-- todo untuk tombol tambah data --}}
                     <div class="_btn-tambah-data">
-                        <a href="{{ route('menu-produk.tambah-produk', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">
-                        <button class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">
-                            <div class="_icon-plus"></div>
-                            <span>Tambah Produk</span>
-                        </button>
+                        <a
+                            href="{{ route('menu-produk.tambah-produk', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">
+                            <button class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">
+                                <div class="_icon-plus"></div>
+                                <span>Tambah Produk</span>
+                            </button>
                         </a>
                     </div>
                 </div>
@@ -126,13 +130,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for ($i = 0; $i < 20; $i++)
+                            @foreach ($produk as $item)
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                     <td scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 flex items-center gap-2 dark:text-white">
-                                        <img class="w-[50px] h-[50px] rounded-[10px] object-cover"
-                                            src="{{ asset('assets/image/customers/produk/foldingcamptableleadpic.jpg') }}"
-                                            alt="">
+                                        @if ($item->produk != null)
+                                            <img class="w-[50px] h-[50px] rounded-[10px] object-cover"
+                                                src="{{ asset('assets/image/customers/produk/' . $item->produk) }}"
+                                                alt="">
+                                        @else
+                                            <img class="w-[50px] h-[50px] rounded-[10px] object-cover"
+                                                src="{{ asset('assets/image/customers/produk/foldingcamptableleadpic.jpg') }}"
+                                                alt="">
+                                        @endif
                                         <p class="line-clamp-2 capitalize">folding camp table lead mantap</p>
                                     </td>
                                     <td class="px-6 py-4 text-left">
@@ -147,9 +157,11 @@
                                         </p>
                                         <p><a href=""><i class="text-[16px] bi bi-trash-fill"></i></a>
                                         </p>
+                                        <p><a href=""><i
+                                                    class="text-[16px] bi bi-file-earmark-spreadsheet-fill"></i></a></p>
                                     </td>
                                 </tr>
-                            @endfor
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

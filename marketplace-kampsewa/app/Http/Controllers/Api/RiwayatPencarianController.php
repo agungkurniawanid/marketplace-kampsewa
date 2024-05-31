@@ -35,7 +35,7 @@ class RiwayatPencarianController extends Controller
     public function show($id_user)
     {
         $table_riwayat_pencarian = RiwayatPencarian::where('id_user', $id_user)
-            ->select('kata_kunci')->limit(5)->get();
+            ->select('kata_kunci')->get();
 
         if (!$table_riwayat_pencarian) {
             return response()->json([

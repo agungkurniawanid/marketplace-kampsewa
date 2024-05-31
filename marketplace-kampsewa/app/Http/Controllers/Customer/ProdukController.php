@@ -9,6 +9,7 @@ use App\Models\VariantProduk;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -18,15 +19,36 @@ class ProdukController extends Controller
     {
         $this->middleware('cust');
     }
-    public function index()
+    public function index($id_user)
     {
         return view('customers.menu-produk.produk', ['title' => 'Produk Menu | KampSewa']);
     }
-    public function kelolaProduk()
+    public function kelolaProduk($id_user)
     {
-        return view('customers.menu-produk.kelola-produk', ['title' => 'Kelola Produk | KampSewa']);
+        $id = Crypt::decrypt($id_user);
+
+        $data_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+            ->select(
+                'produk.id as id_produk',
+                'produk.nama as nama_produk',
+                'produk.status as status_produk',
+                'produk.foto_depan as foto',
+                'variant_produk.id as id_variant_produk',
+                'detail_variant_produk.id as id_detail_variant_produk',
+                DB::raw('COUNT(detail_variant_produk.stok) as stok_produk'),
+            )->where('produk.id_user', $id)->groupBy('produk.id', 'variant_produk.id', 'detail_variant_produk.id');
+
+        $produk_result = $data_produk->get();
+
+        return view('customers.menu-produk.kelola-produk')->with(
+            [
+                'title' => 'Kelola Produk | KampSewa',
+                'produk' => $produk_result,
+            ]
+        );
     }
-    public function sedangDisewa()
+    public function sedangDisewa($id_user)
     {
         return view('customers.menu-produk.sedang-disewa', ['title' => 'Sedang Disewa | KampSewa']);
     }
@@ -109,7 +131,7 @@ class ProdukController extends Controller
                 foreach ($variant['sizes'] as $size) {
                     $detailVarian = new DetailVariantProduk();
                     $detailVarian->id_variant_produk = $varian->id;
-                    if($size['ukuran'] === null) {
+                    if ($size['ukuran'] === null) {
                         $size['ukuran'] = 'Belum di isi';
                     }
                     $detailVarian->ukuran = $size['ukuran'];
