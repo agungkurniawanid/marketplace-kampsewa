@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_produk');
             $table->foreign('id_produk')->references('id')->on('produk')->onDelete('cascade');
-            $table->string('warna');
+            $table->string('warna')->default('Belum di isi');
             $table->timestamps();
         });
     }

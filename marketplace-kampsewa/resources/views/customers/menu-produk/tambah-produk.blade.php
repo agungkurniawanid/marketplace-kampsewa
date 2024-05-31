@@ -53,7 +53,7 @@
                                     src="{{ asset('images/Upload.png') }}" alt="">
                             </div>
                             <label class="block">
-                                <input type="file" name="foto_depan" value="{{ old('foto_depan') }}" id="foto-depan"
+                                <input id="foto_depan" type="file" name="foto_depan" value="{{ old('foto_depan') }}"
                                     onchange="previewImageFotoDepan(event)"
                                     class="block w-full text-sm text-gray-500
                               file:me-4 file:py-2 file:px-4
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="--input-foto-belakang flex flex-col">
-                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Belakang</p>
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Belakang <sup>Opsional</sup></p>
                         <p class="text-[12px] font-medium mb-2">Disarankan memiliki rasio ukuran 1:1</p>
                         <div>
                             <div>
@@ -81,8 +81,8 @@
                                     src="{{ asset('images/Upload.png') }}" alt="">
                             </div>
                             <label class="block">
-                                <input type="file" name="foto_belakang" value="{{ old('foto_belakang') }}"
-                                    id="file-input" onchange="previewImageFotoBelakang(event)"
+                                <input id="foto_belakang" type="file" name="foto_belakang"
+                                    value="{{ old('foto_belakang') }}" onchange="previewImageFotoBelakang(event)"
                                     class="block w-full text-sm text-gray-500
                               file:me-4 file:py-2 file:px-4
                               file:rounded-lg file:border-0
@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div class="--input-foto-kiri flex flex-col">
-                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Kiri</p>
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Kiri <sup>Opsional</sup></p>
                         <p class="text-[12px] font-medium mb-2">Disarankan memiliki rasio ukuran 1:1</p>
                         <div>
                             <div>
@@ -109,7 +109,7 @@
                                     src="{{ asset('images/Upload.png') }}" alt="">
                             </div>
                             <label class="block">
-                                <input type="file" name="foto_kiri" value="{{ old('foto_kiri') }}" id="file-input"
+                                <input id="foto_kiri" type="file" name="foto_kiri" value="{{ old('foto_kiri') }}"
                                     onchange="previewImageFotoKiri(event)"
                                     class="block w-full text-sm text-gray-500
                               file:me-4 file:py-2 file:px-4
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     <div class="--input-foto-kanan flex flex-col">
-                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Kanan</p>
+                        <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold">Input Foto Kanan <sup>Opsional</sup></p>
                         <p class="text-[12px] font-medium mb-2">Disarankan memiliki rasio ukuran 1:1</p>
                         <div>
                             <div>
@@ -137,7 +137,7 @@
                                     src="{{ asset('images/Upload.png') }}" alt="">
                             </div>
                             <label class="block">
-                                <input type="file" name="foto_kanan" value="{{ old('foto_kanan') }}" id="file-input"
+                                <input id="foto_kanan" type="file" name="foto_kanan" value="{{ old('foto_kanan') }}"
                                     onchange="previewImageFotoKanan(event)"
                                     class="block w-full text-sm text-gray-500
                               file:me-4 file:py-2 file:px-4
@@ -274,6 +274,45 @@
 
         document.getElementById('simpan-data-produk').addEventListener('click', (event) => {
             event.preventDefault();
+            let namaProduk = document.getElementById('nama_produk').value;
+            let deskripsiProduk = document.getElementById('deskripsi_produk').value;
+            let kategoriProduk = document.getElementById('grid-state').value;
+            let fotoDepan = document.getElementById('foto_depan').files[0];
+
+            if (!namaProduk) {
+                Swal.fire({
+                    title: 'Nama Produk Kosong',
+                    text: 'Silakan isi nama produk sebelum menyimpan.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else if (!deskripsiProduk) {
+                Swal.fire({
+                    title: 'Deskripsi Produk Kosong',
+                    text: 'Silakan isi deskripsi sebelum menyimpan.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else if (kategoriProduk === 'Belum di isi') {
+                Swal.fire({
+                    title: 'Belum Menentukan Kategori',
+                    text: 'Silakan tentukan kategori produk sebelum menyimpan.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            } else if (!fotoDepan) {
+                Swal.fire({
+                    title: 'Belum Mengisi Foto Depan',
+                    text: 'Silakan isikan foto produk sebelum menyimpan.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
             Swal.fire({
                 title: 'Apakah sudah yakin?',
                 text: "Kamu akan save data ini dan bisa inputkan data produk lainnya!",
@@ -288,8 +327,9 @@
                 } else {
                     Swal.fire('Cancelled', 'Save cancelled', 'info');
                 }
-            })
+            });
         });
+
 
         function capitalizeFirstLetter(string) {
             return string.replace(/\b\w/g, function(char) {
@@ -305,9 +345,9 @@
         });
 
         document.getElementById('deskripsi_produk').addEventListener('input', function(event) {
-                    var inputValue = event.target.value;
-                    var capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1);
-                    event.target.value = capitalizedValue;
+            var inputValue = event.target.value;
+            var capitalizedValue = inputValue.charAt(0).toUpperCase() + inputValue.slice(1);
+            event.target.value = capitalizedValue;
         });
     </script>
 @endsection

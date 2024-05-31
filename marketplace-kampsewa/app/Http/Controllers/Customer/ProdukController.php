@@ -48,13 +48,13 @@ class ProdukController extends Controller
                 'deskripsi_produk' => 'required|string|max:1000',
                 'kategori_produk' => 'required|string',
                 'foto_depan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'foto_belakang' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'foto_kiri' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'foto_kanan' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'variants.*.warna' => 'required|string',
-                'variants.*.sizes.*.ukuran' => 'required|string',
-                'variants.*.sizes.*.stok' => 'required|integer',
-                'variants.*.sizes.*.harga_sewa' => 'required|integer',
+                'foto_belakang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto_kiri' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto_kanan' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'variants.*.warna' => 'nullable|string',
+                'variants.*.sizes.*.ukuran' => 'nullable|string',
+                'variants.*.sizes.*.stok' => 'nullable|integer',
+                'variants.*.sizes.*.harga_sewa' => 'nullable|integer',
             ]);
 
             $request->merge([

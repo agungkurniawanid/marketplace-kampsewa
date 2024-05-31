@@ -20,9 +20,9 @@ return new class extends Migration
             $table->enum('status', ['Tersedia', 'Tidak Tersedia'])->nullable(false);
             $table->string('kategori', 100)->nullable(false);
             $table->string('foto_depan', 255)->nullable();
-            $table->string('foto_belakang', 255)->nullable();
-            $table->string('foto_kiri', 255)->nullable();
-            $table->string('foto_kanan', 255)->nullable();
+            $table->string('foto_belakang', 255)->default('Belum di isi');
+            $table->string('foto_kiri', 255)->default('Belum di isi');
+            $table->string('foto_kanan', 255)->default('Belum di isi');
             $table->timestamps();
         });
     }

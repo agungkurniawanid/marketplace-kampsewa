@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_variant_produk');
             $table->foreign('id_variant_produk')->references('id')->on('variant_produk')->onDelete('cascade');
-            $table->string('ukuran')->nullable();
-            $table->integer('stok')->nullable();
-            $table->integer('harga_sewa')->nullable();
+            $table->string('ukuran')->default('Belum di isi');
+            $table->integer('stok')->default(0);
+            $table->integer('harga_sewa')->default(0);
             $table->timestamps();
         });
     }
