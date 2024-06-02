@@ -197,11 +197,6 @@ class ProductController extends Controller
                     'produk.foto_belakang',
                     'produk.foto_kiri',
                     'produk.foto_kanan',
-                    'variant_produk.id as id_variant_produk',
-                    'variant_produk.warna',
-                    'detail_variant_produk.id as id_detail_variant_produk',
-                    'detail_variant_produk.ukuran',
-                    'detail_variant_produk.stok',
                     'detail_variant_produk.harga_sewa',
                     DB::raw('AVG(rating_produk.rating) as rating'),
                     DB::raw('COUNT(rating_produk.ulasan) as total_ulasan'),
@@ -211,7 +206,7 @@ class ProductController extends Controller
                 )
                 ->where(function ($query) use ($parameter) {
                     $query->where('produk.id', $parameter)
-                        ->orWhere('produk.nama', $parameter);
+                        ->orWhere('produk.nama', 'like', '%' . $parameter . '%');
                 })
                 ->groupBy(
                     'produk.id',
@@ -222,22 +217,20 @@ class ProductController extends Controller
                     'produk.foto_kiri',
                     'produk.foto_kanan',
                     'variant_produk.id',
-                    'variant_produk.warna',
                     'detail_variant_produk.id',
-                    'detail_variant_produk.ukuran',
-                    'detail_variant_produk.stok',
                     'detail_variant_produk.harga_sewa',
                     'users.id',
                     'users.foto',
                     'users.name'
-                );
+                )
+                ->orderBy('detail_variant_produk.harga_sewa', 'asc');
 
             if ($warna) {
                 $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
             }
 
             if ($ukuran) {
-                $tb_produk->where('detail_variant_produk.ukuran', 'like', $ukuran);
+                $tb_produk->where('detail_variant_produk.ukuran', 'like', '%' . $ukuran . '%');
             }
 
             $all_variants = $tb_produk->get();
