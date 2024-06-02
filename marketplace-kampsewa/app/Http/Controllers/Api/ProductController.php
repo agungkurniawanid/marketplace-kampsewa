@@ -143,16 +143,14 @@ class ProductController extends Controller
             $ukuran = request()->query('ukuran');
 
             $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
-                ->leftJoin('detail_variant_produk', function ($join) {
-                    $join->on('variant_produk.id', '=', 'detail_variant_produk.id_variant_produk');
-                    $join->whereNotNull('detail_variant_produk.ukuran');
-                })
+                ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
                 ->select(
                     'produk.id as id_produk',
                     'produk.nama as nama_produk',
                     'produk.foto_depan',
-                    DB::raw('GROUP_CONCAT(DISTINCT variant_produk.warna) as warna'),
-                    DB::raw('GROUP_CONCAT(DISTINCT detail_variant_produk.ukuran) as ukuran'),
+                    'variant_produk.warna',
+                    'detail_variant_produk.ukuran',
+                    'detail_variant_produk.stok',
                     DB::raw('MIN(detail_variant_produk.harga_sewa) as harga_sewa')
                 )
                 ->where('produk.id', $parameter);
@@ -165,9 +163,9 @@ class ProductController extends Controller
                 $tb_produk->where('detail_variant_produk.ukuran', 'like', '%' . $ukuran . '%');
             }
 
-            $all_variants = $tb_produk->groupBy('produk.id')->get();
+            $one_variant = $tb_produk->groupBy('produk.id', 'produk.nama', 'produk.foto_depan', 'variant_produk.warna', 'detail_variant_produk.ukuran', 'detail_variant_produk.stok')->first();
 
-            if ($all_variants->isEmpty()) {
+            if (!$one_variant) {
                 return response()->json([
                     'message' => 'Data tidak ditemukan!',
                 ], 404);
@@ -175,7 +173,7 @@ class ProductController extends Controller
 
             return response()->json([
                 'message' => 'success',
-                'detail_produk' => $all_variants,
+                'detail_produk' => $one_variant,
             ], 200);
         } catch (\Exception $error) {
             Log::error($error->getMessage());
