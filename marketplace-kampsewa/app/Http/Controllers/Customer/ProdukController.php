@@ -27,6 +27,8 @@ class ProdukController extends Controller
     {
         $id = Crypt::decrypt($id_user);
 
+        $search = request()->query('search');
+
         $data_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
             ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
             ->select(
@@ -34,10 +36,16 @@ class ProdukController extends Controller
                 'produk.nama as nama_produk',
                 'produk.status as status_produk',
                 'produk.foto_depan as foto',
-                'variant_produk.id as id_variant_produk',
-                'detail_variant_produk.id as id_detail_variant_produk',
-                DB::raw('COUNT(detail_variant_produk.stok) as stok_produk'),
-            )->where('produk.id_user', $id)->groupBy('produk.id', 'variant_produk.id', 'detail_variant_produk.id');
+                DB::raw('SUM(detail_variant_produk.stok) as stok_produk')
+            )->where('produk.id_user', $id)
+            ->groupBy('produk.id', 'produk.nama', 'produk.status', 'produk.foto_depan');
+
+            if ($search) {
+                $data_produk->where(function ($query) use ($search) {
+                    $query->where('produk.nama', 'LIKE', "%{$search}%")
+                        ->orWhere('produk.status', $search);
+                });
+            }
 
         $produk_result = $data_produk->get();
 
@@ -45,6 +53,7 @@ class ProdukController extends Controller
             [
                 'title' => 'Kelola Produk | KampSewa',
                 'produk' => $produk_result,
+                'search' => $search,
             ]
         );
     }
@@ -145,8 +154,41 @@ class ProdukController extends Controller
             return back();
         } catch (\Exception $e) {
             // Tangani pengecualian di sini
+            Alert::toast('Terjadi kesalahan, harap check inputan anda kembali!', 'warning');
             Log::error('Error: ' . $e->getMessage());
             return back();
         }
+    }
+
+    public function deleteProduk($id_produk)
+    {
+        try {
+            $table_produk = Produk::where('id', $id_produk);
+            if (!$table_produk) {
+                Alert::toast('Gagal menghapus produk coba lagi nanti!', 'warning');
+                return back();
+            }
+            $table_produk->delete();
+            Alert::toast('Produk berhasil dihapus!', 'success');
+            return back();
+        } catch (\Exception $error) {
+            Log::error('Error : ' . $error->getMessage());
+        }
+    }
+
+    public function detailProduk($nama_produk, $id_user) {
+        return view('customers.menu-produk.detail-produk')->with([
+            'title' => 'Detail Produk',
+        ]);
+    }
+
+    public function updateProduk($id_produk) {
+        // memecah encrpyt dari url id produk
+        $id_produk_decrypt = Crypt::decrypt($id_produk);
+
+        // kembalikan nilai
+        return view('customers.menu-produk.update-produk')->with([
+            'title' => 'Update Produk',
+        ]);
     }
 }

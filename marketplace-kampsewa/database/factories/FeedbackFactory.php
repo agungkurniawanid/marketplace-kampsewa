@@ -18,7 +18,7 @@ class FeedbackFactory extends Factory
     public function definition(): array
     {
          return [
-             'id_user' => $this->faker->numberBetween(1, 200),
+             'id_user' => $this->faker->numberBetween(1, 500),
              'deskripsi' => $this->faker->paragraph,
              'kriteria' => $this->faker->randomElement(['Sangat Baik', 'Baik', 'Cukup', 'Kurang', 'Sangat Kurang']),
              'status' => $this->faker->randomElement(['Dibalas', 'Belum Dibalas']),

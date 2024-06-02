@@ -13,6 +13,6 @@ class PenyewaanSeeder extends Seeder
      */
     public function run(): void
     {
-        Penyewaan::factory(200)->create();
+        Penyewaan::factory(500)->create();
     }
 }

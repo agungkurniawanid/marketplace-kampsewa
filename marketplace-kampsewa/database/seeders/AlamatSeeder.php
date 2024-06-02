@@ -13,6 +13,6 @@ class AlamatSeeder extends Seeder
      */
     public function run(): void
     {
-        Alamat::factory(200)->create();
+        Alamat::factory(500)->create();
     }
 }

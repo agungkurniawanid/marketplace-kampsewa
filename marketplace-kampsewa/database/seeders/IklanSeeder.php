@@ -13,6 +13,6 @@ class IklanSeeder extends Seeder
      */
     public function run(): void
     {
-        Iklan::factory(200)->create();
+        Iklan::factory(500)->create();
     }
 }

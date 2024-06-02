@@ -17,7 +17,7 @@ class RiwayatPencarianFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => $this->faker->numberBetween(1, 200),
+            'id_user' => $this->faker->numberBetween(1, 500),
             'kata_kunci' => $this->faker->word(),
         ];
     }

@@ -17,7 +17,7 @@ class VariantProdukFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_produk' => $this->faker->numberBetween(1, 200),
+            'id_produk' => $this->faker->numberBetween(1, 500),
             'warna' => $this->faker->colorName(),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
         ];

@@ -13,6 +13,6 @@ class PembayaranIklanSeeder extends Seeder
      */
     public function run(): void
     {
-        PembayaranIklan::factory(200)->create();
+        PembayaranIklan::factory(500)->create();
     }
 }

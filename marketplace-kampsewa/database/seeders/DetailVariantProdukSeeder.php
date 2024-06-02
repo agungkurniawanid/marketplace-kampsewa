@@ -13,6 +13,6 @@ class DetailVariantProdukSeeder extends Seeder
      */
     public function run(): void
     {
-        DetailVariantProduk::factory(200)->create();
+        DetailVariantProduk::factory(500)->create();
     }
 }

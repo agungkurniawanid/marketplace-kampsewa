@@ -17,9 +17,9 @@ class DetailPenyewaanFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_penyewaan'=>$this->faker->numberBetween(1, 200),
-            'id_produk'=>$this->faker->numberBetween(1,200),
-            'id_variant_produk'=>$this->faker->numberBetween(1,200),
+            'id_penyewaan'=>$this->faker->numberBetween(1, 500),
+            'id_produk'=>$this->faker->numberBetween(1,500),
+            'id_variant_produk'=>$this->faker->numberBetween(1,500),
             'qty'=>$this->faker->numberBetween(1,200),
             'subtotal'=>$this->faker->numberBetween(10000,100000),
             'created_at'=>$this->faker->dateTimeBetween('-1 year','now'),

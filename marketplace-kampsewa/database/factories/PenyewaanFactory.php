@@ -17,7 +17,7 @@ class PenyewaanFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => $this->faker->numberBetween(1, 200),
+            'id_user' => $this->faker->numberBetween(1, 500),
             'tanggal_mulai'=>$this->faker->date(),
             'tanggal_selesai'=>$this->faker->date(),
             'status_penyewaan'=>$this->faker->randomElement(['pending', 'berlangsung', 'selesai']),

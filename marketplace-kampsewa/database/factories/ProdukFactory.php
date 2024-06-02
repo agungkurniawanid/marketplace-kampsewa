@@ -17,7 +17,7 @@ class ProdukFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_user' => $this->faker->numberBetween(1, 200),
+            'id_user' => $this->faker->numberBetween(1, 500),
             'nama' => $this->faker->word,
             'deskripsi' => $this->faker->sentence,
             'status' => $this->faker->randomElement(['Tersedia', 'Tidak Tersedia']),

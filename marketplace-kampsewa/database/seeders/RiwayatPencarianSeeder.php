@@ -13,6 +13,6 @@ class RiwayatPencarianSeeder extends Seeder
      */
     public function run(): void
     {
-        RiwayatPencarian::factory(200)->create();
+        RiwayatPencarian::factory(500)->create();
     }
 }

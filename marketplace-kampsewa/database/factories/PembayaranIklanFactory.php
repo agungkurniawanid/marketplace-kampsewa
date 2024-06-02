@@ -17,8 +17,8 @@ class PembayaranIklanFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_iklan' => $this->faker->numberBetween(1, 200),
-            'id_user' => $this->faker->numberBetween(1, 200),
+            'id_iklan' => $this->faker->numberBetween(1, 500),
+            'id_user' => $this->faker->numberBetween(1, 500),
             'metode_bayar' => 'Transfer',
             'total_bayar' => $this->faker->numberBetween(100000, 1000000),
             'status_bayar' => 'Lunas',

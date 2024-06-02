@@ -28,9 +28,14 @@ Route::post('/lupa-password/kirim-ulang-otp/{nomor_telephone}', [LupaPassword::c
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     // user
-    Route::get('/users', [UserController::class, 'getAllUsers']);
-    Route::get('/users/{identifier}', [UserController::class, 'getUserByIDOrName']);
-    Route::post('/logout', [LogoutController::class, 'logout']);
+    Route::get('/user/{id_user}', [UserController::class, 'detailUser']);
+    Route::put('/user/update-profile/{id_user}', [UserController::class, 'editProfile']);
+    Route::get('/user/pemesanan/{id_user}', [UserController::class, 'pemesananUser']);
+    Route::post('/user/tambah-alamat/{id_user}', [UserController::class, 'tambahAlamatUser']);
+    Route::get('/user/list-alamat/{id_user}', [UserController::class, 'listAlamatUser']);
+    Route::get('/user/detail-alamat/{id_user}', [UserController::class, 'detailAlamatUser']);
+    Route::put('/user/update-alamat/{id_user}', [UserController::class, 'updateAlamatUser']);
+    Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
 
     // product
     Route::get('/produk/produk-rating-tertinggi-limit6', [ProductController::class, 'produkRatingTertinggiLimit6']);

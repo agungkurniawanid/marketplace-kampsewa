@@ -13,6 +13,6 @@ class ProdukSeeder extends Seeder
      */
     public function run(): void
     {
-        Produk::factory(200)->create();
+        Produk::factory(500)->create();
     }
 }
