@@ -194,17 +194,14 @@ class ProductController extends Controller
                     'produk.foto_belakang',
                     'produk.foto_kiri',
                     'produk.foto_kanan',
-                    'detail_variant_produk.harga_sewa',
+                    DB::raw('MIN(detail_variant_produk.harga_sewa) as harga_sewa'),
                     DB::raw('AVG(rating_produk.rating) as rating'),
                     DB::raw('COUNT(rating_produk.ulasan) as total_ulasan'),
                     'users.id as id_user',
                     'users.foto as foto_user',
                     'users.name as nama_user'
                 )
-                ->where(function ($query) use ($parameter) {
-                    $query->where('produk.id', $parameter)
-                        ->orWhere('produk.nama', 'like', '%' . $parameter . '%');
-                })
+                ->where('produk.id', $parameter)
                 ->groupBy(
                     'produk.id',
                     'produk.nama',
@@ -213,14 +210,10 @@ class ProductController extends Controller
                     'produk.foto_belakang',
                     'produk.foto_kiri',
                     'produk.foto_kanan',
-                    'variant_produk.id',
-                    'detail_variant_produk.id',
-                    'detail_variant_produk.harga_sewa',
                     'users.id',
                     'users.foto',
                     'users.name'
-                )
-                ->orderBy('detail_variant_produk.harga_sewa', 'asc');
+                );
 
             if ($warna) {
                 $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
