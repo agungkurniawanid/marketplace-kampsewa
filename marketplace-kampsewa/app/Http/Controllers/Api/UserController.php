@@ -125,15 +125,128 @@ class UserController extends Controller
                 'data disimpan' => $table_alamat,
             ]);
         } catch (\Illuminate\Database\QueryException $e) {
-            // Tangani pengecualian query database
             return response()->json([
                 'message' => 'Terjadi kesalahan pada database.',
                 'error' => $e->getMessage(),
             ], 500);
         } catch (\Exception $e) {
-            // Tangani pengecualian lainnya
             return response()->json([
                 'message' => 'Terjadi kesalahan saat menambah data.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function pemesananUser($id_user)
+    {
+    }
+    public function listAlamatUser($id_user)
+    {
+        try {
+            $get_list_alamat = Alamat::where('id_user', $id_user)->get();
+            if (!$get_list_alamat) {
+                return response()->json([
+                    'message' => 'Data tidak ditemukan',
+                ], 404);
+            }
+            return response()->json([
+                'message' => 'success',
+                'alamat_user' => $get_list_alamat,
+            ], 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada database.',
+                'error' => $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat menampilkan data alamat.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function detailAlamatUser($id_alamat)
+    {
+        try {
+            $get_detail_alamat = Alamat::where('id', $id_alamat)->first();
+            if ($get_detail_alamat) {
+                return response()->json([
+                    'message' => 'success',
+                    'detail_alamat' => $get_detail_alamat,
+                ], 200);
+            }
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat menampilkan data',
+                'detail_alamat' => $get_detail_alamat,
+            ], 404);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada database.',
+                'error' => $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat menampilkan detail data alamat.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function updateAlamatUser($id_alamat, Request $request)
+    {
+        try{
+            $request->validate([
+                'longitude' => 'required|string',
+                'latitude' => 'required|string',
+                'detail_lainnya' => 'nullable|string',
+                'type' => 'nullable|integer',
+            ]);
+
+            $table_alamat = Alamat::where('id', $id_alamat)->update([
+                'longitude' => $request->input('longitude'),
+                'latitude' => $request->input('latitude'),
+                'detail_lainnya' => $request->input('detail_lainnya'),
+                'type' => $request->input('type'),
+            ]);
+
+            if($table_alamat) {
+                $alamat = Alamat::find($id_alamat);
+                return response()->json([
+                    'message' => 'success update',
+                    'data_update' => $alamat
+                ], 200);
+            }
+
+            return response()->json([
+                'message' => 'Data tidak ada.',
+            ], 404);
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada database.',
+                'error' => $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat update data alamat.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function updatePasswordUser($id_user)
+    {
+        try{
+            request()->validate([
+                'password' => 'required|string|max:20|min:8',
+            ]);
+            $table_user = User::where('id', $id_user)->update([]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada database.',
+                'error' => $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat update password.',
                 'error' => $e->getMessage(),
             ], 500);
         }

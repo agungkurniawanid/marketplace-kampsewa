@@ -213,7 +213,6 @@ class ProductController extends Controller
             $warna = request()->query('warna');
             $ukuran = request()->query('ukuran');
 
-            // Base query for all variants
             $all_variants = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
                 ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
                 ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
@@ -236,7 +235,7 @@ class ProductController extends Controller
                     DB::raw('COUNT(rating_produk.ulasan) as total_ulasan'),
                     'users.id as id_user',
                     'users.foto as foto_user',
-                    'users.name as nama_user',
+                    'users.name as nama_user'
                 )
                 ->where(function ($query) use ($parameter) {
                     $query->where('produk.id', $parameter)
@@ -244,13 +243,24 @@ class ProductController extends Controller
                 })
                 ->groupBy(
                     'produk.id',
+                    'produk.nama',
+                    'produk.deskripsi',
+                    'produk.foto_depan',
+                    'produk.foto_belakang',
+                    'produk.foto_kiri',
+                    'produk.foto_kanan',
                     'variant_produk.id',
+                    'variant_produk.warna',
                     'detail_variant_produk.id',
-                    'users.id'
+                    'detail_variant_produk.ukuran',
+                    'detail_variant_produk.stok',
+                    'detail_variant_produk.harga_sewa',
+                    'users.id',
+                    'users.foto',
+                    'users.name'
                 )
                 ->get();
 
-            // Base query for filtered variants
             $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
                 ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
                 ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
@@ -273,14 +283,13 @@ class ProductController extends Controller
                     DB::raw('COUNT(rating_produk.ulasan) as total_ulasan'),
                     'users.id as id_user',
                     'users.foto as foto_user',
-                    'users.name as nama_user',
+                    'users.name as nama_user'
                 )
                 ->where(function ($query) use ($parameter) {
                     $query->where('produk.id', $parameter)
                         ->orWhere('produk.nama', $parameter);
                 });
 
-            // Apply filters for color and size
             if ($warna) {
                 $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
             }
@@ -292,9 +301,21 @@ class ProductController extends Controller
             $filtered_results = $tb_produk
                 ->groupBy(
                     'produk.id',
+                    'produk.nama',
+                    'produk.deskripsi',
+                    'produk.foto_depan',
+                    'produk.foto_belakang',
+                    'produk.foto_kiri',
+                    'produk.foto_kanan',
                     'variant_produk.id',
+                    'variant_produk.warna',
                     'detail_variant_produk.id',
-                    'users.id'
+                    'detail_variant_produk.ukuran',
+                    'detail_variant_produk.stok',
+                    'detail_variant_produk.harga_sewa',
+                    'users.id',
+                    'users.foto',
+                    'users.name'
                 )
                 ->get();
 
@@ -310,7 +331,6 @@ class ProductController extends Controller
                 'hasil_filter' => $filtered_results,
             ], 200);
         } catch (\Exception $error) {
-            // Handle the error appropriately, e.g., log it and return an error response
             Log::error($error->getMessage());
             return response()->json(['error' => 'Terjadi kesalahan saat mengambil detail produk'], 500);
         }
