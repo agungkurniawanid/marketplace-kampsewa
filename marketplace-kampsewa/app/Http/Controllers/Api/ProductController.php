@@ -180,82 +180,81 @@ class ProductController extends Controller
 
     // fungsi untuk get detail produk
     public function getDetailProduct($parameter)
-{
-    try {
-        $warna = request()->query('warna');
-        $ukuran = request()->query('ukuran');
+    {
+        try {
+            $warna = request()->query('warna');
+            $ukuran = request()->query('ukuran');
 
-        $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
-            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
-            ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
-            ->leftJoin('users', 'users.id', '=', 'rating_produk.id_user')
-            ->select(
-                'produk.id as id_produk',
-                'produk.nama as nama_produk',
-                'produk.deskripsi as deskripsi_produk',
-                'produk.foto_depan',
-                'produk.foto_belakang',
-                'produk.foto_kiri',
-                'produk.foto_kanan',
-                'variant_produk.id as id_variant_produk',
-                'variant_produk.warna',
-                'detail_variant_produk.id as id_detail_variant_produk',
-                'detail_variant_produk.ukuran',
-                'detail_variant_produk.stok',
-                'detail_variant_produk.harga_sewa',
-                DB::raw('AVG(rating_produk.rating) as rating'),
-                DB::raw('COUNT(rating_produk.ulasan) as total_ulasan'),
-                'users.id as id_user',
-                'users.foto as foto_user',
-                'users.name as nama_user'
-            )
-            ->where(function ($query) use ($parameter) {
-                $query->where('produk.id', $parameter)
-                    ->orWhere('produk.nama', $parameter);
-            })
-            ->groupBy(
-                'produk.id',
-                'produk.nama',
-                'produk.deskripsi',
-                'produk.foto_depan',
-                'produk.foto_belakang',
-                'produk.foto_kiri',
-                'produk.foto_kanan',
-                'variant_produk.id',
-                'variant_produk.warna',
-                'detail_variant_produk.id',
-                'detail_variant_produk.ukuran',
-                'detail_variant_produk.stok',
-                'detail_variant_produk.harga_sewa',
-                'users.id',
-                'users.foto',
-                'users.name'
-            );
+            $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+                ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+                ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
+                ->leftJoin('users', 'users.id', '=', 'rating_produk.id_user')
+                ->select(
+                    'produk.id as id_produk',
+                    'produk.nama as nama_produk',
+                    'produk.deskripsi as deskripsi_produk',
+                    'produk.foto_depan',
+                    'produk.foto_belakang',
+                    'produk.foto_kiri',
+                    'produk.foto_kanan',
+                    'variant_produk.id as id_variant_produk',
+                    'variant_produk.warna',
+                    'detail_variant_produk.id as id_detail_variant_produk',
+                    'detail_variant_produk.ukuran',
+                    'detail_variant_produk.stok',
+                    'detail_variant_produk.harga_sewa',
+                    DB::raw('AVG(rating_produk.rating) as rating'),
+                    DB::raw('COUNT(rating_produk.ulasan) as total_ulasan'),
+                    'users.id as id_user',
+                    'users.foto as foto_user',
+                    'users.name as nama_user'
+                )
+                ->where(function ($query) use ($parameter) {
+                    $query->where('produk.id', $parameter)
+                        ->orWhere('produk.nama', $parameter);
+                })
+                ->groupBy(
+                    'produk.id',
+                    'produk.nama',
+                    'produk.deskripsi',
+                    'produk.foto_depan',
+                    'produk.foto_belakang',
+                    'produk.foto_kiri',
+                    'produk.foto_kanan',
+                    'variant_produk.id',
+                    'variant_produk.warna',
+                    'detail_variant_produk.id',
+                    'detail_variant_produk.ukuran',
+                    'detail_variant_produk.stok',
+                    'detail_variant_produk.harga_sewa',
+                    'users.id',
+                    'users.foto',
+                    'users.name'
+                );
 
-        if ($warna) {
-            $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
-        }
+            if ($warna) {
+                $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
+            }
 
-        if ($ukuran) {
-            $tb_produk->where('detail_variant_produk.ukuran', 'like', $ukuran);
-        }
+            if ($ukuran) {
+                $tb_produk->where('detail_variant_produk.ukuran', 'like', $ukuran);
+            }
 
-        $all_variants = $tb_produk->get();
+            $all_variants = $tb_produk->get();
 
-        if ($all_variants->isEmpty()) {
+            if ($all_variants->isEmpty()) {
+                return response()->json([
+                    'message' => 'Data tidak ditemukan!',
+                ], 404);
+            }
+
             return response()->json([
-                'message' => 'Data tidak ditemukan!',
-            ], 404);
+                'message' => 'success',
+                'detail_produk' => $all_variants,
+            ], 200);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan saat mengambil detail produk'], 500);
         }
-
-        return response()->json([
-            'message' => 'success',
-            'detail_produk' => $all_variants,
-        ], 200);
-    } catch (\Exception $error) {
-        Log::error($error->getMessage());
-        return response()->json(['error' => 'Terjadi kesalahan saat mengambil detail produk'], 500);
     }
-}
-
 }
