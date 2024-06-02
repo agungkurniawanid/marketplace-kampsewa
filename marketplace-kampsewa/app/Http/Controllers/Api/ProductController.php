@@ -155,10 +155,7 @@ class ProductController extends Controller
                 'detail_variant_produk.stok',
                 'detail_variant_produk.harga_sewa'
             )
-            ->where(function ($query) use ($parameter) {
-                $query->where('produk.nama', $parameter)
-                    ->orWhere('produk.id', $parameter);
-            });
+            ->where('produk.id', $parameter);
 
         // Filter berdasarkan warna
         if ($warna) {
