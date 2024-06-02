@@ -238,7 +238,19 @@ class UserController extends Controller
             request()->validate([
                 'password' => 'required|string|max:20|min:8',
             ]);
-            $table_user = User::where('id', $id_user)->update([]);
+            $table_user = User::where('id', $id_user)->update([
+                'password' => bcrypt(request()->input('password')),
+            ]);
+            if($table_user) {
+                $user = User::find($id_user);
+                return response()->json([
+                    'message' => 'success update password',
+                    'data_update' => $user,
+                ], 200);
+            }
+            return response()->json([
+                'message' => 'data tidak ada atau terjadi kesalahan saat update data',
+            ], 404);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan pada database.',
