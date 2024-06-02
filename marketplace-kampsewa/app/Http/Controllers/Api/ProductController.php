@@ -138,42 +138,50 @@ class ProductController extends Controller
     // saat user clik icon keranjang produk, $parameter berdasarkan id/nama produk
     public function getDetailProdukKeranjang($parameter)
     {
-        $warna = request()->query('warna');
-        $ukuran = request()->query('ukuran');
+        try {
+            $warna = request()->query('warna');
+            $ukuran = request()->query('ukuran');
 
-        // Query untuk mendapatkan produk dan variannya dengan filter
-        $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
-            ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
-            ->select(
-                'produk.id as id_produk',
-                'produk.nama as nama_produk',
-                'produk.foto_depan',
-                'variant_produk.id as id_variant_produk',
-                'variant_produk.warna',
-                'detail_variant_produk.id as id_detail_variant_produk',
-                'detail_variant_produk.ukuran',
-                'detail_variant_produk.stok',
-                'detail_variant_produk.harga_sewa'
-            )
-            ->where('produk.id', $parameter);
+            $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+                ->leftJoin('detail_variant_produk', function ($join) {
+                    $join->on('variant_produk.id', '=', 'detail_variant_produk.id_variant_produk');
+                    $join->whereNotNull('detail_variant_produk.ukuran');
+                })
+                ->select(
+                    'produk.id as id_produk',
+                    'produk.nama as nama_produk',
+                    'produk.foto_depan',
+                    DB::raw('GROUP_CONCAT(DISTINCT variant_produk.warna) as warna'),
+                    DB::raw('GROUP_CONCAT(DISTINCT detail_variant_produk.ukuran) as ukuran'),
+                    DB::raw('MIN(detail_variant_produk.harga_sewa) as harga_sewa')
+                )
+                ->where('produk.id', $parameter);
 
-        // Filter berdasarkan warna
-        if ($warna) {
-            $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
+            if ($warna) {
+                $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
+            }
+
+            if ($ukuran) {
+                $tb_produk->where('detail_variant_produk.ukuran', 'like', '%' . $ukuran . '%');
+            }
+
+            $all_variants = $tb_produk->groupBy('produk.id')->get();
+
+            if ($all_variants->isEmpty()) {
+                return response()->json([
+                    'message' => 'Data tidak ditemukan!',
+                ], 404);
+            }
+
+            return response()->json([
+                'message' => 'success',
+                'detail_produk' => $all_variants,
+            ], 200);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+            return response()->json(['error' => 'Terjadi kesalahan saat mengambil detail produk'], 500);
         }
-
-        // Filter berdasarkan ukuran
-        if ($ukuran) {
-            $tb_produk->where('detail_variant_produk.ukuran', 'like', $ukuran);
-        }
-
-        $filtered_results = $tb_produk->get();
-        return response()->json([
-            'message' => 'success',
-            'data_result' => $filtered_results,
-        ], 200);
     }
-
 
     // fungsi untuk get detail produk
     public function getDetailProduct($parameter)
