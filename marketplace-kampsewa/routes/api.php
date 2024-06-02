@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/user/{id_user}', [UserController::class, 'detailUser']);
     Route::put('/user/update-profile/{id_user}', [UserController::class, 'editProfile']);
     Route::get('/user/pemesanan/{id_user}', [UserController::class, 'pemesananUser']);
-    Route::post('/user/tambah-alamat/{id_user}', [UserController::class, 'tambahAlamatUser']);
+    Route::post('/user/tambah-alamat', [UserController::class, 'tambahAlamatUser']);
     Route::get('/user/list-alamat/{id_user}', [UserController::class, 'listAlamatUser']);
     Route::get('/user/detail-alamat/{id_user}', [UserController::class, 'detailAlamatUser']);
     Route::put('/user/update-alamat/{id_user}', [UserController::class, 'updateAlamatUser']);
