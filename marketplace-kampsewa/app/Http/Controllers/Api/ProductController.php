@@ -122,7 +122,7 @@ class ProductController extends Controller
         }
 
         // Group by produk untuk menghindari duplikasi
-        $produk->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.foto_depan');
+        $produk->groupBy('produk.id', 'produk.id_user', 'users.name','produk.nama', 'produk.foto_depan');
 
         // Eksekusi query dan ambil hasil
         $data = $produk->get();
