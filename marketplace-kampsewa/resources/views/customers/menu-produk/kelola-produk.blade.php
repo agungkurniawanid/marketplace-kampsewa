@@ -79,7 +79,8 @@
                             </div>
                         </div>
                     @else
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <div class="overflow-x-auto">
+                        <table class="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 class="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -142,6 +143,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
                     @endif
                 </div>
             </div>

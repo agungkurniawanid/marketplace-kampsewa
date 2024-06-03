@@ -68,6 +68,7 @@ class ProductController extends Controller
             ->select(
                 'produk.id as id_produk',
                 'produk.id_user as id_user',
+                'users.name as nama_user',
                 DB::raw('MAX(rating_produk.id) as id_rating_produk'),
                 DB::raw('MAX(variant_produk.id) as id_variant_produk'),
                 DB::raw('MAX(detail_variant_produk.id) as id_detail_variant_produk'),
@@ -188,7 +189,7 @@ class ProductController extends Controller
 
             // Filter berdasarkan ukuran
             if ($ukuran) {
-                $filtered_query->where('detail_variant_produk.ukuran', 'like', '%' . $ukuran . '%');
+                $filtered_query->where('detail_variant_produk.ukuran', $ukuran);
             }
 
             $filtered_results = $filtered_query->get();
@@ -198,8 +199,6 @@ class ProductController extends Controller
                     'message' => 'Data tidak ditemukan!',
                 ], 404);
             }
-
-            // testing okok masbro
 
             return response()->json([
                 'message' => 'success',
