@@ -138,34 +138,62 @@ class ProductController extends Controller
     // saat user clik icon keranjang produk, $parameter berdasarkan id/nama produk
     public function getDetailProdukKeranjang($parameter)
     {
-        try {
-            $warna = request()->query('warna');
-            $ukuran = request()->query('ukuran');
+        $warna = request()->query('warna');
+        $ukuran = request()->query('ukuran');
 
-            $tb_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+        try {
+            // Query untuk mendapatkan semua varian produk tanpa filter warna dan ukuran
+            $all_variants = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
                 ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
                 ->select(
                     'produk.id as id_produk',
                     'produk.nama as nama_produk',
                     'produk.foto_depan',
+                    'variant_produk.id as id_variant_produk',
                     'variant_produk.warna',
+                    'detail_variant_produk.id as id_detail_variant_produk',
                     'detail_variant_produk.ukuran',
                     'detail_variant_produk.stok',
-                    DB::raw('MIN(detail_variant_produk.harga_sewa) as harga_sewa')
+                    'detail_variant_produk.harga_sewa'
+                )
+                ->where(function ($query) use ($parameter) {
+                    $query->where('produk.nama', $parameter)
+                        ->orWhere('produk.id', $parameter);
+                })
+                ->get();
+
+            // Query untuk mendapatkan produk dan variannya dengan filter
+            $filtered_query = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+                ->leftJoin('detail_variant_produk', function ($join) {
+                    $join->on('variant_produk.id', '=', 'detail_variant_produk.id_variant_produk');
+                    $join->whereNotNull('detail_variant_produk.ukuran');
+                })
+                ->select(
+                    'produk.id as id_produk',
+                    'produk.nama as nama_produk',
+                    'produk.foto_depan',
+                    'variant_produk.id as id_variant_produk',
+                    'variant_produk.warna',
+                    'detail_variant_produk.id as id_detail_variant_produk',
+                    'detail_variant_produk.ukuran',
+                    'detail_variant_produk.stok',
+                    'detail_variant_produk.harga_sewa'
                 )
                 ->where('produk.id', $parameter);
 
+            // Filter berdasarkan warna
             if ($warna) {
-                $tb_produk->where('variant_produk.warna', 'like', '%' . $warna . '%');
+                $filtered_query->where('variant_produk.warna', 'like', '%' . $warna . '%');
             }
 
+            // Filter berdasarkan ukuran
             if ($ukuran) {
-                $tb_produk->where('detail_variant_produk.ukuran', 'like', '%' . $ukuran . '%');
+                $filtered_query->where('detail_variant_produk.ukuran', 'like', '%' . $ukuran . '%');
             }
 
-            $one_variant = $tb_produk->groupBy('produk.id', 'produk.nama', 'produk.foto_depan', 'variant_produk.warna', 'detail_variant_produk.ukuran', 'detail_variant_produk.stok')->first();
+            $filtered_results = $filtered_query->get();
 
-            if (!$one_variant) {
+            if ($all_variants->isEmpty()) {
                 return response()->json([
                     'message' => 'Data tidak ditemukan!',
                 ], 404);
@@ -173,13 +201,15 @@ class ProductController extends Controller
 
             return response()->json([
                 'message' => 'success',
-                'detail_produk' => $one_variant,
+                'all_variants' => $all_variants,
+                'filtered_results' => $filtered_results,
             ], 200);
         } catch (\Exception $error) {
             Log::error($error->getMessage());
             return response()->json(['error' => 'Terjadi kesalahan saat mengambil detail produk'], 500);
         }
     }
+
 
     // fungsi untuk get detail produk
     public function getDetailProduct($parameter)

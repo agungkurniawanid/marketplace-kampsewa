@@ -122,7 +122,7 @@
                                         </td>
                                         <td class="px-6 py-4 flex gap-2 items-center">
                                             <p><a
-                                                    href="{{ route('menu-produk.update-produk', ['id_produk' => Crypt::encrypt($item->id_produk)]) }}"><i
+                                                    href="{{ route('menu-produk.update-produk', ['id_produk' => Crypt::encrypt($item->id_produk), 'id_user' => Crypt::encrypt($item->id_user)]) }}"><i
                                                         class="text-[16px] bi bi-pen-fill"></i></a>
                                             <form id="delete-produk-{{ $item->id_produk }}"
                                                 action="{{ route('menu-produk.delete', ['id_produk' => $item->id_produk]) }}"

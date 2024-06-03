@@ -33,6 +33,7 @@ class ProdukController extends Controller
             ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
             ->select(
                 'produk.id as id_produk',
+                'produk.id_user as id_user',
                 'produk.nama as nama_produk',
                 'produk.status as status_produk',
                 'produk.foto_depan as foto',
@@ -182,13 +183,32 @@ class ProdukController extends Controller
         ]);
     }
 
-    public function updateProduk($id_produk) {
-        // memecah encrpyt dari url id produk
+    public function updateProduk($id_produk, $id_user) {
+        // Decrypt the ids
         $id_produk_decrypt = Crypt::decrypt($id_produk);
+        $id_user_decrypt = Crypt::decrypt($id_user);
 
-        // kembalikan nilai
+        // Retrieve the product, variants, and detail variants
+        $table_produk = Produk::where('id', $id_produk_decrypt)
+            ->where('id_user', $id_user_decrypt)
+            ->first();
+
+        $table_variant_produk = VariantProduk::where('id_produk', $id_produk_decrypt)
+            ->get();
+
+        $table_detail_variant_produk = DetailVariantProduk::whereIn('id_variant_produk', $table_variant_produk->pluck('id'))
+            ->get()
+            ->groupBy('id_variant_produk');
+
+        // Pass data to the view
         return view('customers.menu-produk.update-produk')->with([
             'title' => 'Update Produk',
+            'id_produk' => $id_produk_decrypt,
+            'id_user' => $id_user_decrypt,
+            'produk' => $table_produk,
+            'variants' => $table_variant_produk,
+            'detail_variants' => $table_detail_variant_produk,
         ]);
     }
+
 }
