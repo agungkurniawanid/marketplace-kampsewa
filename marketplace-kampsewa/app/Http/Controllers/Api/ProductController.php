@@ -199,6 +199,8 @@ class ProductController extends Controller
                 ], 404);
             }
 
+            // testing
+
             return response()->json([
                 'message' => 'success',
                 'all_variants' => $all_variants,
