@@ -1,6 +1,6 @@
 @extends('customers.menu-dashboard-cust.dashboard')
 @section('customer-content')
-    <div class="--container px-10 py-5 flex flex-col gap-8">
+    <div class="--container px-10 mobile-max:py-2 mobile-max:px-5 py-5 flex flex-col gap-8">
         <div class="--wrapper-heading-wrapper-deskripsi-halaman">
             <h1 class="text-[24px] font-bold capitalize">Manajemen Produk Anda!</h1>
             <p class="text-[14px]">Halaman ini berisi data produk anda, anda bisa menambah, mengedit dan menghapus produk,
@@ -14,7 +14,7 @@
 
         {{-- wrapper navigation item menu --}}
         <div class="--wrapper-navigation-menu w-full">
-            <ul class="flex items-center gap-2">
+            <ul class="flex items-center gap-2 mobile-max:gap-4 mobile-max:flex-wrap">
                 <li><a class="{{ $title == 'Produk Menu | KampSewa' ? 'bg-[#F8F7F4] font-medium' : '' }} hover:font-medium hover:bg-[#F8F7F4] hover:text-[#0F172A] text-[14px] px-4 py-2 rounded-full"
                         href="{{ route('menu-produk.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Semua
                         Produk</a></li>
@@ -29,15 +29,15 @@
 
         <div class="--wrapper-action-button">
             {{-- todo wrapper total search filter --}}
-            <div class="flex w-full justify-between items-center mb-4">
+            <div class="flex w-full justify-between items-center mobile-max:flex-col-reverse gap-6 mb-4">
 
                 {{-- todo total users --}}
                 <div class="_total">
-                    <p class="text-[#19191b] text-[14px] font-bold">213 Produk</p>
+                    <p class="text-[#19191b] text-[14px] font-bold whitespace-nowrap">{{ $total_produk }} Produk</p>
                 </div>
 
                 {{-- todo wrapper search filter --}}
-                <div class="_search-filter w-1/2 flex gap-[20px]">
+                <div class="_search-filter w-1/2 mobile-max:w-full items-center mobile-max:flex-col small-desktop:w-full flex gap-[20px]">
                     {{-- todo search --}}
                     <div class="_searrh w-full">
                         <form method="GET" class="w-full">
@@ -51,10 +51,10 @@
                         </form>
                     </div>
                     {{-- todo untuk tombol tambah data --}}
-                    <div class="_btn-tambah-data whitespace-nowrap">
+                    <div class="_btn-tambah-data whitespace-nowrap mobile-max:w-full">
                         <a
                             href="{{ route('menu-produk.tambah-produk', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">
-                            <button class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">
+                            <button class="mobile-max:w-full px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">
                                 <div class="_icon-plus"></div>
                                 <span>Tambah Produk</span>
                             </button>
@@ -63,8 +63,9 @@
                 </div>
             </div>
         </div>
-        <div class="--table w-full h-auto overflow-x-scroll">
-            <div class="relative w-full h-[500px] overflow-y-hidden overflow-x-scroll shadow-box-shadow-11 rounded-[20px] bg-white">
+        <div class="--table w-full h-auto flex flex-col gap-6">
+            <div
+                class="relative w-full h-[500px] overflow-y-hidden overflow-x-scroll shadow-box-shadow-11 rounded-[20px] bg-white">
                 <div class="w-full h-full overflow-x-auto">
                     @if ($produk->count() == 0)
                         <div class="w-full h-full flex items-center justify-center">
@@ -79,7 +80,6 @@
                             </div>
                         </div>
                     @else
-                    <div class="overflow-x-scroll">
                         <table class="w-full min-w-max text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 class="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400">
@@ -143,10 +143,10 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
                     @endif
                 </div>
             </div>
+            {{ $produk->onEachSide(1)->links('components.paginate.custom-pagination') }}
         </div>
     </div>
     <script>

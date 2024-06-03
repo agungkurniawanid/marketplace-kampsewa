@@ -20,11 +20,14 @@
         <div class="--wrapper-navigation-menu w-full">
             <ul class="flex items-center gap-2">
                 <li><a class="{{ $title == 'Produk Menu | KampSewa' ? 'bg-[#F8F7F4] font-medium' : '' }} hover:font-medium hover:bg-[#F8F7F4] hover:text-[#0F172A] text-[14px] px-4 py-2 rounded-full"
-                        href="{{ route('menu-produk.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Semua Produk</a></li>
+                        href="{{ route('menu-produk.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Semua
+                        Produk</a></li>
                 <li><a class="text-[14px] hover:font-medium px-4 py-2 rounded-full hover:bg-[#F8F7F4] hover:text-[#0F172A]"
-                        href="{{ route('menu-produk.kelola-produk', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Kelola Produk</a></li>
+                        href="{{ route('menu-produk.kelola-produk', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Kelola
+                        Produk</a></li>
                 <li><a class="text-[14px] hover:font-medium px-4 py-2 rounded-full hover:bg-[#F8F7F4] hover:text-[#0F172A]"
-                        href="{{ route('menu-produk.sedang-disewa', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Sedang Disewa</a></li>
+                        href="{{ route('menu-produk.sedang-disewa', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Sedang
+                        Disewa</a></li>
             </ul>
         </div>
 
@@ -33,31 +36,37 @@
         {{-- pembungkus kontent filter dan list produk --}}
         <div class="--wrapper-filter-wrapper-list-product w-full flex gap-4 items-start h-auto">
             {{-- filter --}}
-            <div class="--wrapper-filter max-w-[500px] sticky top-4 flex flex-col gap-4">
-                <div class="--search flex flex-col gap-2">
-                    <p class="text-[14px] font-medium">Pencarian Produk:</p>
-                    <form action="">
+            <div class="--wrapper-filter max-w-[500px] sticky top-4">
+                <form id="formSide" method="GET" class="flex flex-col gap-4">
+                    <div class="--search flex flex-col gap-2">
+                        <p class="text-[14px] font-medium">Pencarian Produk:</p>
                         <div class="relative w-full mx-auto">
-                            <input class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" type="search" placeholder="Search">
+                            <input name="search" value="{{ $search }}"
+                                class="w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                type="search" placeholder="Search">
                         </div>
-                    </form>
-                </div>
+                    </div>
 
-                {{-- filter category --}}
-                <div class="--search flex flex-col gap-2">
-                    <p class="text-[14px] font-medium">Pilih Category:</p>
-                    <form class="w-full mx-auto" action="" method="">
+                    {{-- filter category --}}
+                    <div class="--search flex flex-col gap-2">
+                        <p class="text-[14px] font-medium">Pilih Category:</p>
                         <div class="custom-select-wrapper">
-                            <select id="countries" class="custom-select">
-                                <option selected>Semua</option>
-                                <option value="tenda">Tenda</option>
-                                <option value="pemasak">Alat Masak</option>
-                                <option value="sepatu">Sepatu</option>
-                                <option value="meja">Meja</option>
+                            <select id="countries" name="filter_side" class="custom-select">
+                                <option value="" {{ empty($filter_side) ? 'selected' : '' }}>Semua</option>
+                                <option value="tenda" {{ $filter_side == 'tenda' ? 'selected' : '' }}>Tenda</option>
+                                <option value="tas" {{ $filter_side == 'tas' ? 'selected' : '' }}>Tas</option>
+                                <option value="sepatu" {{ $filter_side == 'sepatu' ? 'selected' : '' }}>Sepatu</option>
+                                <option value="perlengkapan" {{ $filter_side == 'perlengkapan' ? 'selected' : '' }}>
+                                    Perlengkapan</option>
                             </select>
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="--wrapper-button w-full">
+                        <button id="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-full">Lakukan
+                            Aksi</button>
+                    </div>
+                </form>
             </div>
 
             {{-- divider --}}
@@ -66,55 +75,111 @@
             {{-- list produk --}}
             <div class="--wrapper-produk w-full flex flex-col gap-4">
                 <div class="w-full flex items-center justify-between">
-                    <p class="text-[14px]">12 Hasil Produk</p>
-                    <form action="">
-                        <select name="filter" id="filter" class="focus:outline-none text-[14px]">
-                            <option value="">Terbaru</option>
-                            <option value="">Terlama</option>
-                            <option value="">Harga Termahal</option>
-                            <option value="">Harga Termurah</option>
+                    <p class="text-[14px]">{{ $result }} Hasil Produk</p>
+                    <form id="filterFormRight" method="GET">
+                        <select name="filter_right" id="filterRight" class="focus:outline-none text-[14px]">
+                            <option value="terbaru" {{ $filter_right == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                            <option value="terlama" {{ $filter_right == 'terlama' ? 'selected' : '' }}>Terlama</option>
+                            <option value="termahal" {{ $filter_right == 'termahal' ? 'selected' : '' }}>Harga Termahal
+                            </option>
+                            <option value="termurah" {{ $filter_right == 'termurah' ? 'selected' : '' }}>Harga Termurah
+                            </option>
                         </select>
                     </form>
                 </div>
                 <div class="--wrapper-card w-full">
-                    <div class="--card-design grid grid-cols-4 gap-4">
-                        @for ($i = 1; $i <= 20; $i++)
-                        <a href="" class="hover:text-black group">
-                            <div class="--card-item flex flex-col gap-2">
-                                <div class="--header">
-                                    <img class="w-[250px] h-[250px] object-cover rounded-[30px]" src="{{ asset('assets/image/customers/produk/foldingcamptableleadpic.jpg') }}" alt="">
-                                </div>
-                                <div class="--body">
-                                    <p class="capitalize text-[18px] font-medium line-clamp-1 group-hover:underline">folding camp table lead Hard Tools</p>
-                                    <p class="text-[14px] text-gray-400"><i class="bi bi-box-fill"></i> Stok : 12</p>
-                                    <div class="flex items-center gap-2 mt-2">
-                                        <p class="text-[12px] font-medium bg-[#F6F7FF] text-[#8DBCFF] px-2 py-1 rounded-[5px]">Ransel</p>
-                                        <p class="text-[12px] font-medium bg-[#FEF2EC] text-[#EF9866] px-2 py-1 rounded-[5px]">Rp. 15.000/Hari</p>
-                                    </div>
+                    @if ($produk->count() == 0)
+                        <div class="w-full h-full flex items-center justify-center">
+                            <div class="flex items-center gap-4 justify-center">
+                                <img class="w-[300px] h-auto object-cover"
+                                    src="{{ asset('images/illustration/filling-survey.png') }}" alt="">
+                                <div>
+                                    <p class="text-[40px] font-black">OOPS!</p>
+                                    <p class="text-[16px] font-medium">Sepertinya {{ $search }} Tidak ada dalam
+                                        daftar
+                                        produk!
                                 </div>
                             </div>
-                        </a>
-                        @endfor
-                    </div>
+                        </div>
+                    @else
+                        <div class="--card-design grid grid-cols-4 gap-4">
+                            @foreach ($produk as $item)
+                                <a href="" class="hover:text-black group">
+                                    <div class="--card-item flex flex-col gap-2">
+                                        <div class="--header">
+                                            <img class="w-[250px] h-[250px] object-cover rounded-[30px]"
+                                                src="{{ asset('assets/image/customers/produk/' . $item->foto_depan) }}"
+                                                alt="">
+                                        </div>
+                                        <div class="--body">
+                                            <p
+                                                class="capitalize text-[18px] font-medium line-clamp-1 group-hover:underline">
+                                                {{ $item->nama_produk }}</p>
+                                            <p class="text-[14px] text-gray-400"><i class="bi bi-box-fill"></i> Stok :
+                                                {{ $item->stok_produk }}</p>
+                                            <div class="flex items-center gap-2 mt-2">
+                                                <p
+                                                    class="text-[12px] font-medium bg-[#F6F7FF] text-[#8DBCFF] px-2 py-1 rounded-[5px]">
+                                                    {{ $item->kategori_produk }}</p>
+                                                <p
+                                                    class="text-[12px] font-medium bg-[#FEF2EC] text-[#EF9866] px-2 py-1 rounded-[5px]">
+                                                    {{ number_format($item->harga_sewa_min, 0, ',', '.') }}/Hari</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
-                <div class="w-full flex justify-center pt-1 gap-2 mt-2">
-                    <p><a href=""
-                            class="text-[12px] font-bold text-white gradient-1 px-4 py-2 rounded-[5px]">Sebelumnya</a></p>
-                    <p><a href=""
-                            class="text-[12px] font-bold text-black hover:bg-gray-100 shadow-box-shadow-8 px-4 py-2 rounded-[5px]">1</a>
-                    </p>
-                    <p><a href=""
-                            class="text-[12px] font-bold text-black hover:bg-gray-100 shadow-box-shadow-8 px-4 py-2 rounded-[5px]">2</a>
-                    </p>
-                    <p><a href=""
-                            class="text-[12px] font-bold text-black hover:bg-gray-100 shadow-box-shadow-8 px-4 py-2 rounded-[5px]">3</a>
-                    </p>
-                    <p><a href=""
-                            class="text-[12px] font-bold text-black hover:bg-gray-100 shadow-box-shadow-8 px-4 py-2 rounded-[5px]">4</a>
-                    </p>
-                    <p><a href="" class="text-[12px] font-bold text-white gradient-1 px-4 py-2 rounded-[5px]">Next</a></p>
-                </div>
+                {{ $produk->onEachSide(1)->links('components.paginate.custom-pagination') }}
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            // Simpan nilai search dan filter_side saat halaman dimuat
+            var searchValue = "{{ $search }}";
+            var filterSideValue = "{{ $filter_side }}";
+
+            // Tombol submit pada formSide
+            document.getElementById('submit').addEventListener('click', function(event){
+                event.preventDefault();
+                var formSide = document.getElementById('formSide');
+                var filterRightValue = document.getElementById('filterRight').value;
+
+                // Menambahkan parameter filter_right ke URL
+                var urlParams = new URLSearchParams(window.location.search);
+                urlParams.set('filter_right', filterRightValue);
+
+                // Menyiapkan URL dengan parameter tambahan
+                var url = '?' + urlParams.toString();
+
+                // Menggabungkan parameter dari formSide ke URL
+                var formData = new FormData(formSide);
+                formData.forEach((value, key) => {
+                    urlParams.set(key, value);
+                });
+
+                // Mengirimkan permintaan ke URL yang diperbarui
+                window.location.href = url + '&' + urlParams.toString();
+            });
+
+            // Menangani perubahan pada elemen select di filterFormRight
+            document.getElementById('filterRight').addEventListener('change', function() {
+                var filterFormRight = document.getElementById('filterFormRight');
+                var filterRightValue = filterFormRight.elements['filter_right'].value;
+
+                // Menyiapkan URL dengan parameter filter_right
+                var url = '?filter_right=' + filterRightValue;
+
+                // Menambahkan nilai search dan filter_side ke URL
+                url += '&search=' + searchValue;
+                url += '&filter_side=' + filterSideValue;
+
+                // Mengirimkan permintaan ke URL yang diperbarui
+                window.location.href = url;
+            });
+        });
+    </script>
 @endsection

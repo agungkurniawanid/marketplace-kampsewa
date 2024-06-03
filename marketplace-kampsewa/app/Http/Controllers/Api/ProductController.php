@@ -30,7 +30,7 @@ class ProductController extends Controller
             )
             ->whereNotNull('rating_produk.rating')
             ->whereNotNull('detail_variant_produk.harga_sewa')
-            ->groupBy('produk.id', 'produk.id_user','users.name', 'produk.nama', 'produk.foto_depan')
+            ->groupBy('produk.id', 'produk.id_user', 'users.name', 'produk.nama', 'produk.foto_depan')
             ->orderByDesc(DB::raw('AVG(rating_produk.rating)'))
             ->orderBy(DB::raw('MIN(detail_variant_produk.harga_sewa)'))
             ->limit(6)
@@ -48,8 +48,6 @@ class ProductController extends Controller
             'data_produk' => $produk
         ], 200);
     }
-
-
 
     // fungsi untuk menampilkan product berdasarkan
     // kategori: tenda, pakaian, tas & sepatu, perlengkapan, semua
@@ -123,7 +121,7 @@ class ProductController extends Controller
         }
 
         // Group by produk untuk menghindari duplikasi
-        $produk->groupBy('produk.id', 'produk.id_user', 'users.name','produk.nama', 'produk.foto_depan');
+        $produk->groupBy('produk.id', 'produk.id_user', 'users.name', 'produk.nama', 'produk.foto_depan');
 
         // Eksekusi query dan ambil hasil
         $data = $produk->get();
@@ -133,8 +131,6 @@ class ProductController extends Controller
             'data' => $data,
         ], 200);
     }
-
-
 
     // fungsi untuk menampilkan detial : nama, stok, harga, warna, ukuran
     // saat user clik icon keranjang produk, $parameter berdasarkan id/nama produk

@@ -21,15 +21,79 @@ class ProdukController extends Controller
     }
     public function index($id_user)
     {
-        return view('customers.menu-produk.produk', ['title' => 'Produk Menu | KampSewa']);
+        try {
+            // decrypt id user
+            $id_user_decrypt = Crypt::decrypt($id_user);
+
+            // variable filter
+            $search = request()->query('search');
+            $filter_side = request()->query('filter_side');
+            $filter_right = request()->query('filter_right');
+
+            // ambil semua data produk berdasarkan id user
+            $table_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+                ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+                ->select(
+                    'produk.id as id_produk',
+                    'produk.id_user as id_user',
+                    'produk.nama as nama_produk',
+                    'produk.kategori as kategori_produk',
+                    'produk.foto_depan',
+                    'produk.created_at',
+                    DB::raw('SUM(detail_variant_produk.stok) as stok_produk'),
+                    DB::raw('MAX(detail_variant_produk.harga_sewa) as harga_sewa_max'),
+                    DB::raw('MIN(detail_variant_produk.harga_sewa) as harga_sewa_min'),
+                )
+                ->where('produk.id_user', $id_user_decrypt);
+
+            // Apply search filter
+            if ($search) {
+                $table_produk->where('produk.nama', 'like', '%' . $search . '%');
+            }
+
+            // Apply additional filter logic for filter_side if needed
+            if ($filter_side) {
+                $table_produk->where('produk.kategori', $filter_side);
+            }
+
+            // Apply sorting logic for filter_right if needed
+            if ($filter_right) {
+                if ($filter_right === 'terbaru') {
+                    $table_produk->orderBy('produk.created_at', 'desc');
+                } elseif ($filter_right === 'terlama') {
+                    $table_produk->orderBy('produk.created_at', 'asc');
+                } elseif ($filter_right === 'termahal') {
+                    $table_produk->orderBy('harga_sewa_max', 'desc');
+                } elseif ($filter_right === 'termurah') {
+                    $table_produk->orderBy('harga_sewa_min', 'asc');
+                }
+            }
+
+            // Paginate the filtered results
+            $result_table = $table_produk->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.kategori', 'produk.foto_depan')->paginate(32);
+
+            return view('customers.menu-produk.produk')->with([
+                'title' => 'Produk Menu | KampSewa',
+                'produk' => $result_table,
+                'search' => $search,
+                'result' => '',
+                'filter_side' => $filter_side,
+                'filter_right' => $filter_right,
+            ]);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+        }
     }
+
+
     public function kelolaProduk($id_user)
     {
         $id = Crypt::decrypt($id_user);
 
         $search = request()->query('search');
 
-        $data_produk = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+        // Create the base query
+        $base_query = Produk::leftJoin('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
             ->leftJoin('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
             ->select(
                 'produk.id as id_produk',
@@ -38,26 +102,42 @@ class ProdukController extends Controller
                 'produk.status as status_produk',
                 'produk.foto_depan as foto',
                 DB::raw('SUM(detail_variant_produk.stok) as stok_produk')
-            )->where('produk.id_user', $id)
-            ->groupBy('produk.id', 'produk.nama', 'produk.status', 'produk.foto_depan');
+            )->where('produk.id_user', $id);
+
+        // Clone the base query to count the total number of products
+        $count_query = clone $base_query;
 
         if ($search) {
-            $data_produk->where(function ($query) use ($search) {
+            $base_query->where(function ($query) use ($search) {
+                $query->where('produk.nama', 'LIKE', "%{$search}%")
+                    ->orWhere('produk.status', $search);
+            });
+            $count_query->where(function ($query) use ($search) {
                 $query->where('produk.nama', 'LIKE', "%{$search}%")
                     ->orWhere('produk.status', $search);
             });
         }
 
-        $produk_result = $data_produk->get();
+        // Apply group by to the main query
+        $data_produk = $base_query->groupBy('produk.id', 'produk.nama', 'produk.status', 'produk.foto_depan');
+
+        // Get the results
+        $produk_result = $data_produk->paginate(50);
+
+        // Count the total number of products
+        $total_product = $count_query->count();
 
         return view('customers.menu-produk.kelola-produk')->with(
             [
                 'title' => 'Kelola Produk | KampSewa',
                 'produk' => $produk_result,
                 'search' => $search,
+                'total_produk' => $total_product,
             ]
         );
     }
+
+
     public function sedangDisewa($id_user)
     {
         return view('customers.menu-produk.sedang-disewa', ['title' => 'Sedang Disewa | KampSewa']);
@@ -70,6 +150,7 @@ class ProdukController extends Controller
             'id' => $id_user_dec,
         ]);
     }
+
     public function tambahProdukPost(Request $request)
     {
         try {
