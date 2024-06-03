@@ -63,8 +63,8 @@
                 </div>
             </div>
         </div>
-        <div class="--table w-full h-auto">
-            <div class="relative w-full h-[500px] overflow-hidden shadow-box-shadow-11 rounded-[20px] bg-white">
+        <div class="--table w-full h-auto overflow-x-scroll">
+            <div class="relative w-full h-[500px] overflow-y-hidden overflow-x-scroll shadow-box-shadow-11 rounded-[20px] bg-white">
                 <div class="w-full h-full overflow-x-auto">
                     @if ($produk->count() == 0)
                         <div class="w-full h-full flex items-center justify-center">
@@ -79,8 +79,8 @@
                             </div>
                         </div>
                     @else
-                    <div class="overflow-x-auto">
-                        <table class="w-full  text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <div class="overflow-x-scroll">
+                        <table class="w-full min-w-max text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead
                                 class="sticky top-0 z-10 text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400">
                                 <tr>

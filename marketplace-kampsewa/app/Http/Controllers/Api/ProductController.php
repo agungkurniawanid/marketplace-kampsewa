@@ -22,6 +22,7 @@ class ProductController extends Controller
             ->select(
                 'produk.id as id_produk',
                 'produk.id_user as id_user',
+                'users.name as nama_user',
                 'produk.nama as nama_produk',
                 'produk.foto_depan',
                 DB::raw('AVG(rating_produk.rating) as rata_rating'),
@@ -29,7 +30,7 @@ class ProductController extends Controller
             )
             ->whereNotNull('rating_produk.rating')
             ->whereNotNull('detail_variant_produk.harga_sewa')
-            ->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.foto_depan')
+            ->groupBy('produk.id', 'produk.id_user','users.name', 'produk.nama', 'produk.foto_depan')
             ->orderByDesc(DB::raw('AVG(rating_produk.rating)'))
             ->orderBy(DB::raw('MIN(detail_variant_produk.harga_sewa)'))
             ->limit(6)
