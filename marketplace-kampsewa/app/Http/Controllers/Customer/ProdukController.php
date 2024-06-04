@@ -300,7 +300,7 @@ class ProdukController extends Controller
             $validatedData = $request->validate([
                 'nama_produk' => 'required|string|max:255',
                 'deskripsi_produk' => 'required|string',
-                'kategori_produk' => 'required|string|max:255',
+                'kategori_produk_update' => 'required|string|max:255',
                 'foto_depan' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
                 'foto_belakang' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
                 'foto_kiri' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
@@ -317,7 +317,9 @@ class ProdukController extends Controller
             $produk = Produk::findOrFail($id_produk);
             $produk->nama = $validatedData['nama_produk'];
             $produk->deskripsi = $validatedData['deskripsi_produk'];
-            $produk->kategori = $validatedData['kategori_produk'];
+            $produk->kategori = $validatedData['kategori_produk_update'];
+
+            Log::info('Kategori Produk: ' . $request->input('kategori_produk_update'));
 
             // Handle foto uploads
             $fotoFields = ['foto_depan', 'foto_belakang', 'foto_kiri', 'foto_kanan'];

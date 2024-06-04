@@ -32,10 +32,9 @@
                         <div class="--input-kategori relative w-full">
                             <p class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Kategori Produk
                             </p>
-                            <select name="kategori_produk"
+                            <select name="kategori_produk_update"
                                 class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="grid-state">
-                                <option value="Belum di isi">-- Pilih Kategori --</option>
                                 <option value="Tenda" {{ $produk->kategori == 'Tenda' ? 'selected' : '' }}>Tenda</option>
                                 <option value="Pakaian" {{ $produk->kategori == 'Pakaian' ? 'selected' : '' }}>Pakaian
                                 </option>
@@ -80,7 +79,7 @@
                             <div>
                                 <div>
                                     <img id="foto-depan" class="w-full h-[250px] object-cover"
-                                        src="{{ asset('assets/image/customers/produk/' . $produk->foto_depan) }}"
+                                        src="{{ $produk->foto_depan ? asset('assets/image/customers/produk/' . $produk->foto_depan) : asset('images/Upload.png') }}"
                                         alt="">
                                 </div>
                                 <label class="block">
@@ -111,7 +110,7 @@
                             <div>
                                 <div>
                                     <img id="foto-belakang" class="w-full h-[250px] object-cover"
-                                        src="{{ asset('assets/image/customers/produk/' . $produk->foto_belakang) }}"
+                                        src="{{ $produk->foto_belakang ? asset('assets/image/customers/produk/' . $produk->foto_belakang) : asset('images/Upload.png') }}"
                                         alt="">
                                 </div>
                                 <label class="block">
@@ -142,7 +141,7 @@
                             <div>
                                 <div>
                                     <img id="foto-kiri" class="w-full h-[250px] object-cover"
-                                        src="{{ asset('assets/image/customers/produk/' . $produk->foto_kiri) }}"
+                                        src="{{ $produk->foto_kiri == 'Belum di isi' ? asset('assets/image/customers/produk/' . $produk->foto_kiri) : asset('images/Upload.png') }}"
                                         alt="">
                                 </div>
                                 <label class="block">
@@ -173,7 +172,7 @@
                             <div>
                                 <div>
                                     <img id="foto-kanan" class="w-full h-[250px] object-cover"
-                                        src="{{ asset('assets/image/customers/produk/' . $produk->foto_kanan) }}"
+                                        src="{{ $produk->foto_kanan == 'Belum di isi' ? asset('assets/image/customers/produk/' . $produk->foto_kanan) : asset('images/Upload.png') }}"
                                         alt="">
                                 </div>
                                 <label class="block">

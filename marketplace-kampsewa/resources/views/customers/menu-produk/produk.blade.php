@@ -3,7 +3,7 @@
 {{-- gunakan section dengan nama yang sesuai untuk custom content --}}
 @section('customer-content')
     {{-- container utama pembungkus kontent utama --}}
-    <div class="--container px-10 py-5 flex flex-col gap-8">
+    <div class="--container small-desktop:px-7 small-desktop:py-2 px-10 py-5 flex flex-col gap-8">
         {{-- heading dan deskripsi halaman --}}
         <div class="--wrapper-heading-wrapper-deskripsi-halaman">
             <h1 class="text-[24px] font-bold capitalize">Manajemen Produk Anda!</h1>
@@ -18,7 +18,7 @@
 
         {{-- wrapper navigation item menu --}}
         <div class="--wrapper-navigation-menu w-full">
-            <ul class="flex items-center gap-2">
+            <ul class="flex items-center gap-x-4 gap-y-4 flex-wrap">
                 <li><a class="{{ $title == 'Produk Menu | KampSewa' ? 'bg-[#F8F7F4] font-medium' : '' }} hover:font-medium hover:bg-[#F8F7F4] hover:text-[#0F172A] text-[14px] px-4 py-2 rounded-full"
                         href="{{ route('menu-produk.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Semua
                         Produk</a></li>
@@ -34,11 +34,11 @@
         <hr>
 
         {{-- pembungkus kontent filter dan list produk --}}
-        <div class="--wrapper-filter-wrapper-list-product w-full flex gap-4 items-start h-auto">
+        <div class="--wrapper-filter-wrapper-list-product mobile-max:flex-col mobile-max:gap-10 w-full flex gap-4 items-start h-auto">
             {{-- filter --}}
-            <div class="--wrapper-filter max-w-[500px] sticky top-4">
-                <form id="formSide" method="GET" class="flex flex-col gap-4">
-                    <div class="--search flex flex-col gap-2">
+            <div class="--wrapper-filter max-w-[500px] mobile-max:w-full mobile-max:relative sticky top-4">
+                <form id="formSide" method="GET" class="flex w-full flex-col gap-4">
+                    <div class="--search w-full flex flex-col gap-2">
                         <p class="text-[14px] font-medium">Pencarian Produk:</p>
                         <div class="relative w-full mx-auto">
                             <input name="search" value="{{ $search }}"
@@ -70,7 +70,7 @@
             </div>
 
             {{-- divider --}}
-            <div class="w-[3px] h-screen bg-[#19191b] sticky top-4"></div>
+            <div class="w-[3px] h-screen bg-[#19191b] sticky top-4 mobile-max:hidden"></div>
 
             {{-- list produk --}}
             <div class="--wrapper-produk w-full flex flex-col gap-4">
@@ -91,7 +91,7 @@
                     @if ($produk->count() == 0)
                         <div class="w-full h-full flex items-center justify-center">
                             <div class="flex items-center gap-4 justify-center">
-                                <img class="w-[300px] h-auto object-cover"
+                                <img class="w-[300px] mobile-max:w-full h-auto object-cover"
                                     src="{{ asset('images/illustration/filling-survey.png') }}" alt="">
                                 <div>
                                     <p class="text-[40px] font-black">OOPS!</p>
@@ -102,12 +102,12 @@
                             </div>
                         </div>
                     @else
-                        <div class="--card-design grid grid-cols-4 gap-4">
+                        <div class="--card-design grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
                             @foreach ($produk as $item)
                                 <a href="" class="hover:text-black group">
                                     <div class="--card-item flex flex-col gap-2">
                                         <div class="--header">
-                                            <img class="w-[250px] h-[250px] object-cover rounded-[30px]"
+                                            <img class="w-[250px] mobile-max:w-full mobile-max:h-full h-[250px] medium-screen:w-[200px] medium-screen:h-[200px] object-cover rounded-[30px]"
                                                 src="{{ asset('assets/image/customers/produk/' . $item->foto_depan) }}"
                                                 alt="">
                                         </div>
