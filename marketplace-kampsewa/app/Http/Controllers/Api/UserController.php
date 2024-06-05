@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         try {
             // Ambil data user
-            $get_data_user = User::select('id', 'name', 'email', 'nomor_telephone', 'foto')
+            $get_data_user = User::select('id', 'name', 'email', 'nomor_telephone', 'foto', 'tanggal_lahir')
                 ->where('id', $id_user)
                 ->first();
 

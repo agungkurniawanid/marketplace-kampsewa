@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ChartWebController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Customer\DashboardCustController;
 use App\Http\Controllers\Customer\IklanController as CustomerIklanController;
+use App\Http\Controllers\Customer\KeuanganController;
 use App\Http\Controllers\Customer\ProdukController;
 use App\Http\Controllers\Customer\SetDataController;
 use App\Http\Controllers\Developer\DashboardController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Developer\PenghasilanController;
 use App\Http\Controllers\Developer\Penyewaan;
 use App\Http\Controllers\Developer\ProfileController;
 use App\Http\Controllers\Developer\RekapKeuanganController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 
 // -- auth route
@@ -37,6 +39,9 @@ Route::post('/lupa-password/reset-password/{nomor_telephone}', [LupaPassword::cl
 |--------------------------------------------------------------------------
 | Developer Routes
 */
+
+// landing page routes
+Route::get('/', [LandingPageController::class, 'halamanBeranda'])->name('landing-page.halaman-beranda');
 
 // -- dashboard menu route
 Route::get('/developer/dashboard/home', [DashboardController::class, 'index'])->name('home.index')->middleware('auth');
@@ -79,6 +84,8 @@ Route::post('/customer/dashboard/kelola-produk/tambah-produk-post', [ProdukContr
 Route::put('/customer/dashboard/kelola-produk/update-produk-put/{id_produk}', [ProdukController::class, 'updateProdukPut'])->name('menu-produk.update-produk-put')->middleware('auth');
 Route::get('/customer/dashboard/sedang-disewa/{id_user}', [ProdukController::class, 'sedangDisewa'])->name('menu-produk.sedang-disewa')->middleware('auth');
 Route::delete('/customer/dashboard/delete-produk/{id_produk}', [ProdukController::class, 'deleteProduk'])->name('menu-produk.delete')->middleware('auth');
+Route::get('/customer/dashboard/detail-produk/{id_produk}', [ProdukController::class, 'detailProduk'])->name('menu-produk.detail-produk')->middleware('auth');
+
 
 // iklan
 Route::get('/customer/dashboard/buat-iklan', [CustomerIklanController::class, 'index'])->name('buat-iklan.index')->middleware('auth');
@@ -89,3 +96,4 @@ Route::get('/customer/dashboard/input-pembayaran-iklan/{id_user}/{harga_iklan}/{
 Route::post('/customer/dashboard/simpan-pembayaran-iklan', [CustomerIklanController::class, 'simpanPembayaranIklan'])->name('simpan-pembayaran-iklan.simpan')->middleware('auth');
 
 // keuangan laporan
+Route::get('/customer/dashboard/keuangan', [KeuanganController::class, 'index'])->name('keuangan.index')->middleware('auth');

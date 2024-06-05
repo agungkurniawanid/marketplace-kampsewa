@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\DetailVariantProduk;
 use App\Models\Produk;
+use App\Models\RatingProduk;
+use App\Models\User;
 use App\Models\VariantProduk;
 use Error;
 use Illuminate\Http\Request;
@@ -258,12 +260,119 @@ class ProdukController extends Controller
         }
     }
 
-    public function detailProduk($nama_produk, $id_user)
+    public function detailProduk($id_product)
     {
+        $id_product_decrypt = Crypt::decrypt($id_product);
+
+        // Mengambil detail produk bersama dengan rata-rata rating dan jumlah ulasan
+        $product_detail = Produk::join('variant_produk', 'produk.id', '=', 'variant_produk.id_produk')
+            ->leftJoin('rating_produk', 'produk.id', '=', 'rating_produk.id_produk')
+            ->select(
+                'produk.id as id_produk',
+                'produk.nama as nama_produk',
+                'produk.status as status_produk',
+                'produk.deskripsi as deskripsi_produk',
+                'produk.kategori as kategori_produk',
+                'produk.foto_depan',
+                'produk.foto_belakang',
+                'produk.foto_kiri',
+                'produk.foto_kanan',
+                DB::raw('AVG(rating_produk.rating) as rata_rating'),
+            )
+            ->where('produk.id', $id_product_decrypt)
+            ->groupBy(
+                'produk.id',
+                'produk.nama',
+                'produk.status',
+                'produk.deskripsi',
+                'produk.kategori',
+                'produk.foto_depan',
+                'produk.foto_belakang',
+                'produk.foto_kiri',
+                'produk.foto_kanan'
+            )
+            ->first();
+
+        // Mengambil detail varian
+        $variant_details = VariantProduk::join('detail_variant_produk', 'variant_produk.id', '=', 'detail_variant_produk.id_variant_produk')
+            ->select(
+                'variant_produk.warna',
+                'detail_variant_produk.ukuran',
+                'detail_variant_produk.stok',
+                'detail_variant_produk.harga_sewa'
+            )
+            ->where('variant_produk.id_produk', $id_product_decrypt)
+            ->get();
+
+        // Konversi warna dari bahasa Indonesia ke bahasa Inggris
+        $color_translation = [
+            'merah' => 'red',
+            'biru' => 'blue',
+            'hijau' => 'green',
+            'kuning' => 'yellow',
+            'hitam' => 'black',
+            'putih' => 'white',
+            'jingga' => 'orange',
+            'abu-abu' => 'gray',
+            'coklat' => 'brown',
+            'ungu' => 'purple',
+            'pink' => 'pink',
+            'emas' => 'gold',
+            'perak' => 'silver',
+            'tosca' => 'teal',
+            'navy' => 'navy',
+            'peach' => 'peach',
+            'marun' => 'maroon',
+            'hijau muda' => 'light green',
+            'hijau tua' => 'dark green',
+            'biru muda' => 'light blue',
+            'biru tua' => 'dark blue',
+            'kuning muda' => 'light yellow',
+            'kuning tua' => 'dark yellow',
+            'merah muda' => 'light red',
+            'merah tua' => 'dark red',
+            'ungu muda' => 'light purple',
+            'ungu tua' => 'dark purple',
+            'coklat muda' => 'light brown',
+            'coklat tua' => 'dark brown'
+        ];
+
+
+        // Terapkan konversi warna dan lowercase
+        $translated_variant_details = $variant_details->map(function ($item) use ($color_translation) {
+            $warna_lowercase = strtolower($item->warna);
+            if (isset($color_translation[$warna_lowercase])) {
+                $item->warna = $color_translation[$warna_lowercase];
+            }
+            return $item;
+        })->groupBy('warna');
+
+        $rating = $product_detail->rata_rating ?? 0;
+
+        // Mendapatkan data rating produk
+        $ratings = RatingProduk::where('id_produk', $id_product_decrypt)->get();
+
+        $userRatings = RatingProduk::join('users', 'rating_produk.id_user', '=', 'users.id')
+        ->select('rating_produk.*', 'users.name as user_name', 'users.foto')
+        ->where('rating_produk.id_produk', $id_product_decrypt)
+        ->get();
+
+        $total_ulasan = RatingProduk::join('users', 'rating_produk.id_user', '=', 'users.id')
+        ->select('rating_produk.*', 'users.name as user_name')
+        ->where('rating_produk.id_produk', $id_product_decrypt)
+        ->count();
+
         return view('customers.menu-produk.detail-produk')->with([
             'title' => 'Detail Produk',
+            'detail_produk' => $product_detail,
+            'variant_details' => $translated_variant_details,
+            'rating' => $rating,
+            'userRatings' => $userRatings,
+            'total_ulasan' => $total_ulasan,
         ]);
     }
+
+
 
     public function updateProduk($id_produk, $id_user)
     {

@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_penyewaan');
             $table->unsignedBigInteger('id_produk');
-            $table->unsignedBigInteger('id_variant_produk');
-            $table->unsignedBigInteger('id_detail_variant_produk');
+            $table->string('warna_produk');
+            $table->string('ukuran');
             $table->foreign('id_penyewaan')->references('id')->on('penyewaan')->onDelete('cascade');
             $table->foreign('id_produk')->references('id')->on('produk')->onDelete('cascade');
-            $table->foreign('id_variant_produk')->references('id')->on('variant_produk');
-            $table->foreign('id_detail_variant_produk')->references('id')->on('detail_variant_produk');
+            // $table->foreign('id_variant_produk')->references('id')->on('variant_produk');
+            // $table->foreign('id_detail_variant_produk')->references('id')->on('detail_variant_produk');
             $table->integer('qty');
             $table->integer('subtotal');
             $table->timestamps();

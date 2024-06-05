@@ -104,7 +104,7 @@
                     @else
                         <div class="--card-design grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
                             @foreach ($produk as $item)
-                                <a href="" class="hover:text-black group">
+                                <a href="{{ route('menu-produk.detail-produk', ['id_produk' => Crypt::encrypt($item->id_produk)]) }}" class="hover:text-black group">
                                     <div class="--card-item flex flex-col gap-2">
                                         <div class="--header">
                                             <img class="w-[250px] mobile-max:w-full mobile-max:h-full h-[250px] medium-screen:w-[200px] medium-screen:h-[200px] object-cover rounded-[30px]"

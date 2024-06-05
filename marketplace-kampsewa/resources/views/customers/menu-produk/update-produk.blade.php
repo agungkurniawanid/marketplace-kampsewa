@@ -79,7 +79,7 @@
                             <div>
                                 <div>
                                     <img id="foto-depan" class="w-full h-[250px] object-cover"
-                                        src="{{ $produk->foto_depan ? asset('assets/image/customers/produk/' . $produk->foto_depan) : asset('images/Upload.png') }}"
+                                        src="{{ $produk->foto_depan == 'Belum di isi' ? asset('images/Upload.png') : asset('assets/image/customers/produk/' . $produk->foto_depan)  }}"
                                         alt="">
                                 </div>
                                 <label class="block">
@@ -110,7 +110,7 @@
                             <div>
                                 <div>
                                     <img id="foto-belakang" class="w-full h-[250px] object-cover"
-                                        src="{{ $produk->foto_belakang ? asset('assets/image/customers/produk/' . $produk->foto_belakang) : asset('images/Upload.png') }}"
+                                        src="{{ $produk->foto_belakang == 'Belum di isi' ? asset('images/Upload.png') : asset('assets/image/customers/produk/' . $produk->foto_belakang)  }}"
                                         alt="">
                                 </div>
                                 <label class="block">
@@ -141,7 +141,7 @@
                             <div>
                                 <div>
                                     <img id="foto-kiri" class="w-full h-[250px] object-cover"
-                                        src="{{ $produk->foto_kiri == 'Belum di isi' ? asset('assets/image/customers/produk/' . $produk->foto_kiri) : asset('images/Upload.png') }}"
+                                        src="{{ $produk->foto_kiri == 'Belum di isi' ? asset('images/Upload.png') : asset('assets/image/customers/produk/' . $produk->foto_kiri)}}"
                                         alt="">
                                 </div>
                                 <label class="block">
@@ -172,7 +172,7 @@
                             <div>
                                 <div>
                                     <img id="foto-kanan" class="w-full h-[250px] object-cover"
-                                        src="{{ $produk->foto_kanan == 'Belum di isi' ? asset('assets/image/customers/produk/' . $produk->foto_kanan) : asset('images/Upload.png') }}"
+                                        src="{{ $produk->foto_kanan == 'Belum di isi' ? asset('images/Upload.png') : asset('assets/image/customers/produk/' . $produk->foto_kanan) }}"
                                         alt="">
                                 </div>
                                 <label class="block">
