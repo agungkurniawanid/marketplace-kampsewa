@@ -96,4 +96,5 @@ Route::get('/customer/dashboard/input-pembayaran-iklan/{id_user}/{harga_iklan}/{
 Route::post('/customer/dashboard/simpan-pembayaran-iklan', [CustomerIklanController::class, 'simpanPembayaranIklan'])->name('simpan-pembayaran-iklan.simpan')->middleware('auth');
 
 // keuangan laporan
-Route::get('/customer/dashboard/keuangan', [KeuanganController::class, 'index'])->name('keuangan.index')->middleware('auth');
+Route::get('/customer/dashboard/keuangan/{id_user}', [KeuanganController::class, 'index'])->name('keuangan.index')->middleware('auth');
+Route::get('/customer/dashboard/keuangan/penghasilan/{id_user}', [KeuanganController::class, 'penghasilan'])->name('keuangan.penghasilan')->middleware('auth');

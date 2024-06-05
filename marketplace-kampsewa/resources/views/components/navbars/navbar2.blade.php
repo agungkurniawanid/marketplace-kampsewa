@@ -25,7 +25,7 @@
                         Produk</a>
                 </li>
                 <li class="nav-item {{ $title == 'Menu Keuangan' ? 'active' : ''}}">
-                    <a href="{{ route('keuangan.index') }}" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i>
+                    <a href="{{ route('keuangan.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i>
                         Keuangan & Laporan</a>
                 </li>
             </ul>
