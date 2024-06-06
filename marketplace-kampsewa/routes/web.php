@@ -57,7 +57,6 @@ Route::get('developer/dashboard/kelola-pengguna/detail-pengguna/{fullname}/produ
 Route::get('developer/dashboard/kelola-pengguna/detail-pengguna/{fullname}/produk-disewakan/detail-produk/{namaproduk}', [DetailPenggunaController::class, 'showDetailProdukDisewakan'])->name('detail-pengguna.detail-produk-disewakan')->middleware('auth');
 Route::get('developer/dashboard/kelola-pengguna/detail-pengguna/{fullname}/detail-produk-sedang-disewa/{namaproduk}', [DetailPenggunaController::class, 'showDetailProdukSedangDisewa'])->name('detail-pengguna.detail-produk-sedang-disewa')->middleware('auth');
 Route::post('/delete-selected-products', [DetailPenggunaController::class, 'deleteSelectedProducts'])->name('delete_selected_products')->middleware('auth');
-
 Route::get('developer/dashboard/informasi-pengguna', [InformasiPenggunaController::class, 'index'])->name('informasi-pengguna.index')->middleware('auth');
 
 // iklan
@@ -97,4 +96,4 @@ Route::post('/customer/dashboard/simpan-pembayaran-iklan', [CustomerIklanControl
 
 // keuangan laporan
 Route::get('/customer/dashboard/keuangan/{id_user}', [KeuanganController::class, 'index'])->name('keuangan.index')->middleware('auth');
-Route::get('/customer/dashboard/keuangan/penghasilan/{id_user}', [KeuanganController::class, 'penghasilan'])->name('keuangan.penghasilan')->middleware('auth');
+Route::get('/customer/dashboard/keuangan/tambah-penghasilan/{id_user}', [KeuanganController::class, 'tambahPenghasilan'])->name('keuangan.tambah-penghasilan')->middleware('auth');

@@ -51,6 +51,10 @@ class UserController extends Controller
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
+            // Dapatkan user yang akan diperbarui
+            $user = User::findOrFail($id_user);
+
+            // Persiapan data yang akan diperbarui
             $update_data = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
@@ -71,27 +75,28 @@ class UserController extends Controller
             }
 
             // Update data user
-            $update_user = User::where('id', $id_user)->update($update_data);
+            $user->update($update_data);
 
-            if ($update_user) {
-                $user = User::find($id_user);
-                return response()->json([
-                    'message' => 'Success Update!',
-                    'hasil_update' => $user,
-                ], 200);
-            }
-
+            // Tanggapan sukses
             return response()->json([
-                'message' => 'User tidak ditemukan atau gagal saat update data',
+                'message' => 'Data berhasil diperbarui',
+                'data' => $user,
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Tanggapan jika user tidak ditemukan
+            return response()->json([
+                'message' => 'User tidak ditemukan',
             ], 404);
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Tanggapan jika validasi gagal
             return response()->json([
-                'message' => 'Terjadi kesalahan pada database.',
-                'error' => $e->getMessage(),
-            ], 500);
+                'message' => 'Validasi gagal',
+                'errors' => $e->errors(),
+            ], 422);
         } catch (\Exception $e) {
+            // Tanggapan jika terjadi kesalahan lainnya
             return response()->json([
-                'message' => 'Terjadi kesalahan saat mengupdate profil.',
+                'message' => 'Terjadi kesalahan saat memperbarui data',
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -193,7 +198,7 @@ class UserController extends Controller
     }
     public function updateAlamatUser($id_alamat, Request $request)
     {
-        try{
+        try {
             $request->validate([
                 'longitude' => 'required|string',
                 'latitude' => 'required|string',
@@ -208,7 +213,7 @@ class UserController extends Controller
                 'type' => $request->input('type'),
             ]);
 
-            if($table_alamat) {
+            if ($table_alamat) {
                 $alamat = Alamat::find($id_alamat);
                 return response()->json([
                     'message' => 'success update',
@@ -219,7 +224,6 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'Data tidak ada.',
             ], 404);
-
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan pada database.',
@@ -234,14 +238,14 @@ class UserController extends Controller
     }
     public function updatePasswordUser($id_user)
     {
-        try{
+        try {
             request()->validate([
                 'password' => 'required|string|max:20|min:8',
             ]);
             $table_user = User::where('id', $id_user)->update([
                 'password' => bcrypt(request()->input('password')),
             ]);
-            if($table_user) {
+            if ($table_user) {
                 $user = User::find($id_user);
                 return response()->json([
                     'message' => 'success update password',

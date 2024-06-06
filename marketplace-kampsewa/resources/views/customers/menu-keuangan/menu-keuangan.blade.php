@@ -1,8 +1,9 @@
 @extends('layouts.customers.layouts-customer')
 @section('customer-content')
+    @include('components.modals.tambah-pemasukan-cust')
     <div class="--container w-full h-auto md:px-10 md:py-10 flex flex-col gap-6">
         <div class="--heading w-full h-auto flex md:justify-between md:items-center">
-            <div class="--url-penghasilan-pengeluaran w-full flex items-center gap-4">
+            <div class="--url-penghasilan-apengeluaran w-full flex items-center gap-4">
                 <div class="--url-penghasilan"><a href=""
                         class="{{ $title == 'Menu Keuangan' ? 'text-[#6F65D6] bg-[#EEEDFA]' : '' }} p-2 font-medium rounded-lg">Penghasilan</a>
                 </div>
@@ -20,11 +21,11 @@
                                     placeholder="Cari nominal / deskripsi">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center cursor-pointer">
                                     <button id="cari-button" class="focus:outline-none">
-                                    <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                    </svg>
+                                        <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                        </svg>
                                     </button>
                                 </div>
                             </div>
@@ -133,10 +134,12 @@
                     </div>
                 </div>
                 <div class="--body flex items-center gap-2">
-                    <div class="--nominal font-bold md:text-[28px]">Rp. {{ number_format($keuntungan, 0, ',', '.') }}</div>
+                    <div class="--nominal font-bold md:text-[28px]">Rp. {{ number_format($keuntungan, 0, ',', '.') }}
+                    </div>
                     @if ($persentase_keuntungan > 0)
                         <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
-                            {{ number_format(abs($persentase_keuntungan), 0) }}% <i class="bi bi-arrow-up-right"></i></div>
+                            {{ number_format(abs($persentase_keuntungan), 0) }}% <i class="bi bi-arrow-up-right"></i>
+                        </div>
                     @else
                         <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg bg-[#ffd1d1] text-[#ff6d6d]">
                             {{ number_format(abs($persentase_keuntungan), 0) }}% <i class="bi bi-arrow-down-right"></i>
@@ -148,8 +151,9 @@
         <div class="--table bg-white flex flex-col gap-4">
             <div class="--action flex items-center gap-2">
                 <div class="--button">
-                    <button class="gradient-1 text-white md:px-4 md:py-2 rounded-lg"><i
-                            class="bi bi-plus-lg"></i> Tambah Pemasukan</button>
+                    <button id="tambah-pemasukan-customer" class="gradient-1 text-white md:px-4 md:py-2 rounded-lg"><i
+                            class="bi bi-plus-lg"></i> Tambah
+                        Pemasukan</button>
                 </div>
             </div>
             <div class="overflow-scroll px-0 w-full">
@@ -257,7 +261,8 @@
 
             // Set nilai input select filter tahun dan bulan saat halaman dimuat
             document.getElementById('filter-tahun').value = filterTahunValue || "{{ date('Y') }}";
-            document.getElementById('filter-bulan').value = filterBulanValue || "semua_bulan"; // Ganti nilai default menjadi "semua_bulan"
+            document.getElementById('filter-bulan').value = filterBulanValue ||
+                "semua_bulan"; // Ganti nilai default menjadi "semua_bulan"
 
             // Tombol submit pada form filter tahun
             document.getElementById('filter-tahun').addEventListener('change', function() {
@@ -337,6 +342,138 @@
                 }
             }
         });
-        </script>
 
+        const modal = document.getElementById('modal-tambah-pemasukan-customer');
+        const idButton = document.getElementById('tambah-pemasukan-customer');
+        const submitPemasukan = document.getElementById('tambah-pemasukan');
+        const formTambahPemasukan = document.getElementById('form-tambah-pemasukan');
+        const cancelButton = document.getElementById('cancel-tambah-pemasukan-web-customer');
+
+        // Fungsi untuk menampilkan atau menyembunyikan modal
+        function modalHandlerPemasukanCustomer(val) {
+            if (val) {
+                modal.style.display = "flex";
+            } else {
+                modal.style.display = "none";
+            }
+        }
+
+        // function isString
+        function isStringInputPemasukanCustomer(value) {
+            const lettersOnlyRegex = /^[A-Za-z]+$/;
+            return lettersOnlyRegex.test(value);
+        }
+
+        // function isNumeric
+        function isNumericPemasukanCustomer(value) {
+            const numbersOnlyRegex = /^[0-9]+$/;
+            return numbersOnlyRegex.test(value)
+        }
+
+        idButton.addEventListener('click', (event) => {
+            modalHandlerPemasukanCustomer(true);
+        });
+
+        submitPemasukan.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // input tambah-pemasukan-customer.blade.php
+            let sumber = document.getElementById('sumber_pemasukan_customer').value.trim();
+            let deskripsi = document.getElementById('deskripsi_pemasukan_customer').value.trim();
+            let nominal = document.getElementById('nominal_pemasukan_customer').value.trim();
+
+            if (sumber === '') {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Sumber Kosong!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            } else if (!isStringInputPemasukanCustomer(sumber)) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Sumber tidak boleh angka!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            } else if (deskripsi === '') {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Deskripsi Kosong!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            } else if (nominal === '') {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Nominal Kosong!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            } else if (!isNumericPemasukanCustomer(nominal)) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Nominal tidak boleh huruf!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            }
+            Swal.fire({
+                title: 'Menyimpan data...',
+                allowOutsideClick: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Submit formulir setelah penundaan kecil
+            setTimeout(() => {
+                formTambahPemasukan.submit();
+            }, 1000);
+        });
+
+        cancelButton.addEventListener('click', () => {
+            modalHandlerPemasukanCustomer(false);
+        });
+    </script>
 @endsection

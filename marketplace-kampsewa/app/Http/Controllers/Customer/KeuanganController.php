@@ -8,6 +8,8 @@ use App\Models\Pengeluaran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class KeuanganController extends Controller
 {
@@ -143,7 +145,28 @@ class KeuanganController extends Controller
         ]);
     }
 
-    public function penghasilan($id_user)
+    public function tambahPenghasilan($id_user)
     {
+        try {
+            request()->validate([
+                'id_user' => 'string',
+                'sumber' => 'required|string|max:50|min:50',
+                'deskripsi' => 'required|string|max:255',
+                'nominal' => 'required|integer',
+            ]);
+
+            $pemasukan = new Pemasukan();
+            $pemasukan->id_user = request()->id_user;
+            $pemasukan->sumber = strtoupper(request()->sumber);
+            $pemasukan->deskripsi = request()->deskripsi;
+            $pemasukan->nominal = request()->nominal;
+
+            $pemasukan->save();
+
+            Alert::toast('Data berhasil di simpan', 'success');
+            return redirect('/customer/dashboard/keuangan/'.$id_user);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+        }
     }
 }

@@ -19,8 +19,6 @@ return new class extends Migration
             $table->string('ukuran');
             $table->foreign('id_penyewaan')->references('id')->on('penyewaan')->onDelete('cascade');
             $table->foreign('id_produk')->references('id')->on('produk')->onDelete('cascade');
-            // $table->foreign('id_variant_produk')->references('id')->on('variant_produk');
-            // $table->foreign('id_detail_variant_produk')->references('id')->on('detail_variant_produk');
             $table->integer('qty');
             $table->integer('subtotal');
             $table->timestamps();
