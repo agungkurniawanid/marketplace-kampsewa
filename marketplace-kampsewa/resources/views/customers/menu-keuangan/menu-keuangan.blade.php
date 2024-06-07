@@ -1,8 +1,8 @@
 @extends('layouts.customers.layouts-customer')
 @section('customer-content')
     @include('components.modals.tambah-pemasukan-cust')
-    <div class="--container w-full h-auto md:px-10 md:py-10 flex flex-col gap-6">
-        <div class="--heading w-full h-auto flex md:justify-between md:items-center">
+    <div class="--container w-full h-auto px-6 py-6 md:px-10 md:py-10 flex flex-col gap-6">
+        <div class="--heading w-full h-auto flex flex-col gap-6 md:gap-6 lg:gap-0 md:flex-col lg:flex-row md:justify-between md:items-center">
             <div class="--url-penghasilan-apengeluaran w-full flex items-center gap-4">
                 <div class="--url-penghasilan"><a href=""
                         class="{{ $title == 'Menu Keuangan' ? 'text-[#6F65D6] bg-[#EEEDFA]' : '' }} p-2 font-medium rounded-lg">Penghasilan</a>
@@ -11,7 +11,7 @@
                         class="{{ $title == 'Menu Pengeluaran' ? 'text-[#6F65D6] bg-[#EEEDFA]' : '' }} p-2 font-medium rounded-lg">Pengeluaran</a>
                 </div>
             </div>
-            <div class="--filter-tahun-bulan-cetak w-full flex items-center gap-2">
+            <div class="--filter-tahun-bulan-cetak w-full flex flex-col gap-4 sm:flex-row sm:flex sm:items-center sm:gap-2">
                 <div class="--search w-full">
                     <form id="search-form" method="GET">
                         <div class="w-full flex justify-center">
@@ -32,51 +32,53 @@
                         </div>
                     </form>
                 </div>
-                <div class="--filter-tahun">
-                    <form method="GET" id="filter-tahun-form">
-                        <div class="w-fit relative">
-                            <select
-                                class="shadow-box-shadow-11 cursor-pointer rounded-lg bg-white appearance-none md:px-6 md:py-2"
-                                name="filter_tahun" id="filter-tahun">
-                                <option value="{{ date('Y') }}">{{ date('Y') }}</option>
-                                <option value="{{ date('Y') - 1 }}">{{ date('Y') - 1 }}</option>
-                                <option value="{{ date('Y') - 2 }}">{{ date('Y') - 2 }}</option>
-                                <option value="{{ date('Y') - 3 }}">{{ date('Y') - 3 }}</option>
-                                <option value="{{ date('Y') - 4 }}">{{ date('Y') - 4 }}</option>
-                            </select>
-                            <i class="absolute right-2 top-1/2 transform -translate-y-1/2 bi bi-caret-down-fill"></i>
-                        </div>
-                    </form>
-                </div>
-                <div class="--filter-bulan">
-                    <form method="GET" id="filter-bulan-form">
-                        <div class="w-fit relative">
-                            <select
-                                class="shadow-box-shadow-11 rounded-lg cursor-pointer bg-white appearance-none md:px-4 md:py-2"
-                                name="filter_bulan" id="filter-bulan">
-                                <option value="semua_bulan">Semua</option>
-                                <option value="01">Januari</option>
-                                <option value="02">Februari</option>
-                                <option value="03">Maret</option>
-                                <option value="04">April</option>
-                                <option value="05">Mei</option>
-                                <option value="06">Juni</option>
-                                <option value="07">Juli</option>
-                                <option value="08">Agustus</option>
-                                <option value="09">September</option>
-                                <option value="10">Oktober</option>
-                                <option value="11">November</option>
-                                <option value="12">Desember</option>
-                            </select>
-                            <i class="absolute right-2 top-1/2 transform -translate-y-1/2 bi bi-caret-down-fill"></i>
-                        </div>
-                    </form>
-                </div>
-                <div class="--filter-cetak">
-                    <form action="">
-                        <button class="md:px-4 md:py-2 bg-white rounded-lg shadow-box-shadow-11 flex items-center gap-2"><i
-                                class="bi bi-printer-fill"></i> Cetak</button>
-                    </form>
+                <div class="flex items-centers gap-2">
+                    <div class="--filter-tahun">
+                        <form method="GET" id="filter-tahun-form">
+                            <div class="w-fit relative">
+                                <select
+                                    class="shadow-box-shadow-11 cursor-pointer rounded-lg bg-white appearance-none px-6 py-2"
+                                    name="filter_tahun" id="filter-tahun">
+                                    <option value="{{ date('Y') }}">{{ date('Y') }}</option>
+                                    <option value="{{ date('Y') - 1 }}">{{ date('Y') - 1 }}</option>
+                                    <option value="{{ date('Y') - 2 }}">{{ date('Y') - 2 }}</option>
+                                    <option value="{{ date('Y') - 3 }}">{{ date('Y') - 3 }}</option>
+                                    <option value="{{ date('Y') - 4 }}">{{ date('Y') - 4 }}</option>
+                                </select>
+                                <i class="absolute right-2 top-1/2 transform -translate-y-1/2 bi bi-caret-down-fill"></i>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="--filter-bulan">
+                        <form method="GET" id="filter-bulan-form">
+                            <div class="w-fit relative">
+                                <select
+                                    class="shadow-box-shadow-11 rounded-lg cursor-pointer bg-white appearance-none px-4 py-2"
+                                    name="filter_bulan" id="filter-bulan">
+                                    <option value="semua_bulan">Semua</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                                <i class="absolute right-2 top-1/2 transform -translate-y-1/2 bi bi-caret-down-fill"></i>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="--filter-cetak">
+                        <form action="{{ route('keuangan.download-penghasilan', ['id_user' => session('id_user'), 'tahun' => $tahun]) }}">
+                            <button class="px-4 py-2 bg-white rounded-lg shadow-box-shadow-11 flex items-center gap-2"><i
+                                    class="bi bi-printer-fill"></i> Cetak</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,7 +94,7 @@
                     </div>
                 </div>
                 <div class="--body flex items-center gap-2">
-                    <div class="--nominal font-bold md:text-[28px]">Rp.
+                    <div class="--nominal font-bold text-[20px] md:text-[20px] lg:text-[24px] xl:text-[28px]">Rp.
                         {{ number_format($total_tahun_sekarang, 0, ',', '.') }}</div>
                     @if ($persentase_pertahun > 0)
                         <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
@@ -113,7 +115,7 @@
                     </div>
                 </div>
                 <div class="--body flex items-center gap-2">
-                    <div class="--nominal font-bold md:text-[28px]">Rp. {{ number_format($total_perbulan, 0, ',', '.') }}
+                    <div class="--nominal font-bold text-[20px] md:text-[20px] lg:text-[24px] xl:text-[28px]">Rp. {{ number_format($total_perbulan, 0, ',', '.') }}
                     </div>
                     @if ($persentase_perbulan > 0)
                         <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
@@ -134,7 +136,7 @@
                     </div>
                 </div>
                 <div class="--body flex items-center gap-2">
-                    <div class="--nominal font-bold md:text-[28px]">Rp. {{ number_format($keuntungan, 0, ',', '.') }}
+                    <div class="--nominal font-bold text-[20px] md:text-[20px] lg:text-[24px] xl:text-[28px]">Rp. {{ number_format($keuntungan, 0, ',', '.') }}
                     </div>
                     @if ($persentase_keuntungan > 0)
                         <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
@@ -151,13 +153,13 @@
         <div class="--table bg-white flex flex-col gap-4">
             <div class="--action flex items-center gap-2">
                 <div class="--button">
-                    <button id="tambah-pemasukan-customer" class="gradient-1 text-white md:px-4 md:py-2 rounded-lg"><i
+                    <button id="tambah-pemasukan-customer" class="gradient-1 text-white px-4 py-2 rounded-lg"><i
                             class="bi bi-plus-lg"></i> Tambah
                         Pemasukan</button>
                 </div>
             </div>
             <div class="overflow-scroll px-0 w-full">
-                <table class="w-full table-auto text-left">
+                <table class="w-full min-w-max table-auto text-left">
                     <thead>
                         <tr>
                             <th class="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
@@ -215,8 +217,8 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="p-4 border-b border-blue-gray-50">
-                                    <a href=""
+                                <td class="p-4 border-b border-blue-gray-50 flex">
+                                    <a href="{{ route('keuangan.update-penghasilan', ['id_penghasilan' => Crypt::encrypt($item->id)]) }}"
                                         class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20"
                                         type="button">
                                         <span
@@ -229,20 +231,25 @@
                                             </svg>
                                         </span>
                                     </a>
-                                    <a href=""
-                                        class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20"
-                                        type="button">
-                                        <span
-                                            class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
-                                                fill="currentColor" aria-hidden="true" class="h-4 w-4">
-                                                <path
-                                                    d="M5.5 5.5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7zm3 0a.5.5 0 00-1 0v7a.5.5 0 001 0v-7zm3 0a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z" />
-                                                <path fill-rule="evenodd"
-                                                    d="M1.5 1a1 1 0 011-1h11a1 1 0 011 1V3H1V1zm11 1h-9v12a1 1 0 001 1h7a1 1 0 001-1V2zM4.5 0a.5.5 0 000 1H6a.5.5 0 000-1h-1.5zm6 0a.5.5 0 000 1H12a.5.5 0 000-1h-1.5z" />
-                                            </svg>
-                                        </span>
-                                    </a>
+                                    <form method="POST" id="form-delete-{{ $item->id }}"
+                                        action="{{ route('keuangan.delete-penghasilan', ['id_penghasilan' => $item->id]) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button id="btn-hapus-{{ $item->id }}"
+                                            class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20"
+                                            type="button">
+                                            <span
+                                                class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+                                                    fill="currentColor" aria-hidden="true" class="h-4 w-4">
+                                                    <path
+                                                        d="M5.5 5.5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7zm3 0a.5.5 0 00-1 0v7a.5.5 0 001 0v-7zm3 0a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z" />
+                                                    <path fill-rule="evenodd"
+                                                        d="M1.5 1a1 1 0 011-1h11a1 1 0 011 1V3H1V1zm11 1h-9v12a1 1 0 001 1h7a1 1 0 001-1V2zM4.5 0a.5.5 0 000 1H6a.5.5 0 000-1h-1.5zm6 0a.5.5 0 000 1H12a.5.5 0 000-1h-1.5z" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
@@ -461,6 +468,7 @@
             Swal.fire({
                 title: 'Menyimpan data...',
                 allowOutsideClick: false,
+                showConfirmButton: false,
                 onBeforeOpen: () => {
                     Swal.showLoading();
                 }
@@ -474,6 +482,28 @@
 
         cancelButton.addEventListener('click', () => {
             modalHandlerPemasukanCustomer(false);
+        });
+
+        document.querySelectorAll('[id^="btn-hapus-"]').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: 'Apa kamu yakin?',
+                    text: "Data ini tidak akan kembali ketika dihapus!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Hapus ini!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const penghasilanId = this.id.replace('btn-hapus-', '');
+                        document.getElementById('form-delete-' + penghasilanId).submit();
+                    } else {
+                        Swal.fire('Dibatalkan', 'Penghapusan dibatalkan', 'info');
+                    }
+                });
+            });
         });
     </script>
 @endsection

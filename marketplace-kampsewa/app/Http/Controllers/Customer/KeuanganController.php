@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Pemasukan;
 use App\Models\Pengeluaran;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -150,7 +152,7 @@ class KeuanganController extends Controller
         try {
             request()->validate([
                 'id_user' => 'string',
-                'sumber' => 'required|string|max:50|min:50',
+                'sumber' => 'required|string|max:50|min:5',
                 'deskripsi' => 'required|string|max:255',
                 'nominal' => 'required|integer',
             ]);
@@ -164,9 +166,105 @@ class KeuanganController extends Controller
             $pemasukan->save();
 
             Alert::toast('Data berhasil di simpan', 'success');
-            return redirect('/customer/dashboard/keuangan/'.$id_user);
+            return redirect('/customer/dashboard/keuangan/' . $id_user);
         } catch (\Exception $error) {
             Log::error($error->getMessage());
         }
     }
+
+    public function updatePenghasilan($id_penghasilan)
+    {
+        $id_penghasilan_decrypt = Crypt::decrypt($id_penghasilan);
+
+        $get_data = Pemasukan::where('id', $id_penghasilan_decrypt)->first();
+
+        return view('customers.menu-keuangan.update-keuangan')->with([
+            'title' => 'Update Keuangan',
+            'data_update' => $get_data,
+        ]);
+    }
+
+    public function updatePenghasilanPost($id_penghasilan, $id_user)
+    {
+        try {
+            $validate_data = request()->validate([
+                'sumber' => 'required|string',
+                'deskripsi' => 'required|string',
+                'nominal' => 'required|integer',
+            ]);
+
+            $get_data = Pemasukan::where('id', $id_penghasilan)->first();
+
+            if (!$get_data) {
+                Alert::toast('Data tidak ditemukan', 'warning');
+                return back();
+            }
+
+            $get_data->update($validate_data);
+
+            Alert::toast('Data berhasil di update', 'success');
+            return redirect()->route('keuangan.index', ['id_user' => $id_user]);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+        }
+    }
+    public function deletePenghasilan($id_penghasilan)
+    {
+        try {
+            $get_data = Pemasukan::where('id', $id_penghasilan);
+            $get_data->delete();
+
+            Alert::toast('Data berhasil dihapus!', 'success');
+
+            return back();
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+        }
+    }
+
+    public function downloadPenghasilan($id_user, $tahun)
+    {
+        $user = User::select('name')->where('id', $id_user)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $totalPertahun = Pemasukan::where('id_user', $id_user)
+            ->whereYear('created_at', $tahun)
+            ->sum('nominal');
+
+        // Ambil data pemasukan untuk setiap bulan
+        $monthlyIncome = [];
+        $currentYear = date('Y');
+        $currentMonth = date('n');
+
+        for ($bulan = 1; $bulan <= 12; $bulan++) {
+            if (($tahun == $currentYear && $bulan <= $currentMonth) || $tahun < $currentYear) {
+                $monthlyIncome[$bulan]['bulan'] = date('F', mktime(0, 0, 0, $bulan, 1));
+                $monthlyIncome[$bulan]['total_nominal'] = 0;
+
+                $monthlyIncome[$bulan]['data_pemasukan'] = Pemasukan::where('id_user', $id_user)
+                    ->whereYear('created_at', $tahun)
+                    ->whereMonth('created_at', $bulan)
+                    ->get();
+
+                foreach ($monthlyIncome[$bulan]['data_pemasukan'] as $pemasukan) {
+                    $monthlyIncome[$bulan]['total_nominal'] += $pemasukan->nominal;
+                }
+            }
+        }
+
+        $data = [
+            'user' => $user,
+            'monthlyIncome' => $monthlyIncome,
+            'tahun' => $tahun,
+            'totalPertahun' => $totalPertahun,
+        ];
+
+        $pdf = PDF::loadView('customers.menu-keuangan.pdf-penghasilan', $data);
+        $fileName = 'penghasilan_' . $user->name . '.pdf';
+        return $pdf->download($fileName);
+    }
+
 }

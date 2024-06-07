@@ -97,3 +97,7 @@ Route::post('/customer/dashboard/simpan-pembayaran-iklan', [CustomerIklanControl
 // keuangan laporan
 Route::get('/customer/dashboard/keuangan/{id_user}', [KeuanganController::class, 'index'])->name('keuangan.index')->middleware('auth');
 Route::get('/customer/dashboard/keuangan/tambah-penghasilan/{id_user}', [KeuanganController::class, 'tambahPenghasilan'])->name('keuangan.tambah-penghasilan')->middleware('auth');
+Route::get('/customer/dashboard/keuangan/update-penghasilan/{id_penghasilan}', [KeuanganController::class, 'updatePenghasilan'])->name('keuangan.update-penghasilan')->middleware('auth');
+Route::put('/customer/dashboard/keuangan/update-penghasilan-post/{id_penghasilan}/{id_user}', [KeuanganController::class, 'updatePenghasilanPost'])->name('keuangan.update-penghasilan-post')->middleware('auth');
+Route::get('/download-pdf-penghasilan/{id_user}/{tahun}', [KeuanganController::class, 'downloadPenghasilan'])->name('keuangan.download-penghasilan')->middleware('auth');
+Route::delete('/customer/dashboard/keuangan/delete-penghasilan/{id_penghasilan}/', [KeuanganController::class, 'deletePenghasilan'])->name('keuangan.delete-penghasilan')->middleware('auth');
