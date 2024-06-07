@@ -96,8 +96,15 @@ Route::post('/customer/dashboard/simpan-pembayaran-iklan', [CustomerIklanControl
 
 // keuangan laporan
 Route::get('/customer/dashboard/keuangan/{id_user}', [KeuanganController::class, 'index'])->name('keuangan.index')->middleware('auth');
-Route::get('/customer/dashboard/keuangan/tambah-penghasilan/{id_user}', [KeuanganController::class, 'tambahPenghasilan'])->name('keuangan.tambah-penghasilan')->middleware('auth');
+Route::post('/customer/dashboard/keuangan/tambah-penghasilan/{id_user}', [KeuanganController::class, 'tambahPenghasilan'])->name('keuangan.tambah-penghasilan')->middleware('auth');
 Route::get('/customer/dashboard/keuangan/update-penghasilan/{id_penghasilan}', [KeuanganController::class, 'updatePenghasilan'])->name('keuangan.update-penghasilan')->middleware('auth');
 Route::put('/customer/dashboard/keuangan/update-penghasilan-post/{id_penghasilan}/{id_user}', [KeuanganController::class, 'updatePenghasilanPost'])->name('keuangan.update-penghasilan-post')->middleware('auth');
 Route::get('/download-pdf-penghasilan/{id_user}/{tahun}', [KeuanganController::class, 'downloadPenghasilan'])->name('keuangan.download-penghasilan')->middleware('auth');
 Route::delete('/customer/dashboard/keuangan/delete-penghasilan/{id_penghasilan}/', [KeuanganController::class, 'deletePenghasilan'])->name('keuangan.delete-penghasilan')->middleware('auth');
+
+Route::get('/customer/dashboard/keuangan/pengeluaran/{id_user}', [KeuanganController::class, 'pengeluaran'])->name('keuangan.pengeluaran-customer')->middleware('auth');
+Route::post('/customer/dashboard/keuangan/tambah-pengeluaran/{id_user}', [KeuanganController::class, 'tambahPengeluaran'])->name('keuangan.tambah-pengeluaran-customer')->middleware('auth');
+Route::get('/customer/dashboard/keuangan/update-pengeluaran/{id_pengeluaran}', [KeuanganController::class, 'updatePengeluaran'])->name('keuangan.update-pengeluaran-customer')->middleware('auth');
+Route::put('/customer/dashboard/keuangan/update-pengeluaran-post/{id_pengeluaran}/{id_user}', [KeuanganController::class, 'updatePengeluaranPost'])->name('keuangan.update-pengeluaran-post-customer')->middleware('auth');
+Route::get('/download-pdf-pengeluaran/{id_user}/{tahun}', [KeuanganController::class, 'downloadPengeluaran'])->name('keuangan.download-pengeluaran-customer')->middleware('auth');
+Route::delete('/customer/dashboard/keuangan/delete-pengeluaran/{id_pengeluaran}', [KeuanganController::class, 'deletePengeluaran'])->name('keuangan.delete-pengeluaran-customer')->middleware('auth');

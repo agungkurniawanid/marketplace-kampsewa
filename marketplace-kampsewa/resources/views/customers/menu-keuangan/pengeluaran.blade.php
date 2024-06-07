@@ -1,6 +1,6 @@
 @extends('layouts.customers.layouts-customer')
 @section('customer-content')
-    @include('components.modals.tambah-pemasukan-cust')
+    @include('components.modals.tambah-pengeluaran')
     <div class="--container w-full h-auto px-6 py-6 md:px-10 md:py-10 flex flex-col gap-6">
         <div
             class="--heading w-full h-auto flex flex-col gap-6 md:gap-6 lg:gap-0 md:flex-col lg:flex-row md:justify-between md:items-center">
@@ -10,7 +10,7 @@
                         class="{{ $title == 'Menu Keuangan' ? 'text-[#6F65D6] bg-[#EEEDFA]' : '' }} p-2 font-medium rounded-lg">Penghasilan</a>
                 </div>
                 <div class="--url-pengeluaran"><a
-                        href="{{ route('keuangan.pengeluaran-customer', ['id_user' => Crypt::encrypt(session('id_user'))]) }}"
+                        href="{{ route('pengeluaran.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}"
                         class="{{ $title == 'Menu Pengeluaran' ? 'text-[#6F65D6] bg-[#EEEDFA]' : '' }} p-2 font-medium rounded-lg">Pengeluaran</a>
                 </div>
             </div>
@@ -78,7 +78,7 @@
                     </div>
                     <div class="--filter-cetak">
                         <form
-                            action="{{ route('keuangan.download-penghasilan', ['id_user' => session('id_user'), 'tahun' => $tahun]) }}">
+                            action="{{ route('keuangan.download-pengeluaran-customer', ['id_user' => session('id_user'), 'tahun' => $tahun]) }}">
                             <button class="px-4 py-2 bg-white rounded-lg shadow-box-shadow-11 flex items-center gap-2"><i
                                     class="bi bi-printer-fill"></i> Cetak</button>
                         </form>
@@ -94,18 +94,18 @@
                         <div class="--icon p-2 bg-[#F3F5F7] w-[34px] h-[34px] flex items-center justify-center rounded-lg">
                             <i class="bi bi-currency-exchange"></i>
                         </div>
-                        <div class="--title font-medium text-[16px]">Penghasilan Pertahun - {{ $tahun }}</div>
+                        <div class="--title font-medium text-[16px]">Pengeluaran Pertahun - {{ $tahun }}</div>
                     </div>
                 </div>
                 <div class="--body flex items-center gap-2">
                     <div class="--nominal font-bold text-[20px] md:text-[20px] lg:text-[24px] xl:text-[28px]">Rp.
                         {{ number_format($total_tahun_sekarang, 0, ',', '.') }}</div>
                     @if ($persentase_pertahun > 0)
-                        <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
-                            {{ number_format(abs($persentase_pertahun), 0) }}% <i class="bi bi-arrow-up-right"></i></div>
-                    @else
                         <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg bg-[#ffd1d1] text-[#ff6d6d]">
                             {{ number_format(abs($persentase_pertahun), 0) }}% <i class="bi bi-arrow-down-right"></i></div>
+                    @else
+                        <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
+                            {{ number_format(abs($persentase_pertahun), 0) }}% <i class="bi bi-arrow-up-right"></i></div>
                     @endif
                 </div>
             </div>
@@ -115,7 +115,7 @@
                         <div class="--icon p-2 bg-[#F3F5F7] w-[34px] h-[34px] flex items-center justify-center rounded-lg">
                             <i class="bi bi-wallet-fill"></i>
                         </div>
-                        <div class="--title font-medium text-[16px]">Penghasilan Perbulan - {{ date('M') }}</div>
+                        <div class="--title font-medium text-[16px]">Pengeluaran Perbulan - {{ date('M') }}</div>
                     </div>
                 </div>
                 <div class="--body flex items-center gap-2">
@@ -123,11 +123,11 @@
                         {{ number_format($total_perbulan, 0, ',', '.') }}
                     </div>
                     @if ($persentase_perbulan > 0)
-                        <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
-                            {{ number_format(abs($persentase_perbulan), 0) }}% <i class="bi bi-arrow-up-right"></i></div>
-                    @else
                         <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg bg-[#ffd1d1] text-[#ff6d6d]">
                             {{ number_format(abs($persentase_perbulan), 0) }}% <i class="bi bi-arrow-down-right"></i></div>
+                    @else
+                        <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
+                            {{ number_format(abs($persentase_perbulan), 0) }}% <i class="bi bi-arrow-up-right"></i></div>
                     @endif
                 </div>
             </div>
@@ -137,20 +137,20 @@
                         <div class="--icon p-2 bg-[#F3F5F7] w-[34px] h-[34px] flex items-center justify-center rounded-lg">
                             <i class="bi bi-piggy-bank-fill"></i>
                         </div>
-                        <div class="--title font-medium text-[16px]">Keuntungan</div>
+                        <div class="--title font-medium text-[16px]">Pengeluaran Hari ini</div>
                     </div>
                 </div>
                 <div class="--body flex items-center gap-2">
                     <div class="--nominal font-bold text-[20px] md:text-[20px] lg:text-[24px] xl:text-[28px]">Rp.
-                        {{ number_format($keuntungan, 0, ',', '.') }}
+                        {{ number_format($total_hari_ini, 0, ',', '.') }}
                     </div>
-                    @if ($persentase_keuntungan > 0)
-                        <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
-                            {{ number_format(abs($persentase_keuntungan), 0) }}% <i class="bi bi-arrow-up-right"></i>
+                    @if ($persentase_perhari > 0)
+                        <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg bg-[#ffd1d1] text-[#ff6d6d]">
+                            {{ number_format(abs($persentase_perhari), 0) }}% <i class="bi bi-arrow-down-right"></i>
                         </div>
                     @else
-                        <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg bg-[#ffd1d1] text-[#ff6d6d]">
-                            {{ number_format(abs($persentase_keuntungan), 0) }}% <i class="bi bi-arrow-down-right"></i>
+                        <div class="--persentase w-fit font-bold px-2 py-1 rounded-lg text-[#75D5CB] bg-[#E7F8F6]">
+                            {{ number_format(abs($persentase_perhari), 0) }}% <i class="bi bi-arrow-up-right"></i>
                         </div>
                     @endif
                 </div>
@@ -159,9 +159,9 @@
         <div class="--table bg-white flex flex-col gap-4">
             <div class="--action flex items-center gap-2">
                 <div class="--button">
-                    <button id="tambah-pemasukan-customer" class="gradient-1 text-white px-4 py-2 rounded-lg"><i
+                    <button id="btn-tambah-pengeluaran" class="gradient-1 text-white px-4 py-2 rounded-lg"><i
                             class="bi bi-plus-lg"></i> Tambah
-                        Pemasukan</button>
+                        Pengeluaran</button>
                 </div>
             </div>
             <div class="overflow-scroll px-0 w-full">
@@ -224,7 +224,7 @@
                                     </div>
                                 </td>
                                 <td class="p-4 border-b border-blue-gray-50 flex">
-                                    <a href="{{ route('keuangan.update-penghasilan', ['id_penghasilan' => Crypt::encrypt($item->id)]) }}"
+                                    <a href="{{ route('keuangan.update-pengeluaran-customer', ['id_pengeluaran' => Crypt::encrypt($item->id)]) }}"
                                         class="relative align-middle select-none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-900 hover:bg-gray-900/10 active:bg-gray-900/20"
                                         type="button">
                                         <span
@@ -238,7 +238,7 @@
                                         </span>
                                     </a>
                                     <form method="POST" id="form-delete-{{ $item->id }}"
-                                        action="{{ route('keuangan.delete-penghasilan', ['id_penghasilan' => $item->id]) }}">
+                                        action="{{ route('keuangan.delete-pengeluaran-customer', ['id_pengeluaran' => $item->id]) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button id="btn-hapus-{{ $item->id }}"
@@ -267,84 +267,51 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Simpan nilai filter_tahun dan filter_bulan saat halaman dimuat
             var filterTahunValue = "{{ request()->input('filter_tahun') }}";
             var filterBulanValue = "{{ request()->input('filter_bulan') }}";
             var searchValue = "{{ request()->input('search') }}";
-
-            // Set nilai input select filter tahun dan bulan saat halaman dimuat
             document.getElementById('filter-tahun').value = filterTahunValue || "{{ date('Y') }}";
             document.getElementById('filter-bulan').value = filterBulanValue ||
-                "semua_bulan"; // Ganti nilai default menjadi "semua_bulan"
-
-            // Tombol submit pada form filter tahun
+                "semua_bulan";
             document.getElementById('filter-tahun').addEventListener('change', function() {
                 var filterTahunForm = document.getElementById('filter-tahun-form');
                 var filterTahunValue = document.getElementById('filter-tahun').value;
-
-                // Menyiapkan URL dengan parameter filter_tahun dan filter_bulan
                 var url = '?' + new URLSearchParams(window.location.search).toString();
                 url = updateQueryStringParameter(url, 'filter_tahun', filterTahunValue);
-
-                // Mengambil nilai filter_bulan dari URL saat ini
                 var filterBulanValue = "{{ request()->input('filter_bulan') }}";
-                // Memeriksa apakah filter_bulan sudah ada pada URL
                 if (filterBulanValue) {
                     url = updateQueryStringParameter(url, 'filter_bulan', filterBulanValue);
                 }
-
-                // Mengirimkan permintaan ke URL yang diperbarui
                 window.location.href = url;
             });
-
-            // Tombol submit pada form filter bulan
             document.getElementById('filter-bulan').addEventListener('change', function() {
                 var filterBulanForm = document.getElementById('filter-bulan-form');
                 var filterBulanValue = document.getElementById('filter-bulan').value;
-
-                // Menyiapkan URL dengan parameter filter_bulan dan filter_tahun
                 var url = '?' + new URLSearchParams(window.location.search).toString();
                 url = updateQueryStringParameter(url, 'filter_bulan', filterBulanValue);
-
-                // Mengambil nilai filter_tahun dari URL saat ini
                 var filterTahunValue = "{{ request()->input('filter_tahun') }}";
-                // Memeriksa apakah filter_tahun sudah ada pada URL
                 if (filterTahunValue) {
                     url = updateQueryStringParameter(url, 'filter_tahun', filterTahunValue);
                 }
-
-                // Mengirimkan permintaan ke URL yang diperbarui
                 window.location.href = url;
             });
-
-            // Tombol submit pada form pencarian ketika tombol ditekan
             document.querySelector('.cari-button').addEventListener('click', function(event) {
                 event.preventDefault();
                 var searchQuery = document.getElementById('search').value;
-
-                // Menyiapkan URL dengan parameter search
                 var url = '?' + new URLSearchParams(window.location.search).toString();
-
-                // Mengambil nilai filter_tahun dan filter_bulan dari URL saat ini
                 var filterTahunValue = "{{ request()->input('filter_tahun') }}";
                 var filterBulanValue = "{{ request()->input('filter_bulan') }}";
-
-                // Memeriksa apakah filter_tahun dan filter_bulan sudah ada pada URL
-                // Jika ada, tambahkan ke URL pencarian baru
+                ru
                 if (filterTahunValue) {
                     url = updateQueryStringParameter(url, 'filter_tahun', filterTahunValue);
                 }
                 if (filterBulanValue) {
                     url = updateQueryStringParameter(url, 'filter_bulan', filterBulanValue);
                 }
-
                 url = updateQueryStringParameter(url, 'search', searchQuery);
-
-                // Mengirimkan permintaan ke URL yang diperbarui
                 window.location.href = url;
             });
 
-            // Fungsi untuk memperbarui parameter dalam URL
             function updateQueryStringParameter(uri, key, value) {
                 var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
                 var separator = uri.indexOf('?') !== -1 ? "&" : "?";
@@ -356,13 +323,12 @@
             }
         });
 
-        const modal = document.getElementById('modal-tambah-pemasukan-customer');
-        const idButton = document.getElementById('tambah-pemasukan-customer');
-        const submitPemasukan = document.getElementById('tambah-pemasukan');
-        const formTambahPemasukan = document.getElementById('form-tambah-pemasukan');
-        const cancelButton = document.getElementById('cancel-tambah-pemasukan-web-customer');
+        const modal = document.getElementById('modal-tambah-pengeluaran-customer');
+        const idButton = document.getElementById('btn-tambah-pengeluaran');
+        const submitPemasukan = document.getElementById('tambah-pengeluaran');
+        const formTambahPemasukan = document.getElementById('form-tambah-pengeluaran');
+        const cancelButton = document.getElementById('cancel-tambah-pengeluaran-web-customer');
 
-        // Fungsi untuk menampilkan atau menyembunyikan modal
         function modalHandlerPemasukanCustomer(val) {
             if (val) {
                 modal.style.display = "flex";
@@ -391,9 +357,9 @@
             event.preventDefault();
 
             // input tambah-pemasukan-customer.blade.php
-            let sumber = document.getElementById('sumber_pemasukan_customer').value.trim();
-            let deskripsi = document.getElementById('deskripsi_pemasukan_customer').value.trim();
-            let nominal = document.getElementById('nominal_pemasukan_customer').value.trim();
+            let sumber = document.getElementById('sumber_pengeluaran_customer').value.trim();
+            let deskripsi = document.getElementById('deskripsi_pengeluaran_customer').value.trim();
+            let nominal = document.getElementById('nominal_pengeluaran_customer').value.trim();
 
             if (sumber === '') {
                 Swal.fire({

@@ -24,7 +24,7 @@
                     <a href="{{ route('menu-produk.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link"><i class="typcn typcn-shopping-cart"></i>
                         Produk</a>
                 </li>
-                <li class="nav-item {{ $title == 'Menu Keuangan' ? 'active' : ''}}">
+                <li class="nav-item {{ $title == 'Menu Pengeluaran' ? 'active' : ''}} {{ $title == 'Menu Keuangan' ? 'active' : ''}}">
                     <a href="{{ route('keuangan.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i>
                         Keuangan & Laporan</a>
                 </li>
