@@ -1,16 +1,18 @@
 @extends('layouts.customers.layouts-customer')
 @section('customer-content')
-    <div class="--container w-full px-10 py-5 h-auto">
-        <div class="--wrapper-card-main-wrapper-card-get-manajemen-iklan w-full grid grid-cols-[2fr_1fr] small-desktop:grid-cols-1 gap-6">
+    <div class="--container w-full mobile-max:px-6 mobile-max:py-2 px-10 py-5 h-auto">
+        <div
+            class="--wrapper-card-main-wrapper-card-get-manajemen-iklan w-full grid grid-cols-[2fr_1fr] small-desktop:grid-cols-1 gap-6">
             <div class="--card-main w-full flex flex-col gap-10">
                 <div
-                    class="--card-design flex relative justify-content-between items-center w-full h-[300px] bg-white shadow-box-shadow-11 rounded-[30px] p-4">
+                    class="--card-design mobile-max:flex-col flex relative justify-content-between items-center w-full mobile-max:h-auto mobile-max:gap-4 h-[300px] bg-white shadow-box-shadow-11 rounded-[30px] p-4">
                     <div class="--header w-full flex flex-col gap-4 items-start">
                         <h1 class="text-[34px] font-black">Iklankan<br>Peralatan Kamping!</h1>
                         <p class="text-[14px]">Ingin menjangkau lebih banyak penyewa di area sekitar anda? anda bisa! dengan
                             cara promosikan peralatan kamping dengan harga promosi iklan yang terjangkau dan yang pasti
                             mencapai semua pengguna.</p>
-                        <div class="mt-2"><a href="{{ route('pilih-durasi-iklan.index', ['id_user' => Crypt::encryptString(session('id_user'))]) }}"
+                        <div class="mt-2"><a
+                                href="{{ route('pilih-durasi-iklan.index', ['id_user' => Crypt::encryptString(session('id_user'))]) }}"
                                 class="text-[14px] bg-gradient-to-bl from-[#B381F4] to-[#5038ED] text-white rounded-[10px] p-[10px] hover:bg-gradient-to-t hover:from-[#B381F4] hover:to-[#5038ED]">Mulai
                                 Buat Iklan!</a></div>
                     </div>
@@ -20,7 +22,7 @@
                             alt="">
                     </div>
                 </div>
-                <div class="--card-informasi-kedua w-full flex items-center">
+                <div class="--card-informasi-kedua w-full mobile-max:flex-col flex items-center">
                     <div class="--blok-image w-full h-[400px] relative">
                         <img class="w-[40px] bottom-40 left-[-20px] absolute object-cover animate-float"
                             src="{{ asset('images/illustration/Oval.png') }}" alt="">
@@ -51,7 +53,8 @@
                             alt="">
                     </div>
                     <div class="--blok-deskripsi w-full">
-                        <div class="--header font-black text-[34px]">Lebih Dari 2576+ User Menggunakan Layanan Iklan.</div>
+                        <div class="--header font-black text-[34px]">Lebih Dari {{ $total_data_iklan }}+ User Menggunakan
+                            Layanan Iklan.</div>
                     </div>
                 </div>
             </div>
@@ -65,41 +68,49 @@
 
                 <div class="--wrapper-card-iklan-sedang-berlangsung flex flex-col gap-4">
                     <p class="text-[16px] font-bold">Iklan Anda Yang Sedang Berlangsung.</p>
-                    <div class="--card-design w-full flex items-center justify-between gap-2">
-                        <div class="--header flex items-start gap-2">
-                            <div class="--image"><img class="w-[60px] min-w-[60px] h-[60px] rounded-[10px] object-cover"
-                                    src="{{ asset('assets/image/customers/advert/Banner Mua Ghế Massage _ PSD Tải xuống miễn phí - Pikbest.jpg') }}"
-                                    alt=""></div>
-                            <div>
-                                <p class=" text-[14px] font-medium">Penyewaan Harga Tenda Murah Meriah Sampai 70% Off</p>
-                                <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i> 4 Hari</p>
+                    @foreach ($iklan_berlangsung as $item)
+                        <div class="--card-design w-full flex items-center justify-between gap-2">
+                            <div class="--header flex items-start gap-2">
+                                <div class="--image"><img class="w-[60px] min-w-[60px] h-[60px] rounded-[10px] object-cover"
+                                        src="{{ asset('assets/image/customers/advert/' . $item->poster) }}" alt="">
+                                </div>
+                                <div>
+                                    <p class=" text-[14px] font-medium capitalize">{{ $item->judul }}</p>
+                                    @foreach ($iklan_berlangsung as $iklan)
+                                        <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i>
+                                            {{ $iklan->durasi_hari }} Hari</p>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="--body font-black text-[14px] whitespace-nowrap text-green-500">
+                                Rp. {{ number_format($item->harga_iklan, 0, ',', '.') }}
                             </div>
                         </div>
-                        <div class="--body font-black text-[14px] whitespace-nowrap text-green-500">
-                            Rp. 200.000
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
                 <div class="--wrapper-card-iklan-sedang-berlangsung flex flex-col gap-4">
                     <p class="text-[16px] font-bold">Iklan Anda Yang Menunggu Giliran.</p>
-                    @for ($i = 0; $i < 3; $i++)
+                    @foreach ($iklan_pending as $item)
                         <div class="--card-design w-full flex items-center justify-between gap-2">
                             <div class="--header flex items-start gap-2">
                                 <div class="--image"><img class="w-[60px] min-w-[60px] h-[60px] rounded-[10px] object-cover"
-                                        src="{{ asset('assets/image/customers/advert/Banner Mua Ghế Massage _ PSD Tải xuống miễn phí - Pikbest.jpg') }}"
+                                        src="{{ asset('assets/image/customers/advert/'.$item->poster) }}"
                                         alt=""></div>
                                 <div>
-                                    <p class=" text-[14px] font-medium">Penyewaan Harga Tenda Murah Meriah Sampai 70% Off
+                                    <p class=" text-[14px] font-medium">{{ $item->judul }}
                                     </p>
-                                    <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i> 4 Hari</p>
+                                    @foreach ($iklan_pending as $iklan)
+                                    <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i>
+                                        {{ $iklan->durasi_hari }} Hari</p>
+                                @endforeach
                                 </div>
                             </div>
                             <div class="--body font-black text-[14px] whitespace-nowrap text-green-500">
-                                Rp. 200.000
+                                Rp. {{ number_format($item->harga_iklan, 0, ',', '.') }}
                             </div>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
 
                 <div class="--wrapper-card-iklan-sedang-berlangsung flex flex-col gap-4">

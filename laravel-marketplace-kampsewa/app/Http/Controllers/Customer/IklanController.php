@@ -23,16 +23,95 @@ class IklanController extends Controller
         $this->middleware('cust');
     }
 
-    public function index()
+    public function index($id_user)
     {
+        $get_total_user_menggunakan_iklan = Iklan::count();
+
+        $get_iklan = Iklan::join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
+            ->join('users', 'users.id', '=', 'iklan.id_user')
+            ->select(
+                'iklan.id as id_iklan',
+                'iklan.poster',
+                'iklan.judul',
+                'detail_iklan.id as id_detail_iklan',
+                'detail_iklan.tanggal_mulai',
+                'detail_iklan.tanggal_akhir',
+                'detail_iklan.harga_iklan',
+            )->where('iklan.id_user', Crypt::decrypt($id_user));
+
+        $iklan_berlangsung = $get_iklan->where('detail_iklan.status_iklan', 'Aktif')
+            ->groupBy(
+                'iklan.id',
+                'iklan.poster',
+                'iklan.judul',
+                'detail_iklan.id',
+                'detail_iklan.tanggal_mulai',
+                'detail_iklan.tanggal_akhir',
+            )->get();
+
+        $iklan_pending = Iklan::join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
+            ->join('users', 'users.id', '=', 'iklan.id_user')
+            ->select(
+                'iklan.id as id_iklan',
+                'iklan.poster',
+                'iklan.judul',
+                'detail_iklan.id as id_detail_iklan',
+                'detail_iklan.tanggal_mulai',
+                'detail_iklan.tanggal_akhir',
+                'detail_iklan.harga_iklan',
+            )->where('iklan.id_user', Crypt::decrypt($id_user))->where('detail_iklan.status_iklan', 'Pending')
+            ->groupBy(
+                'iklan.id',
+                'iklan.poster',
+                'iklan.judul',
+                'detail_iklan.id',
+                'detail_iklan.tanggal_mulai',
+                'detail_iklan.tanggal_akhir',
+            )->get();
+
+        // Looping untuk menghitung durasi iklan dalam format hari
+        foreach ($iklan_berlangsung as $iklan) {
+            $tanggal_mulai = strtotime($iklan->tanggal_mulai);
+            $tanggal_akhir = strtotime($iklan->tanggal_akhir);
+
+            // Hitung perbedaan waktu antara tanggal mulai dan tanggal akhir dalam detik
+            $durasi_detik = $tanggal_akhir - $tanggal_mulai;
+
+            // Konversi detik menjadi hari
+            $durasi_hari = floor($durasi_detik / (60 * 60 * 24));
+
+            // Tambahkan durasi hari ke objek iklan
+            $iklan->durasi_hari = $durasi_hari;
+        }
+
+        // Looping untuk menghitung durasi iklan dalam format hari
+        foreach ($iklan_pending as $iklan) {
+            $tanggal_mulai = strtotime($iklan->tanggal_mulai);
+            $tanggal_akhir = strtotime($iklan->tanggal_akhir);
+
+            // Hitung perbedaan waktu antara tanggal mulai dan tanggal akhir dalam detik
+            $durasi_detik = $tanggal_akhir - $tanggal_mulai;
+
+            // Konversi detik menjadi hari
+            $durasi_hari = floor($durasi_detik / (60 * 60 * 24));
+
+            // Tambahkan durasi hari ke objek iklan
+            $iklan->durasi_hari = $durasi_hari;
+        }
+
         return view('customers.menu-iklan.iklan')->with([
             'title' => 'Iklan | Customer',
+            'total_data_iklan' => $get_total_user_menggunakan_iklan,
+            'iklan_berlangsung' => $iklan_berlangsung,
+            'iklan_pending' => $iklan_pending,
         ]);
     }
+
 
     public function pilihDurasiIklan($id_user)
     {
         $id_user_dec = Crypt::decryptString($id_user);
+
         // $bank = Bank::where('id_user', $id_user_dec)->count();
         // if ($bank == 0) {
         //     Alert::warning('Nomor Rekening Belum di isi', 'Silahkan lengkapi data nomor rekening anda dahulu, pilih Menu Transaksi lalu pilih Set Lokasi Toko & Rekening')->persistent(true);

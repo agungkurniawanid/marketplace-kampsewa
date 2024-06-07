@@ -16,8 +16,8 @@
                 <li class="nav-item {{ $title == 'Iklan | Customer' ? 'active' : '' }}">
                     <a href="" class="nav-link with-sub"><i class="typcn typcn-shopping-bag"></i> Transaksi</a>
                     <nav class="az-menu-sub">
-                        <a href="page-signin.html" class="nav-link">Penyewaan Peralatan</a>
-                        <a href="{{ route('buat-iklan.index') }}" class="nav-link">Buat Promosi / Iklan</a>
+                        <a href="page-signin.html" class="nav-link">Penyewaan & Transaksi offline</a>
+                        <a href="{{ route('buat-iklan.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link">Buat Promosi / Iklan</a>
                     </nav>
                 </li>
                 <li class="nav-item {{ $title == 'Update Produk' ? 'active' : ''}} {{ $title == 'Detail Produk' ? 'active' : ''}} {{ $title == 'Tambah Produk' ? 'active' : '' }} {{ $title == 'Sedang Disewa | KampSewa' ? 'active' : '' }} {{ $title == 'Kelola Produk | KampSewa' ? 'active' : '' }} {{ $title == 'Produk Menu | KampSewa' ? 'active' : '' }}">

@@ -87,7 +87,7 @@ Route::get('/customer/dashboard/detail-produk/{id_produk}', [ProdukController::c
 
 
 // iklan
-Route::get('/customer/dashboard/buat-iklan', [CustomerIklanController::class, 'index'])->name('buat-iklan.index')->middleware('auth');
+Route::get('/customer/dashboard/buat-iklan/{id_user}', [CustomerIklanController::class, 'index'])->name('buat-iklan.index')->middleware('auth');
 Route::get('/customer/dashboard/pilih-durasi-iklan/{id_user}', [CustomerIklanController::class, 'pilihDurasiIklan'])->name('pilih-durasi-iklan.index')->middleware('auth');
 Route::get('/customer/dashboard/layanan-iklan/{id_user}/{harga_iklan}', [CustomerIklanController::class, 'layananIklan'])->name('layanan-iklan.index')->middleware('auth');
 Route::post('/customer/dashboard/layanan-iklan/{id_user}/{harga_iklan}/{durasi}', [CustomerIklanController::class, 'simpanIklan'])->name('layanan-iklan.simpan-iklan')->middleware('auth');
