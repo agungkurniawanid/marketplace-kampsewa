@@ -146,7 +146,9 @@ class UserController extends Controller
     public function listAlamatUser($id_user)
     {
         try {
-            $get_list_alamat = Alamat::where('id_user', $id_user)->get();
+            $get_list_alamat = Alamat::join('users', 'users.id', '=', 'alamat.id_user')
+            ->select('alamat.*', 'users.*')->where('alamat.id_user', $id_user)
+            ->distinct()->get();
             if (!$get_list_alamat) {
                 return response()->json([
                     'message' => 'Data tidak ditemukan',

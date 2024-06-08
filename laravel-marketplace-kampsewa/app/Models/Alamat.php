@@ -18,4 +18,15 @@ class Alamat extends Model
         'detail_lainnya',
         'type',
     ];
+
+    // Accessor untuk kolom type
+    public function getTypeAttribute($value)
+    {
+        $types = [
+            0 => 'Rumah',
+            1 => 'Toko',
+            2 => 'Kantor'
+        ];
+        return $types[$value] ?? 'Unknown';
+    }
 }
