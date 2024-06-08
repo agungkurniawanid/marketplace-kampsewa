@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Alamat;
+use App\Models\Bank;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -142,9 +143,6 @@ class UserController extends Controller
         }
     }
 
-    public function pemesananUser($id_user)
-    {
-    }
     public function listAlamatUser($id_user)
     {
         try {
@@ -255,6 +253,40 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'data tidak ada atau terjadi kesalahan saat update data',
             ], 404);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada database.',
+                'error' => $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat update password.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function tambahBank() {
+        try{
+            request()->validate([
+                'id_user' => 'required|integer',
+                'rekening' => 'required|string',
+                'bank' => 'required|string',
+            ]);
+
+            $bank = new Bank();
+            $bank->id_user = request()->id_user;
+            $bank->rekening = request()->rekening;
+            $bank->bank = strtoupper(request()->bank);
+            $bank->save();
+
+            $get_data = Bank::where('id_user', request()->id_user)->first();
+
+            return response()->json([
+                'message' => 'success',
+                'data_result' => $get_data,
+            ], 200);
+
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan pada database.',

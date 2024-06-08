@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/user/update-alamat/{id_alamat}', [UserController::class, 'updateAlamatUser']);
     Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
     Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
+    Route::post('/user/tambah-bank/', [UserController::class, 'tambahBank']);
 
 
     // product
