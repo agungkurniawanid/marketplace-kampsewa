@@ -147,13 +147,10 @@ class UserController extends Controller
     {
         try {
             $get_list_alamat = Alamat::join('users', 'users.id', '=', 'alamat.id_user')
-            ->select('alamat.*', 'users.*')->where('alamat.id_user', $id_user)
-            ->distinct()->get();
-            if (!$get_list_alamat) {
-                return response()->json([
-                    'message' => 'Data tidak ditemukan',
-                ], 404);
-            }
+                ->select('alamat.*', 'users.name', 'users.nomor_telephone')
+                ->where('alamat.id_user', $id_user)
+                ->distinct()
+                ->get();
             return response()->json([
                 'message' => 'success',
                 'alamat_user' => $get_list_alamat,
@@ -268,8 +265,9 @@ class UserController extends Controller
         }
     }
 
-    public function tambahBank() {
-        try{
+    public function tambahBank()
+    {
+        try {
             request()->validate([
                 'id_user' => 'required|integer',
                 'rekening' => 'required|string',
@@ -288,7 +286,6 @@ class UserController extends Controller
                 'message' => 'success',
                 'data_result' => $get_data,
             ], 200);
-
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan pada database.',
@@ -302,7 +299,8 @@ class UserController extends Controller
         }
     }
 
-    public function tambahStore($id_user) {
+    public function tambahStore($id_user)
+    {
         try {
             request()->validate([
                 'name_store' => 'required|string',
@@ -311,7 +309,7 @@ class UserController extends Controller
                 'detail_lainnya' => 'nullable|string|max:255',
             ]);
             $users = User::where('id', $id_user);
-            if(!$users) {
+            if (!$users) {
                 return response()->json([
                     'message' => 'User tidak ada',
                 ], 200);
@@ -321,7 +319,7 @@ class UserController extends Controller
             $alamat->id_user = $id_user;
             $alamat->longitude = request()->longitude;
             $alamat->latitude = request()->latitude;
-            if(request()->detail_lainnya == null || request()->detail_lainnya == '') {
+            if (request()->detail_lainnya == null || request()->detail_lainnya == '') {
                 $alamat->detail_lainnya = 'Tidak di isi';
             }
             $alamat->detail_lainnya = request()->detail_lainnya;
