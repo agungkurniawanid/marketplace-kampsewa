@@ -148,6 +148,10 @@ class UserController extends Controller
         try {
             $get_list_alamat = Alamat::join('users', 'users.id', '=', 'alamat.id_user')
                 ->select('alamat.*', 'users.name', 'users.nomor_telephone')
+                ->where(function ($query) {
+                    $query->where('alamat.type', 0)
+                        ->orWhere('alamat.type', 2);
+                })
                 ->where('alamat.id_user', $id_user)
                 ->distinct()
                 ->get();
