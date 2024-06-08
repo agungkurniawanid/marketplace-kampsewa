@@ -2,7 +2,7 @@
 @section('customer-content')
     <div class="--container px-10 py-5 w-full h-auto flex justify-center">
         <div class="--wrapper-form w-[500px] h-auto bg-white shadow-box-shadow-11 p-4">
-            <form id="simpan-pembayaran" action="{{ route('simpan-pembayaran-iklan.simpan') }}" method="POST" class="flex flex-col gap-6">
+            <form id="simpan-pembayaran" action="{{ route('simpan-pembayaran-iklan.simpan', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" method="POST" class="flex flex-col gap-6">
                 @csrf
                 <div class="--header flex flex-col gap-6">
                     <div class="--icon-title flex items-center gap-4">

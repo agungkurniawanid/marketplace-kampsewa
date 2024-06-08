@@ -95,7 +95,7 @@ Route::get('/customer/dashboard/pilih-durasi-iklan/{id_user}', [CustomerIklanCon
 Route::get('/customer/dashboard/layanan-iklan/{id_user}/{harga_iklan}', [CustomerIklanController::class, 'layananIklan'])->name('layanan-iklan.index')->middleware('auth');
 Route::post('/customer/dashboard/layanan-iklan/{id_user}/{harga_iklan}/{durasi}', [CustomerIklanController::class, 'simpanIklan'])->name('layanan-iklan.simpan-iklan')->middleware('auth');
 Route::get('/customer/dashboard/input-pembayaran-iklan/{id_user}/{harga_iklan}/{durasi}', [CustomerIklanController::class, 'inputPembayaranIklan'])->name('input-pembayaran-iklan.index')->middleware('auth');
-Route::post('/customer/dashboard/simpan-pembayaran-iklan', [CustomerIklanController::class, 'simpanPembayaranIklan'])->name('simpan-pembayaran-iklan.simpan')->middleware('auth');
+Route::post('/customer/dashboard/simpan-pembayaran-iklan/{id_user}', [CustomerIklanController::class, 'simpanPembayaranIklan'])->name('simpan-pembayaran-iklan.simpan')->middleware('auth');
 Route::delete('/delete-kelola-iklan/{id_iklan}', [CustomerIklanController::class, 'deleteKelolaIklan'])->name('kelola-iklan.delete')->middleware('auth');
 
 // keuangan laporan

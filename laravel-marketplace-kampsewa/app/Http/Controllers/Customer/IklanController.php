@@ -224,7 +224,7 @@ class IklanController extends Controller
             ->first();
 
         if ($existingAd) {
-            Alert::toast('Anda tidak dapat membuat iklan baru sebelum ' . $durasi . ' hari dari transaksi terakhir.');
+            Alert::toast('Anda tidak dapat membuat iklan baru sebelum ' . $durasi . ' hari dari transaksi terakhir.', 'warning');
             return redirect()->back()
                 ->withErrors(['error' => 'Anda tidak dapat membuat iklan baru sebelum ' . $durasi . ' hari dari transaksi terakhir.'])
                 ->withInput();
@@ -263,7 +263,7 @@ class IklanController extends Controller
         $harga_iklan_enc = Crypt::encrypt($harga_iklan);
         $durasi_enc = Crypt::encryptString($durasi);
 
-        Alert::success('Berhasil', 'Iklan berhasil ditambahkan.');
+        Alert::success('Berhasil ditambahkan', 'success');
         return redirect('/customer/dashboard/input-pembayaran-iklan/' . $id_user . '/' . $harga_iklan_enc . '/' . $durasi_enc);
     }
 
@@ -302,7 +302,7 @@ class IklanController extends Controller
         ]);
     }
 
-    public function simpanPembayaranIklan(Request $request)
+    public function simpanPembayaranIklan($id_user,Request $request)
     {
         $request->validate([
             'id_iklan' => 'required|string',
@@ -341,8 +341,8 @@ class IklanController extends Controller
                 'nominal' => $request->harga_iklan,
             ]);
 
-            Alert::toast('Terimakasih memberikan kepercayaan layanan iklan kami dengan berlangganan.');
-            return redirect()->route('buat-iklan.index');
+            Alert::toast('Terimakasih memberikan kepercayaan layanan iklan kami dengan berlangganan.', 'success');
+            return redirect()->route('buat-iklan.index', ['id_user' => $id_user]);
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.']);
         }
