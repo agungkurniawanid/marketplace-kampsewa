@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -25,9 +26,10 @@ class IklanController extends Controller
 
     public function index($id_user)
     {
+        $user_id = Crypt::decrypt($id_user);
         $get_total_user_menggunakan_iklan = Iklan::count();
 
-        $get_iklan = Iklan::join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
+        $iklan_berlangsung = Iklan::join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
             ->join('users', 'users.id', '=', 'iklan.id_user')
             ->select(
                 'iklan.id as id_iklan',
@@ -37,9 +39,9 @@ class IklanController extends Controller
                 'detail_iklan.tanggal_mulai',
                 'detail_iklan.tanggal_akhir',
                 'detail_iklan.harga_iklan',
-            )->where('iklan.id_user', Crypt::decrypt($id_user));
-
-        $iklan_berlangsung = $get_iklan->where('detail_iklan.status_iklan', 'Aktif')
+                DB::raw('DATEDIFF(detail_iklan.tanggal_akhir, detail_iklan.tanggal_mulai) as durasi_hari')
+            )->where('iklan.id_user', $user_id)
+            ->where('detail_iklan.status_iklan', 'Aktif')
             ->groupBy(
                 'iklan.id',
                 'iklan.poster',
@@ -47,6 +49,8 @@ class IklanController extends Controller
                 'detail_iklan.id',
                 'detail_iklan.tanggal_mulai',
                 'detail_iklan.tanggal_akhir',
+                'detail_iklan.harga_iklan',
+                'durasi_hari'
             )->get();
 
         $iklan_pending = Iklan::join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
@@ -59,7 +63,9 @@ class IklanController extends Controller
                 'detail_iklan.tanggal_mulai',
                 'detail_iklan.tanggal_akhir',
                 'detail_iklan.harga_iklan',
-            )->where('iklan.id_user', Crypt::decrypt($id_user))->where('detail_iklan.status_iklan', 'Pending')
+                DB::raw('DATEDIFF(detail_iklan.tanggal_akhir, detail_iklan.tanggal_mulai) as durasi_hari')
+            )->where('iklan.id_user', $user_id)
+            ->where('detail_iklan.status_iklan', 'Pending')
             ->groupBy(
                 'iklan.id',
                 'iklan.poster',
@@ -67,45 +73,44 @@ class IklanController extends Controller
                 'detail_iklan.id',
                 'detail_iklan.tanggal_mulai',
                 'detail_iklan.tanggal_akhir',
+                'detail_iklan.harga_iklan',
+                'durasi_hari'
             )->get();
 
-        // Looping untuk menghitung durasi iklan dalam format hari
-        foreach ($iklan_berlangsung as $iklan) {
-            $tanggal_mulai = strtotime($iklan->tanggal_mulai);
-            $tanggal_akhir = strtotime($iklan->tanggal_akhir);
-
-            // Hitung perbedaan waktu antara tanggal mulai dan tanggal akhir dalam detik
-            $durasi_detik = $tanggal_akhir - $tanggal_mulai;
-
-            // Konversi detik menjadi hari
-            $durasi_hari = floor($durasi_detik / (60 * 60 * 24));
-
-            // Tambahkan durasi hari ke objek iklan
-            $iklan->durasi_hari = $durasi_hari;
-        }
-
-        // Looping untuk menghitung durasi iklan dalam format hari
-        foreach ($iklan_pending as $iklan) {
-            $tanggal_mulai = strtotime($iklan->tanggal_mulai);
-            $tanggal_akhir = strtotime($iklan->tanggal_akhir);
-
-            // Hitung perbedaan waktu antara tanggal mulai dan tanggal akhir dalam detik
-            $durasi_detik = $tanggal_akhir - $tanggal_mulai;
-
-            // Konversi detik menjadi hari
-            $durasi_hari = floor($durasi_detik / (60 * 60 * 24));
-
-            // Tambahkan durasi hari ke objek iklan
-            $iklan->durasi_hari = $durasi_hari;
-        }
+        $iklan_selesai = Iklan::join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
+            ->join('users', 'users.id', '=', 'iklan.id_user')
+            ->select(
+                'iklan.id as id_iklan',
+                'iklan.poster',
+                'iklan.judul',
+                'detail_iklan.id as id_detail_iklan',
+                'detail_iklan.tanggal_mulai',
+                'detail_iklan.tanggal_akhir',
+                'detail_iklan.harga_iklan',
+                DB::raw('DATEDIFF(detail_iklan.tanggal_akhir, detail_iklan.tanggal_mulai) as durasi_hari')
+            )->where('iklan.id_user', $user_id)
+            ->where('detail_iklan.status_iklan', 'Selesai')
+            ->groupBy(
+                'iklan.id',
+                'iklan.poster',
+                'iklan.judul',
+                'detail_iklan.id',
+                'detail_iklan.tanggal_mulai',
+                'detail_iklan.tanggal_akhir',
+                'detail_iklan.harga_iklan',
+                'durasi_hari'
+            )->limit(5)->get();
 
         return view('customers.menu-iklan.iklan')->with([
             'title' => 'Iklan | Customer',
             'total_data_iklan' => $get_total_user_menggunakan_iklan,
             'iklan_berlangsung' => $iklan_berlangsung,
             'iklan_pending' => $iklan_pending,
+            'iklan_selesai' => $iklan_selesai,
         ]);
     }
+
+
 
 
     public function pilihDurasiIklan($id_user)
@@ -340,6 +345,121 @@ class IklanController extends Controller
             return redirect()->route('buat-iklan.index');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.']);
+        }
+    }
+
+    public function kelolaIklan(Request $request, $id_user)
+    {
+        try {
+            $id_user_decrypt = Crypt::decrypt($id_user);
+
+            // Get the selected filter
+            $filter = $request->input('filter_kelola_iklan', 'semua');
+
+            // Base query to get all ads related to the user
+            $query = Iklan::join('detail_iklan', 'iklan.id', '=', 'detail_iklan.id_iklan')
+                ->join('users', 'users.id', '=', 'iklan.id_user')
+                ->select(
+                    'iklan.id as id_iklan',
+                    'iklan.poster',
+                    'iklan.judul',
+                    'iklan.sub_judul',
+                    'detail_iklan.id as id_detail_iklan',
+                    'detail_iklan.tanggal_mulai',
+                    'detail_iklan.tanggal_akhir',
+                    'detail_iklan.harga_iklan',
+                    'detail_iklan.status_iklan',
+                    DB::raw('DATEDIFF(detail_iklan.tanggal_akhir, detail_iklan.tanggal_mulai) as durasi_hari')
+                )
+                ->where('iklan.id_user', $id_user_decrypt);
+
+            // Apply filter if not 'semua'
+            if ($filter !== 'semua') {
+                $query->where('detail_iklan.status_iklan', ucfirst($filter));
+            }
+
+            // Get all filtered data
+            $get_all_data = $query->get();
+
+            // Separate ads by status
+            $iklan_berlangsung = $get_all_data->where('status_iklan', 'Aktif');
+            $iklan_pending = $get_all_data->where('status_iklan', 'Pending');
+            $iklan_selesai = $get_all_data->where('status_iklan', 'Selesai');
+
+            return view('customers.menu-iklan.kelola-iklan')->with([
+                'title' => 'Kelola Iklan',
+                'total_data_iklan' => $get_all_data->count(),
+                'iklan_berlangsung' => $iklan_berlangsung,
+                'iklan_pending' => $iklan_pending,
+                'iklan_selesai' => $iklan_selesai,
+                'all_iklan' => $get_all_data,
+                'selected_filter' => $filter,
+            ]);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+            return back()->withErrors(['error' => $error->getMessage()]);
+        }
+    }
+
+    public function deleteKelolaIklan($id_iklan)
+    {
+        try {
+            $get_data = Iklan::where('id', $id_iklan);
+            $get_data->delete();
+
+            Alert::toast('Data berhasil dihapus!', 'success');
+            return back();
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+        }
+    }
+
+    public function updateIklanView($id_iklan)
+    {
+        $id_decrypt = Crypt::decrypt($id_iklan);
+        $get_data = Iklan::where('id', $id_decrypt)->first();
+        return view('customers.menu-iklan.update-iklan')->with([
+            'title' => 'Update Iklan',
+            'data' => $get_data,
+        ]);
+    }
+
+    public function updateIklan($id_iklan, $id_user)
+    {
+        try {
+            request()->validate([
+                'poster' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'judul' => 'required|string',
+                'sub_judul' => 'required|string',
+                'deskripsi' => 'required|string',
+            ]);
+
+            $get_data = Iklan::findOrFail($id_iklan);
+
+            $list_update = [
+                'judul' => request()->input('judul'),
+                'sub_judul' => request()->input('sub_judul'),
+                'deskripsi' => request()->input('deskripsi'),
+            ];
+
+            if (request()->hasFile('poster')) {
+                $file = request()->file('poster');
+                $destinationPath = public_path('assets/image/customers/advert');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move($destinationPath, $filename);
+
+                // Simpan path relatif ke database
+                $foto_url = $filename;
+                $list_update['poster'] = $foto_url;
+            }
+
+            $get_data->update($list_update);
+
+            Alert::toast('Data berhasil di update', 'success');
+            return redirect()->route('kelola-iklan.index', ['id_user' => $id_user]);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+            return back()->withErrors(['error' => $error->getMessage()]);
         }
     }
 }

@@ -13,7 +13,7 @@
                 <li class="nav-item {{ $title == 'Dashboard | Customer' ? 'active' : '' }} show">
                     <a href="/customer/dashboard/home" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
                 </li>
-                <li class="nav-item {{ $title == 'Iklan | Customer' ? 'active' : '' }}">
+                <li class="nav-item {{ $title == 'Kelola Iklan' ? 'active' : '' }} {{ $title == 'Iklan | Customer' ? 'active' : '' }}">
                     <a href="" class="nav-link with-sub"><i class="typcn typcn-shopping-bag"></i> Transaksi</a>
                     <nav class="az-menu-sub">
                         <a href="page-signin.html" class="nav-link">Penyewaan & Transaksi offline</a>

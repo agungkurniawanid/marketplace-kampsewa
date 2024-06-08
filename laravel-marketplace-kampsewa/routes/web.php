@@ -88,11 +88,15 @@ Route::get('/customer/dashboard/detail-produk/{id_produk}', [ProdukController::c
 
 // iklan
 Route::get('/customer/dashboard/buat-iklan/{id_user}', [CustomerIklanController::class, 'index'])->name('buat-iklan.index')->middleware('auth');
+Route::get('/customer/dashboard/kelola-iklan/{id_user}', [CustomerIklanController::class, 'kelolaIklan'])->name('kelola-iklan.index')->middleware('auth');
+Route::get('/customer/dashboard/kelola-iklan/update-iklan/{id_iklan}', [CustomerIklanController::class, 'updateIklanView'])->name('kelola-iklan.update-iklan-view')->middleware('auth');
+Route::put('/customer/dashboard/kelola-iklan/update-iklan-post/{id_iklan}/{id_user}', [CustomerIklanController::class, 'updateIklan'])->name('kelola-iklan.update-iklan-post')->middleware('auth');
 Route::get('/customer/dashboard/pilih-durasi-iklan/{id_user}', [CustomerIklanController::class, 'pilihDurasiIklan'])->name('pilih-durasi-iklan.index')->middleware('auth');
 Route::get('/customer/dashboard/layanan-iklan/{id_user}/{harga_iklan}', [CustomerIklanController::class, 'layananIklan'])->name('layanan-iklan.index')->middleware('auth');
 Route::post('/customer/dashboard/layanan-iklan/{id_user}/{harga_iklan}/{durasi}', [CustomerIklanController::class, 'simpanIklan'])->name('layanan-iklan.simpan-iklan')->middleware('auth');
 Route::get('/customer/dashboard/input-pembayaran-iklan/{id_user}/{harga_iklan}/{durasi}', [CustomerIklanController::class, 'inputPembayaranIklan'])->name('input-pembayaran-iklan.index')->middleware('auth');
 Route::post('/customer/dashboard/simpan-pembayaran-iklan', [CustomerIklanController::class, 'simpanPembayaranIklan'])->name('simpan-pembayaran-iklan.simpan')->middleware('auth');
+Route::delete('/delete-kelola-iklan/{id_iklan}', [CustomerIklanController::class, 'deleteKelolaIklan'])->name('kelola-iklan.delete')->middleware('auth');
 
 // keuangan laporan
 Route::get('/customer/dashboard/keuangan/{id_user}', [KeuanganController::class, 'index'])->name('keuangan.index')->middleware('auth');

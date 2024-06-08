@@ -61,7 +61,7 @@
             <div class="--card-manajemen-iklan w-full flex flex-col gap-10">
                 <div class="--btn-management flex flex-col gap-4">
                     <p class="text-[16px] font-bold">Kelola Data Iklan Anda!</p>
-                    <div><a href=""
+                    <div><a href="{{ route('kelola-iklan.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}"
                             class="text-[14px] bg-gradient-to-bl from-[#B381F4] to-[#5038ED] text-white rounded-[10px] p-[10px] hover:bg-gradient-to-t hover:from-[#B381F4] hover:to-[#5038ED]">Kelola
                             Iklan</a></div>
                 </div>
@@ -75,11 +75,9 @@
                                         src="{{ asset('assets/image/customers/advert/' . $item->poster) }}" alt="">
                                 </div>
                                 <div>
-                                    <p class=" text-[14px] font-medium capitalize">{{ $item->judul }}</p>
-                                    @foreach ($iklan_berlangsung as $iklan)
-                                        <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i>
-                                            {{ $iklan->durasi_hari }} Hari</p>
-                                    @endforeach
+                                    <p class="text-[14px] font-medium capitalize">{{ $item->judul }}</p>
+                                    <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i>
+                                        {{ $item->durasi_hari }} Hari</p>
                                 </div>
                             </div>
                             <div class="--body font-black text-[14px] whitespace-nowrap text-green-500">
@@ -95,15 +93,12 @@
                         <div class="--card-design w-full flex items-center justify-between gap-2">
                             <div class="--header flex items-start gap-2">
                                 <div class="--image"><img class="w-[60px] min-w-[60px] h-[60px] rounded-[10px] object-cover"
-                                        src="{{ asset('assets/image/customers/advert/'.$item->poster) }}"
-                                        alt=""></div>
+                                        src="{{ asset('assets/image/customers/advert/' . $item->poster) }}" alt="">
+                                </div>
                                 <div>
-                                    <p class=" text-[14px] font-medium">{{ $item->judul }}
-                                    </p>
-                                    @foreach ($iklan_pending as $iklan)
+                                    <p class="text-[14px] font-medium">{{ $item->judul }}</p>
                                     <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i>
-                                        {{ $iklan->durasi_hari }} Hari</p>
-                                @endforeach
+                                        {{ $item->durasi_hari }} Hari</p>
                                 </div>
                             </div>
                             <div class="--body font-black text-[14px] whitespace-nowrap text-green-500">
@@ -115,24 +110,25 @@
 
                 <div class="--wrapper-card-iklan-sedang-berlangsung flex flex-col gap-4">
                     <p class="text-[16px] font-bold">Riwayat Terbaru Iklan Anda.</p>
-                    @for ($i = 0; $i < 3; $i++)
+                    @foreach ($iklan_selesai as $item)
                         <div class="--card-design w-full flex items-center justify-between gap-2">
                             <div class="--header flex items-start gap-2">
                                 <div class="--image"><img class="w-[60px] min-w-[60px] h-[60px] rounded-[10px] object-cover"
-                                        src="{{ asset('assets/image/customers/advert/Banner Mua Ghế Massage _ PSD Tải xuống miễn phí - Pikbest.jpg') }}"
-                                        alt=""></div>
+                                        src="{{ asset('assets/image/customers/advert/' . $item->poster) }}" alt="">
+                                </div>
                                 <div>
-                                    <p class=" text-[14px] font-medium">Penyewaan Harga Tenda Murah Meriah Sampai 70% Off
-                                    </p>
-                                    <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i> 4 Hari</p>
+                                    <p class="text-[14px] font-medium">{{ $item->judul }}</p>
+                                    <p class="text-[12px] text-gray-400"><i class="bi bi-alarm-fill"></i>
+                                        {{ $item->durasi_hari }} Hari</p>
                                 </div>
                             </div>
                             <div class="--body font-black text-[14px] whitespace-nowrap text-green-500">
-                                Rp. 200.000
+                                Rp. {{ number_format($item->harga_iklan, 0, ',', '.') }}
                             </div>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
+
             </div>
         </div>
     </div>

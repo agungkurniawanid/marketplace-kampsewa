@@ -441,7 +441,6 @@ class ProdukController extends Controller
                 }
             }
 
-
             $produk->save();
 
             // Sinkronisasi varian dan detail varian

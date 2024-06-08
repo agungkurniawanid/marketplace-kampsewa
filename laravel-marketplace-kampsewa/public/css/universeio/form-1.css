@@ -128,3 +128,24 @@
       opacity: 0;
     }
   }
+
+  .inputGambar {
+    max-width: 190px;
+    display: none;
+  }
+
+  .labelFileGambar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 250px;
+    height: 190px;
+    border: 2px dashed #ccc;
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+    color: #404040;
+    cursor: pointer;
+  }
+
