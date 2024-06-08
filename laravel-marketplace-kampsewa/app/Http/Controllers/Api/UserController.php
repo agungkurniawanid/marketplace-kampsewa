@@ -299,4 +299,48 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function tambahStore($id_user) {
+        try {
+            request()->validate([
+                'name_store' => 'required|string',
+                'longitude' => 'required|string',
+                'latitude' => 'required|string',
+                'detail_lainnya' => 'nullable|string|max:255',
+            ]);
+            $users = User::where('id', $id_user);
+            if(!$users) {
+                return response()->json([
+                    'message' => 'User tidak ada',
+                ], 200);
+            }
+            $users->update(['name_store' => request()->name_store]);
+            $alamat = new Alamat();
+            $alamat->id_user = $id_user;
+            $alamat->longitude = request()->longitude;
+            $alamat->latitude = request()->latitude;
+            if(request()->detail_lainnya == null || request()->detail_lainnya == '') {
+                $alamat->detail_lainnya = 'Tidak di isi';
+            }
+            $alamat->detail_lainnya = request()->detail_lainnya;
+            $alamat->type = 1;
+            $alamat->save();
+            $get_alamat = Alamat::where('id_user', $id_user)->orderBy('created_at', 'desc');
+            return response()->json([
+                'message' => 'success',
+                'users' => $users->first(),
+                'alamat' => $get_alamat->first(),
+            ], 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada database.',
+                'error' => $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat update password.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

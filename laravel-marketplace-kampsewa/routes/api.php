@@ -38,7 +38,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
     Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
     Route::post('/user/tambah-bank/', [UserController::class, 'tambahBank']);
-
+    Route::post('/user/input-store/{id_user}', [UserController::class, 'tambahStore']);
 
     // product
     Route::get('/produk/produk-rating-tertinggi-limit6', [ProductController::class, 'produkRatingTertinggiLimit6']);
