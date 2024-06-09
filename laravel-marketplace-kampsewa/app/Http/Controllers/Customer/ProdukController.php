@@ -72,7 +72,7 @@ class ProdukController extends Controller
             }
 
             // Paginate the filtered results
-            $result_table = $table_produk->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.kategori', 'produk.foto_depan')->paginate(32);
+            $result_table = $table_produk->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.kategori', 'produk.foto_depan', 'produk.created_at')->paginate(32);
 
             return view('customers.menu-produk.produk')->with([
                 'title' => 'Produk Menu | KampSewa',
