@@ -19,6 +19,7 @@ class PembayaranPenyewaanFactory extends Factory
         return [
             'id_penyewaan'=>$this->faker->numberBetween(1,500),
             'bukti_pembayaran'=>$this->faker->imageUrl(),
+            'jaminan_sewa'=>$this->faker->imageUrl(),
             'jumlah_pembayaran'=>$this->faker->numberBetween(10000,100000),
             'kembalian_pembayaran'=>$this->faker->numberBetween(0, 100000),
             'kurang_pembayaran'=>$this->faker->numberBetween(0, 100000),

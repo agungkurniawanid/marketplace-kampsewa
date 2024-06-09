@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ChartWebController;
 use App\Http\Controllers\Api\IklanControlller;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RiwayatPencarianController;
+use App\Http\Controllers\Api\TransaksiController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/user/list-alamat/{id_user}', [UserController::class, 'listAlamatUser']);
     Route::get('/user/detail-alamat/{id_alamat}', [UserController::class, 'detailAlamatUser']);
     Route::put('/user/update-alamat/{id_alamat}', [UserController::class, 'updateAlamatUser']);
+    Route::delete('/user/delete-alamat/{id_alamat}', [UserController::class, 'deleteAlamatUser']);
     Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
     Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
     Route::post('/user/tambah-bank/', [UserController::class, 'tambahBank']);
@@ -54,4 +56,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/riwayat-pencarian/insert/{id_user}', [RiwayatPencarianController::class, 'insert']);
     Route::get('/riwayat-pencarian/show/{id_user}', [RiwayatPencarianController::class, 'show']);
     Route::delete('/riwayat-pencarian/delete/{id_user}', [RiwayatPencarianController::class, 'delete']);
+
+    // transaksi
+    Route::post('/transaksi/checkout/{id_user}',[TransaksiController::class, 'checkout']);
 });

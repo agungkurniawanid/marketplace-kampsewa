@@ -7,6 +7,7 @@ use App\Models\Alamat;
 use App\Models\Bank;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -290,6 +291,35 @@ class UserController extends Controller
                 'message' => 'success',
                 'data_result' => $get_data,
             ], 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada database.',
+                'error' => $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat update password.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function deleteAlamatUser($id_alamat)
+    {
+        try {
+            $get_data = Alamat::where('id', $id_alamat)->first();
+            if (!$get_data) {
+                return response()->json([
+                    'message' => 'Alamat tidak ditemukan',
+                ], 404);
+            }
+            $get_data->delete();
+
+            return response()->json([
+                'message' => 'success delete',
+            ], 200);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan pada database.',

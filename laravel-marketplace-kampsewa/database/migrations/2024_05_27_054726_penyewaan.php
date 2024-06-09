@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('tanggal_mulai')->nullable();
             $table->date('tanggal_selesai')->nullable();
             $table->text('pesan');
-            $table->string('status_penyewaan');
+            $table->string('status_penyewaan')->default('Pending');
             $table->timestamps();
         });
     }
