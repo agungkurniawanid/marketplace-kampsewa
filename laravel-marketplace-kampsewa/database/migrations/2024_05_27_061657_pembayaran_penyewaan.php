@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_penyewaan');
             $table->foreign('id_penyewaan')->references('id')->on('penyewaan')->onDelete('cascade');
-            $table->string('bukti_pembayaran');
-            $table->string('jaminan_sewa');
-            $table->integer('jumlah_pembayaran');
-            $table->integer('kembalian_pembayaran');
-            $table->integer('biaya_admin');
-            $table->integer('kurang_pembayaran');
-            $table->integer('total_pembayaran');
-            $table->string('metode')->default('transfer');
+            $table->string('bukti_pembayaran')->nullable();
+            $table->string('jaminan_sewa')->nullable();
+            $table->integer('jumlah_pembayaran')->nullable();
+            $table->integer('kembalian_pembayaran')->nullable();
+            $table->integer('biaya_admin')->nullable();
+            $table->integer('kurang_pembayaran')->nullable();
+            $table->integer('total_pembayaran')->nullable();
+            $table->string('metode')->default('transfer')->nullable();
             $table->string('jenis_transaksi')->default('ambil ditempat');
-            $table->string('status_pembayaran');
+            $table->string('status_pembayaran')->default('belum lunas');
             $table->timestamps();
         });
     }

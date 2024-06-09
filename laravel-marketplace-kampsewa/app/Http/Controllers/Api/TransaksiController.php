@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\DetailPenyewaan;
 use App\Models\DetailVariantProduk;
+use App\Models\PembayaranPenyewaan;
 use App\Models\Penyewaan;
 use App\Models\Produk;
 use App\Models\VariantProduk;
@@ -47,6 +48,8 @@ class TransaksiController extends Controller
                 'produk_details.*.ukuran' => 'required|string',
                 'produk_details.*.qty' => 'required|integer',
                 'produk_details.*.subtotal' => 'required|integer',
+                'metode' => 'required|string',
+                'biaya_admin' => 'required|integer',
             ], $message_error);
 
             // Mengisi tabel penyewaan
@@ -57,6 +60,20 @@ class TransaksiController extends Controller
             $table_penyewaan->pesan = request()->input('pesan') ?: 'Tidak ada pesan';
             $table_penyewaan->status_penyewaan = 'Pending';
             $table_penyewaan->save();
+
+            if(request()->input('metode') == 'COD') {
+                $table_pembayaran = new PembayaranPenyewaan();
+                $table_pembayaran->id_penyewaan = $table_penyewaan->id;
+                $table_pembayaran->bukti_pembayaran = 'Belum di isi';
+                $table_pembayaran->jaminan_sewa = 'Belum di isi';
+                $table_pembayaran->jumlah_pembayaran = 0;
+                $table_pembayaran->kembalian_pembayaran = 0;
+                $table_pembayaran->biaya_admin = request()->input('biaya_admin');
+                $table_pembayaran->kurang_pembayaran = 0;
+                $table_pembayaran->total_pembayaran = 0;
+                $table_pembayaran->metode = request()->input('metode');
+                $table_pembayaran->save();
+            }
 
             // Mengisi tabel detail_penyewaan
             $produk_details = request()->input('produk_details');
@@ -106,5 +123,9 @@ class TransaksiController extends Controller
 
     public function pembayaran()
     {
+        $id_penyewaan = request()->query('id_penyewaan');
+        $biaya_admin = request()->query('biaya_admin');
+        $total_pembayaran = request()->query('total_pembayaran');
+        $metode = request()->query('metode');
     }
 }
