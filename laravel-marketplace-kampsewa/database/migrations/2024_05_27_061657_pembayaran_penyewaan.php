@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_penyewaan');
             $table->foreign('id_penyewaan')->references('id')->on('penyewaan')->onDelete('cascade');
             $table->string('bukti_pembayaran');
+            $table->string('jaminan_sewa');
             $table->integer('jumlah_pembayaran');
             $table->integer('kembalian_pembayaran');
             $table->integer('biaya_admin');
