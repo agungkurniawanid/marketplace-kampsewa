@@ -12,9 +12,9 @@ class DetailPenyewaan extends Model
     protected $fillable=[
         'id_penyewaan',
         'id_produk',
-        'id_variant_produk',
+        'warna_produk',
+        'ukuran',
         'qty',
         'subtotal',
-        'pesan',
     ];
 }

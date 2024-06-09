@@ -15,8 +15,6 @@ class DetailIklan extends Model
         'id_iklan',
         'tanggal_mulai',
         'tanggal_akhir',
-        'start_date',
-        'end_date',
         'harga_iklan',
         'status_iklan'
     ];

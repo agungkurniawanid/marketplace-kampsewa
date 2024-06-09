@@ -17,5 +17,6 @@ class Iklan extends Model
         'judul',
         'sub_judul',
         'deskripsi',
+        'snap_token',
     ];
 }

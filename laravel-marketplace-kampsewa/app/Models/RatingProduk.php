@@ -15,6 +15,6 @@ class RatingProduk extends Model
         'id_user',
         'id_produk',
         'rating',
-        'komentar',
+        'ulasan',
     ];
 }

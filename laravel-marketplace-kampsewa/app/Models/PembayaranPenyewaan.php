@@ -12,9 +12,14 @@ class PembayaranPenyewaan extends Model
     protected $fillable=[
         'id_penyewaan',
         'bukti_pembayaran',
+        'jaminan_sewa',
+        'jumlah_pembayaran',
         'kembalian_pembayaran',
+        'biaya_admin',
+        'kurang_pembayaran',
         'total_pembayaran',
         'metode',
+        'jenis_transaksi',
         'status_pembayaran'
     ];
 }

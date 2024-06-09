@@ -11,6 +11,7 @@ use App\Models\Produk;
 use App\Models\VariantProduk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class TransaksiController extends Controller
 {
@@ -61,7 +62,7 @@ class TransaksiController extends Controller
             $table_penyewaan->status_penyewaan = 'Pending';
             $table_penyewaan->save();
 
-            if(request()->input('metode') == 'COD') {
+            if (request()->input('metode') == 'COD') {
                 $table_pembayaran = new PembayaranPenyewaan();
                 $table_pembayaran->id_penyewaan = $table_penyewaan->id;
                 $table_pembayaran->bukti_pembayaran = 'Belum di isi';
@@ -121,11 +122,45 @@ class TransaksiController extends Controller
         }
     }
 
-    public function pembayaran()
+    public function pembayaran(Request $request)
     {
-        $id_penyewaan = request()->query('id_penyewaan');
-        $biaya_admin = request()->query('biaya_admin');
-        $total_pembayaran = request()->query('total_pembayaran');
-        $metode = request()->query('metode');
+        try {
+            $validate = Validator::make($request->all(), [
+                'id_penyewaan' => 'required|integer',
+                'bukti_pembayaran' => 'required|image|mimes:png,jpg|max:3000',
+                'jaminan_sewa' => 'required|image|mimes:png,jpg|max:3000',
+                'jumlah_pembayaran' => 'required|integer',
+                'kembalian_pembayaran' => 'required|integer',
+                'biaya_admin' => 'required|integer',
+                'kurang_pembayaran' => 'required|integer',
+                'total_pembayaran' => 'required|integer',
+            ]);
+            if ($validate->fails()) {
+                return response()->json(['message' => $validate->errors()], 400);
+            }
+            $request->merge([
+                'metode' => 'Transfer',
+                'status_pembayaran' => 'Lunas',
+                'jenis_transaksi' => 'Ambil ditempat',
+            ]);
+            $pembayaran = new PembayaranPenyewaan($request->all());
+            if ($request->hasFile('bukti_pembayaran')) {
+                $buktiPembayaran = $request->file('bukti_pembayaran');
+                $buktiPembayaranName = time() . '_bukti.' . $buktiPembayaran->getClientOriginalExtension();
+                $buktiPembayaran->move(public_path('assets/image/customers/pembayaran/'), $buktiPembayaranName);
+                $pembayaran->bukti_pembayaran = $buktiPembayaranName;
+            }
+            if ($request->hasFile('jaminan_sewa')) {
+                $jaminanSewa = $request->file('jaminan_sewa');
+                $jaminanSewaName = time() . '_jaminan.' . $jaminanSewa->getClientOriginalExtension();
+                $jaminanSewa->move(public_path('assets/image/customers/jaminan/'), $jaminanSewaName);
+                $pembayaran->jaminan_sewa = $jaminanSewaName;
+            }
+            $pembayaran->save();
+            return response()->json(['message' => 'Pembayaran berhasil disimpan', 'data' => $pembayaran], 201);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+            return response()->json(['message' => 'Terjadi kesalahan pada server.', 'error' => $error->getMessage()], 500);
+        }
     }
 }

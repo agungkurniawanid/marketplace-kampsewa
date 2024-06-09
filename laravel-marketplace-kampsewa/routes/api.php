@@ -59,4 +59,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     // transaksi
     Route::post('/transaksi/checkout/{id_user}',[TransaksiController::class, 'checkout']);
+    Route::post('/transaksi/pembayaran',[TransaksiController::class, 'pembayaran']);
 });

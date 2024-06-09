@@ -13,6 +13,7 @@ class Penyewaan extends Model
         'id_user',
         'tanggal_mulai',
         'tanggal_selesai',
+        'pesan',
         'status_penyewaan',
     ];
 }

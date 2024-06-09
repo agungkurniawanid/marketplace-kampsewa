@@ -18,13 +18,13 @@ return new class extends Migration
             $table->string('bukti_pembayaran')->nullable();
             $table->string('jaminan_sewa')->nullable();
             $table->integer('jumlah_pembayaran')->nullable();
-            $table->integer('kembalian_pembayaran')->nullable();
+            $table->integer('kembalian_pembayaran')->default(0);
             $table->integer('biaya_admin')->nullable();
-            $table->integer('kurang_pembayaran')->nullable();
+            $table->integer('kurang_pembayaran')->default(0);
             $table->integer('total_pembayaran')->nullable();
             $table->string('metode')->default('transfer')->nullable();
             $table->string('jenis_transaksi')->default('ambil ditempat');
-            $table->string('status_pembayaran')->default('belum lunas');
+            $table->string('status_pembayaran')->default('Belum lunas');
             $table->timestamps();
         });
     }
