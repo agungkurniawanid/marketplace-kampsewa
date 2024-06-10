@@ -7,6 +7,7 @@ use App\Models\Alamat;
 use App\Models\Bank;
 use App\Models\DetailPenyewaan;
 use App\Models\DetailVariantProduk;
+use App\Models\Pemasukan;
 use App\Models\PembayaranPenyewaan;
 use App\Models\Penyewaan;
 use App\Models\Produk;
@@ -128,6 +129,8 @@ class TransaksiController extends Controller
 
     public function pembayaran(Request $request)
     {
+        $id_toko = $request->query('id_user');
+
         try {
             $validate = Validator::make($request->all(), [
                 'id_penyewaan' => 'required|integer',
@@ -139,28 +142,55 @@ class TransaksiController extends Controller
                 'kurang_pembayaran' => 'required|integer',
                 'total_pembayaran' => 'required|integer',
             ]);
+
             if ($validate->fails()) {
                 return response()->json(['message' => $validate->errors()], 400);
             }
+
             $request->merge([
                 'metode' => 'Transfer',
                 'status_pembayaran' => 'Lunas',
                 'jenis_transaksi' => 'Ambil ditempat',
             ]);
+
             $pembayaran = new PembayaranPenyewaan($request->all());
+
             if ($request->hasFile('bukti_pembayaran')) {
                 $buktiPembayaran = $request->file('bukti_pembayaran');
                 $buktiPembayaranName = time() . '_bukti.' . $buktiPembayaran->getClientOriginalExtension();
                 $buktiPembayaran->move(public_path('assets/image/customers/pembayaran/'), $buktiPembayaranName);
                 $pembayaran->bukti_pembayaran = $buktiPembayaranName;
             }
+
             if ($request->hasFile('jaminan_sewa')) {
                 $jaminanSewa = $request->file('jaminan_sewa');
                 $jaminanSewaName = time() . '_jaminan.' . $jaminanSewa->getClientOriginalExtension();
                 $jaminanSewa->move(public_path('assets/image/customers/jaminan/'), $jaminanSewaName);
                 $pembayaran->jaminan_sewa = $jaminanSewaName;
             }
+
             $pembayaran->save();
+
+            if ($id_toko != null) {
+                $pemasukanData = [
+                    [
+                        'id_user' => $id_toko,
+                        'deskripsi' => 'Layanan Penyewaan Toko',
+                        'nominal' => $request->total_pembayaran,
+                    ],
+                    [
+                        'id_user' => $id_toko,
+                        'deskripsi' => 'Biaya Admin',
+                        'nominal' => $request->biaya_admin,
+                    ]
+                ];
+
+                foreach ($pemasukanData as $data) {
+                    $pemasukan = new Pemasukan($data);
+                    $pemasukan->save();
+                }
+            }
+
             return response()->json(['message' => 'Pembayaran berhasil disimpan', 'data' => $pembayaran], 201);
         } catch (\Exception $error) {
             Log::error($error->getMessage());
