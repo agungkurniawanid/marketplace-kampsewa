@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
     Route::put('/user/update-password/{id_user}', [UserController::class, 'updatePasswordUser']);
     Route::post('/user/tambah-bank/', [UserController::class, 'tambahBank']);
-    Route::post('/user/input-store/{id_user}', [UserController::class, 'tambahStore']);
+    Route::post('/user/input-store/', [UserController::class, 'tambahStore']);
 
     // product
     Route::get('/produk/produk-rating-tertinggi-limit6', [ProductController::class, 'produkRatingTertinggiLimit6']);
@@ -60,4 +60,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // transaksi
     Route::post('/transaksi/checkout/{id_user}',[TransaksiController::class, 'checkout']);
     Route::post('/transaksi/pembayaran',[TransaksiController::class, 'pembayaran']);
+    Route::post('/transaksi/lokasi-toko',[TransaksiController::class, 'lokasiToko']);
+    Route::post('/transaksi/bank-toko',[TransaksiController::class, 'bankToko']);
 });

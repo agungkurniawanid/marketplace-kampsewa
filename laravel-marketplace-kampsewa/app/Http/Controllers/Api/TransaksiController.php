@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Alamat;
+use App\Models\Bank;
 use App\Models\DetailPenyewaan;
 use App\Models\DetailVariantProduk;
 use App\Models\PembayaranPenyewaan;
@@ -10,6 +12,8 @@ use App\Models\Penyewaan;
 use App\Models\Produk;
 use App\Models\VariantProduk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -162,5 +166,112 @@ class TransaksiController extends Controller
             Log::error($error->getMessage());
             return response()->json(['message' => 'Terjadi kesalahan pada server.', 'error' => $error->getMessage()], 500);
         }
+    }
+
+    public function lokasiToko()
+    {
+        $id_user_toko = request()->query('id_user');
+        $name_store = request()->query('name_store');
+        $id_user_pemesanan = request()->query('id_user_pemesanan');
+        $id_alamat_user_pemesanan = request()->query('id_alamat_user');
+
+
+        if (!$id_user_toko && !$name_store) {
+            return response()->json(['error' => 'Harus ada parameter id_user atau name_store'], 400);
+        }
+        if (!$id_user_pemesanan) {
+            return response()->json(['error' => 'Tidak ada parameter id_user_pemesanan'], 400);
+        }
+        $lokasi_pemesanan = Alamat::where('id', $id_alamat_user_pemesanan)->where('id_user', $id_user_pemesanan)->first();
+        if (!$lokasi_pemesanan) {
+            return response()->json(['error' => 'Lokasi pemesanan tidak ditemukan'], 404);
+        }
+        $relation_table = Alamat::join('users', 'users.id', '=', 'alamat.id_user')
+            ->select(
+                'alamat.id as id_alamat',
+                'alamat.longitude',
+                'alamat.latitude',
+                'alamat.type',
+                'alamat.detail_lainnya',
+                'users.name as user_name'
+            )
+            ->where('alamat.type', 1)
+            ->where(function ($query) use ($id_user_toko, $name_store) {
+                if ($id_user_toko) {
+                    $query->where('alamat.id_user', $id_user_toko);
+                }
+                if ($name_store) {
+                    $query->orWhere('users.name', $name_store);
+                }
+            })
+            ->get();
+        if ($relation_table->isEmpty()) {
+            return response()->json(['error' => 'Tidak ada data yang ditemukan'], 404);
+        }
+        $relation_table->transform(function ($item) {
+            $address = $this->getAddressFromCoordinates($item->latitude, $item->longitude);
+            $item->address = $address;
+            return $item;
+        });
+        $relation_table = $relation_table->map(function ($item) use ($lokasi_pemesanan) {
+            $distance_km = $this->calculateDistance($lokasi_pemesanan->latitude, $lokasi_pemesanan->longitude, $item->latitude, $item->longitude);
+            $item->jarak_km = round($distance_km, 2);
+            $item->jarak_mil = round($distance_km * 0.621371, 2);
+            return $item;
+        })->sortBy('distance');
+        $nearest_location = $relation_table->first();
+        return response()->json([
+            'message' => 'success',
+            'lokasi_toko' => $nearest_location,
+        ]);
+    }
+
+    private function getAddressFromCoordinates($latitude, $longitude)
+    {
+        $response = Http::get("https://nominatim.openstreetmap.org/reverse", [
+            'lat' => $latitude,
+            'lon' => $longitude,
+            'format' => 'json'
+        ]);
+        $data = $response->json();
+        if ($response->successful() && isset($data['display_name'])) {
+            return $data['display_name'];
+        }
+        return 'Address not found';
+    }
+
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earth_radius = 6371;
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon / 2) * sin($dLon / 2);
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $distance = $earth_radius * $c;
+        return $distance;
+    }
+
+    public function bankToko()
+    {
+        $id_user = request()->query('id_user');
+        $name_store = request()->query('name_store');
+
+        $bank = Bank::select('bank.id', 'bank.id_user', 'bank.rekening', DB::raw('UPPER(bank.bank) as bank'))
+            ->where(function ($query) use ($id_user, $name_store) {
+                if ($id_user) {
+                    $query->where('id_user', $id_user);
+                }
+                if ($name_store) {
+                    $query->orWhere('name_store', $name_store);
+                }
+            })
+            ->get();
+
+        return response()->json([
+            'message' => 'success',
+            'bank' => $bank,
+        ]);
     }
 }
