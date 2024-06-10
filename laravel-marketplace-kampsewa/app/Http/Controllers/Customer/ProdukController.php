@@ -121,7 +121,7 @@ class ProdukController extends Controller
         }
 
         // Apply group by to the main query
-        $data_produk = $base_query->groupBy('produk.id', 'produk.nama', 'produk.status', 'produk.foto_depan');
+        $data_produk = $base_query->groupBy('produk.id', 'produk.id_user', 'produk.nama', 'produk.status', 'produk.foto_depan');
 
         // Get the results
         $produk_result = $data_produk->paginate(50);

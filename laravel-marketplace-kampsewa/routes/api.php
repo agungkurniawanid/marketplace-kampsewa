@@ -62,4 +62,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/transaksi/pembayaran',[TransaksiController::class, 'pembayaran']);
     Route::get('/transaksi/lokasi-toko',[TransaksiController::class, 'lokasiToko']);
     Route::get('/transaksi/bank-toko',[TransaksiController::class, 'bankToko']);
+    Route::get('/riwayat/belum-bayar',[TransaksiController::class, 'belumBayar']);
+    Route::get('/riwayat/pengambilan',[TransaksiController::class, 'pengambilan']);
+    Route::get('/riwayat/berlangsung',[TransaksiController::class, 'berlangsung']);
+    Route::get('/riwayat/selesai',[TransaksiController::class, 'selesai']);
+    Route::get('/riwayat/dibatalkan',[TransaksiController::class, 'dibatalkan']);
+    Route::get('/riwayat/rincian-produk',[TransaksiController::class, 'rincianProduk']);
 });

@@ -274,4 +274,11 @@ class TransaksiController extends Controller
             'bank' => $bank,
         ]);
     }
+
+    public function belumBayar() {}
+    public function pengambilan() {}
+    public function berlangsung() {}
+    public function selesai() {}
+    public function dibatalkan() {}
+    public function rincianProduk() {}
 }
