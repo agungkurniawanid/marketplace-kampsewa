@@ -60,6 +60,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     // transaksi
     Route::post('/transaksi/checkout/{id_user}',[TransaksiController::class, 'checkout']);
     Route::post('/transaksi/pembayaran',[TransaksiController::class, 'pembayaran']);
-    Route::post('/transaksi/lokasi-toko',[TransaksiController::class, 'lokasiToko']);
-    Route::post('/transaksi/bank-toko',[TransaksiController::class, 'bankToko']);
+    Route::get('/transaksi/lokasi-toko',[TransaksiController::class, 'lokasiToko']);
+    Route::get('/transaksi/bank-toko',[TransaksiController::class, 'bankToko']);
 });
