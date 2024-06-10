@@ -175,17 +175,10 @@ class TransaksiController extends Controller
         $id_user_pemesanan = request()->query('id_user_pemesanan');
         $id_alamat_user_pemesanan = request()->query('id_alamat_user');
 
-
         if (!$id_user_toko && !$name_store) {
             return response()->json(['error' => 'Harus ada parameter id_user atau name_store'], 400);
         }
-        if (!$id_user_pemesanan) {
-            return response()->json(['error' => 'Tidak ada parameter id_user_pemesanan'], 400);
-        }
-        $lokasi_pemesanan = Alamat::where('id', $id_alamat_user_pemesanan)->where('id_user', $id_user_pemesanan)->first();
-        if (!$lokasi_pemesanan) {
-            return response()->json(['error' => 'Lokasi pemesanan tidak ditemukan'], 404);
-        }
+
         $relation_table = Alamat::join('users', 'users.id', '=', 'alamat.id_user')
             ->select(
                 'alamat.id as id_alamat',
@@ -205,25 +198,51 @@ class TransaksiController extends Controller
                 }
             })
             ->get();
+
         if ($relation_table->isEmpty()) {
             return response()->json(['error' => 'Tidak ada data yang ditemukan'], 404);
         }
-        $relation_table->transform(function ($item) {
-            $address = $this->getAddressFromCoordinates($item->latitude, $item->longitude);
-            $item->address = $address;
-            return $item;
-        });
-        $relation_table = $relation_table->map(function ($item) use ($lokasi_pemesanan) {
-            $distance_km = $this->calculateDistance($lokasi_pemesanan->latitude, $lokasi_pemesanan->longitude, $item->latitude, $item->longitude);
-            $item->jarak_km = round($distance_km, 2);
-            $item->jarak_mil = round($distance_km * 0.621371, 2);
-            return $item;
-        })->sortBy('distance');
-        $nearest_location = $relation_table->first();
-        return response()->json([
-            'message' => 'success',
-            'lokasi_toko' => $nearest_location,
-        ]);
+
+        if ($id_user_pemesanan && $id_alamat_user_pemesanan) {
+            $lokasi_pemesanan = Alamat::where('id', $id_alamat_user_pemesanan)
+                ->where('id_user', $id_user_pemesanan)
+                ->first();
+
+            if (!$lokasi_pemesanan) {
+                return response()->json(['error' => 'Lokasi pemesanan tidak ditemukan'], 404);
+            }
+
+            $relation_table->transform(function ($item) {
+                $address = $this->getAddressFromCoordinates($item->latitude, $item->longitude);
+                $item->address = $address;
+                return $item;
+            });
+
+            $relation_table = $relation_table->map(function ($item) use ($lokasi_pemesanan) {
+                $distance_km = $this->calculateDistance($lokasi_pemesanan->latitude, $lokasi_pemesanan->longitude, $item->latitude, $item->longitude);
+                $item->jarak_km = round($distance_km, 2);
+                $item->jarak_mil = round($distance_km * 0.621371, 2);
+                return $item;
+            })->sortBy('jarak_km');
+
+            $nearest_location = $relation_table->first();
+
+            return response()->json([
+                'message' => 'success',
+                'lokasi_toko' => $nearest_location,
+            ]);
+        } else {
+            $relation_table->transform(function ($item) {
+                $address = $this->getAddressFromCoordinates($item->latitude, $item->longitude);
+                $item->address = $address;
+                return $item;
+            });
+
+            return response()->json([
+                'message' => 'success',
+                'lokasi_toko' => $relation_table,
+            ]);
+        }
     }
 
     private function getAddressFromCoordinates($latitude, $longitude)
@@ -275,10 +294,22 @@ class TransaksiController extends Controller
         ]);
     }
 
-    public function belumBayar() {}
-    public function pengambilan() {}
-    public function berlangsung() {}
-    public function selesai() {}
-    public function dibatalkan() {}
-    public function rincianProduk() {}
+    public function belumBayar()
+    {
+    }
+    public function pengambilan()
+    {
+    }
+    public function berlangsung()
+    {
+    }
+    public function selesai()
+    {
+    }
+    public function dibatalkan()
+    {
+    }
+    public function rincianProduk()
+    {
+    }
 }
