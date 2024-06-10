@@ -32,10 +32,9 @@
                             <img src="{{asset('template/envato/img/home-5.jpg')}}" class="img-fluid" alt="Image">
                             <div class="carousel-caption">
                                 <div class="p-3" style="max-width: 900px;">
-                                    <h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">pilih kebutuhanmu.</h4>
-                                    <h1 class="display-2 text-capitalize text-white mb-4">Sewa Barang kebutuhanmu sekarang!</h1>
-                                    <p class="mb-5 fs-5">Persiapan camping jadi gampang banget! Di sini, kamu bisa nyewa semua yang kamu butuhin buat berkemah, mendaki, atau sekedar nge-trip.
-                                                            Dari tenda sampe alat masak, kita punya semuanya. Jadi, tinggal bawa diri aja dan nikmati petualangan tanpa ribet bawa barang sendiri! </p>
+                                    <h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">kategori barang</h4>
+                                    <h1 class="display-2 text-capitalize text-white mb-4">pilihan daftar barang yang ada dikampsewa</h1>
+                                    <p class="mb-5 fs-5">Platform marketplace yang menyediakan berbagai macam barang dan jasa untuk kebutuhan berkemah dan kegiatan luar ruangan. Mulai dari tenda, peralatan masak portable, sleeping bag, hingga pakaian outdoor, semuanya tersedia di Kampsewa. Platform ini memudahkan pengguna untuk menyewa peralatan berkualitas tinggi tanpa harus membelinya, menjadikannya solusi ideal bagi para pecinta alam dan petualang yang ingin menjelajahi alam bebas tanpa repot membawa banyak perlengkapan.</p>
                                     <div class="d-flex align-items-center justify-content-center">
                                     </div>
                                 </div>
