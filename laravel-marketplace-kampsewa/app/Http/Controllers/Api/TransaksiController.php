@@ -129,7 +129,7 @@ class TransaksiController extends Controller
 
     public function pembayaran(Request $request)
     {
-        $id_toko = $request->query('id_user');
+        $id_toko = $request->query('id_toko');
 
         try {
             $validate = Validator::make($request->all(), [
