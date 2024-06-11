@@ -15,3 +15,5 @@ php artisan db:seed --class=DetailVariantProdukSeeder &&
 php artisan db:seed --class=PenyewaanSeeder &&
 php artisan db:seed --class=DetailPenyewaanSeeder &&
 php artisan db:seed --class=PembayaranPenyewaanSeeder
+
+

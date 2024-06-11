@@ -58,10 +58,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('/riwayat-pencarian/delete/{id_user}', [RiwayatPencarianController::class, 'delete']);
 
     // transaksi
-    Route::post('/transaksi/checkout/{id_user}',[TransaksiController::class, 'checkout']);
-    Route::post('/transaksi/pembayaran',[TransaksiController::class, 'pembayaran']);
-    Route::get('/transaksi/lokasi-toko',[TransaksiController::class, 'lokasiToko']);
-    Route::get('/transaksi/bank-toko',[TransaksiController::class, 'bankToko']);
-    Route::get('/riwayat/',[TransaksiController::class, 'riwayat']);
-    Route::get('/riwayat/rincian-produk',[TransaksiController::class, 'rincianProduk']);
+    Route::post('/transaksi/checkout/{id_user}', [TransaksiController::class, 'checkout']);
+    Route::post('/transaksi/pembayaran', [TransaksiController::class, 'pembayaran']);
+    Route::get('/transaksi/lokasi-toko', [TransaksiController::class, 'lokasiToko']);
+    Route::get('/transaksi/bank-toko', [TransaksiController::class, 'bankToko']);
+    Route::get('/riwayat', [TransaksiController::class, 'riwayat']);
+    Route::get('/riwayat/rincian-produk', [TransaksiController::class, 'rincianProduk']);
 });
