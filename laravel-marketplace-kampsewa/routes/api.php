@@ -64,4 +64,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/transaksi/bank-toko', [TransaksiController::class, 'bankToko']);
     Route::get('/riwayat', [TransaksiController::class, 'riwayat']);
     Route::get('/riwayat/rincian-produk', [TransaksiController::class, 'rincianProduk']);
+    Route::post('/riwayat/bayar-sekarang', [TransaksiController::class, 'bayarSekarang']);
 });

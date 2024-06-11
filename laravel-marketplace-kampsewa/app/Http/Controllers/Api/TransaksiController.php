@@ -366,24 +366,8 @@ class TransaksiController extends Controller
                     'pembayaran_penyewaan.status_pembayaran',
                     DB::raw('AVG(rating_produk.rating) as rating'),
                     'detail_penyewaan.subtotal as harga',
-                    'pembayaran_penyewaan.total_pembayaran'
-                )->where('users.id', $id_user)
-                ->groupBy(
-                    'users.id',
-                    'penyewaan.id',
-                    'detail_penyewaan.id',
-                    'store_user.name_store',
-                    'produk.nama',
-                    'produk.foto_depan',
-                    'detail_penyewaan.qty',
-                    'detail_penyewaan.ukuran',
-                    'detail_penyewaan.warna_produk',
-                    'penyewaan.tanggal_selesai',
-                    'penyewaan.tanggal_mulai',
-                    'pembayaran_penyewaan.status_pembayaran',
                     'pembayaran_penyewaan.total_pembayaran',
-                    'detail_penyewaan.subtotal'
-                );
+                )->where('users.id', $id_user);
             if ($tipe_riwayat === 'belum-bayar') {
                 $query->where('penyewaan.status_penyewaan', 'Pending')->where('pembayaran_penyewaan.status_pembayaran', 'Belum lunas');
             } elseif ($tipe_riwayat === 'pengambilan') {
@@ -395,6 +379,22 @@ class TransaksiController extends Controller
             } else if ($tipe_riwayat === 'dibatalkan') {
                 $query->where('penyewaan.status_penyewaan', 'Dibatalkan');
             }
+            $query->groupBy(
+                'users.id',
+                'penyewaan.id',
+                'detail_penyewaan.id',
+                'store_user.name_store',
+                'produk.nama',
+                'produk.foto_depan',
+                'detail_penyewaan.qty',
+                'detail_penyewaan.ukuran',
+                'detail_penyewaan.warna_produk',
+                'penyewaan.tanggal_selesai',
+                'penyewaan.tanggal_mulai',
+                'pembayaran_penyewaan.status_pembayaran',
+                'pembayaran_penyewaan.total_pembayaran',
+                'detail_penyewaan.subtotal'
+            );
             $result = $query->get();
             $data_pertama = $result->first();
             if (!$data_pertama) {
@@ -410,6 +410,8 @@ class TransaksiController extends Controller
                 'message' => 'success',
                 'response' => [
                     'id' => $data_pertama->id_user,
+                    'id_penyewaan' => $data_pertama->id_penyewaan,
+                    'id_detail_penyewaan' => $data_pertama->id_detail_penyewaan,
                     'nama_toko' => $data_pertama->name_store,
                     'nama_produk' => $data_pertama->nama_produk,
                     'foto_produk' => $data_pertama->foto_produk,
@@ -434,6 +436,64 @@ class TransaksiController extends Controller
         }
     }
 
+    public function bayarSekarang(Request $request)
+    {
+        try {
+            $request->validate([
+                'bukti_pembayaran' => 'required|image|mimes:png,jpg',
+                'jaminan_sewa' => 'required|image|mimes:png,jpg',
+                'jumlah_pembayaran' => 'required|integer',
+                'total_pembayaran' => 'required|integer',
+            ]);
+
+            $id_penyewaan = $request->query('id_penyewaan');
+            $pembayaran_penyewaan = PembayaranPenyewaan::where('id_penyewaan', $id_penyewaan)->first();
+
+            if (!$pembayaran_penyewaan) {
+                return response()->json([
+                    'message' => 'Data tidak ditemukan'
+                ], 404);
+            }
+
+            $update = [
+                'jumlah_pembayaran' => $request->input('jumlah_pembayaran'),
+                'total_pembayaran' => $request->input('total_pembayaran'),
+                'metode' => 'Transfer',
+                'status_pembayaran' => 'Lunas',
+            ];
+
+            if ($request->hasFile('bukti_pembayaran')) {
+                $file = $request->file('bukti_pembayaran');
+                $destinationPath = public_path('assets/image/customers/pembayaran/');
+                $filename = time() . '_bukti' . $file->getClientOriginalName();
+                $file->move($destinationPath, $filename);
+                $foto_url = $filename;
+                $update['bukti_pembayaran'] = $foto_url;
+            }
+
+            if ($request->hasFile('jaminan_sewa')) {
+                $file = $request->file('jaminan_sewa');
+                $destinationPath = public_path('assets/image/customers/jaminan/');
+                $filename = time() . '_jaminan' . $file->getClientOriginalName();
+                $file->move($destinationPath, $filename);
+                $foto_url = $filename;
+                $update['jaminan_sewa'] = $foto_url;
+            }
+
+            $pembayaran_penyewaan->update($update);
+
+            return response()->json([
+                'message' => 'Data berhasil diperbarui',
+                'data' => $pembayaran_penyewaan,
+            ], 200);
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+            return response()->json([
+                'message' => 'error',
+                'error' => $error->getMessage()
+            ], 500);
+        }
+    }
 
     public function rincianProduk(Request $request)
     {

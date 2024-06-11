@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('foto_belakang', 255)->default('Belum di isi');
             $table->string('foto_kiri', 255)->default('Belum di isi');
             $table->string('foto_kanan', 255)->default('Belum di isi');
-            $table->string('status_penilaian')->default('Belum dinilai');
             $table->timestamps();
         });
     }
