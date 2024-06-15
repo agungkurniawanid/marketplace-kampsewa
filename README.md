@@ -1,14 +1,10 @@
 # TECHNOLOGY USED
 ![Static Badge](https://img.shields.io/badge/Laravel-red?style=flat&logo=laravel&logoColor=white&logoSize=auto&labelColor=red) ![Static Badge](https://img.shields.io/badge/Flutter-%2303589C?style=flat&logo=flutter&logoColor=72D3ED&logoSize=auto) ![Static Badge](https://img.shields.io/badge/TailwindCSS-%23F7F7F7?style=flat&logo=tailwindcss&logoColor=36B7F0&logoSize=auto) ![Static Badge](https://img.shields.io/badge/VITE-%238B0CC9?style=flat&logo=vite&logoColor=FED029&logoSize=auto) ![Static Badge](https://img.shields.io/badge/JavaScript-%23F3E11D?style=flat&logo=javascript&logoColor=white&logoSize=auto) ![Static Badge](https://img.shields.io/badge/HTML5-%23EA3D0C?style=flat&logo=html5&logoColor=white&logoSize=auto) ![Static Badge](https://img.shields.io/badge/CSS-%230E71B4?style=flat&logo=css3&logoColor=white&logoSize=auto) ![Static Badge](https://img.shields.io/badge/PHP-%236082BB?style=flat&logo=php&logoColor=white&logoSize=auto)
 
-
-
-
-
 # TEAM DEVELOPER INSTAGRAM
-@agungkurniawan.id, ach_bayhq, bintangandk_, anggi._.nur, mutiaraacd__
+@agungkurniawan.dev @ach_bayhq @bintangandk_ @anggi._.nur @mutiaraacd__
 
-# CONTACT PERSON FOR MORE INFORMATION
+# CONTACT PERSON FOR MORE INFORMATION | INSTALLATION
 WhatsApp or Call: +6281331640909
 
 # DESCRIPTION | INDONESIA
