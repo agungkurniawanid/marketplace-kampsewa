@@ -7,6 +7,7 @@ use App\Http\Controllers\Customer\IklanController as CustomerIklanController;
 use App\Http\Controllers\Customer\KeuanganController;
 use App\Http\Controllers\Customer\ProdukController;
 use App\Http\Controllers\Customer\SetDataController;
+use App\Http\Controllers\Customer\TransaksiMenuController;
 use App\Http\Controllers\Developer\DashboardController;
 use App\Http\Controllers\Developer\DetailPenggunaController;
 use App\Http\Controllers\Developer\IklanController;
@@ -112,3 +113,9 @@ Route::get('/customer/dashboard/keuangan/update-pengeluaran/{id_pengeluaran}', [
 Route::put('/customer/dashboard/keuangan/update-pengeluaran-post/{id_pengeluaran}/{id_user}', [KeuanganController::class, 'updatePengeluaranPost'])->name('keuangan.update-pengeluaran-post-customer')->middleware('auth');
 Route::get('/download-pdf-pengeluaran/{id_user}/{tahun}', [KeuanganController::class, 'downloadPengeluaran'])->name('keuangan.download-pengeluaran-customer')->middleware('auth');
 Route::delete('/customer/dashboard/keuangan/delete-pengeluaran/{id_pengeluaran}', [KeuanganController::class, 'deletePengeluaran'])->name('keuangan.delete-pengeluaran-customer')->middleware('auth');
+
+// transaksi
+Route::get('customer/dashboard/transaksi/{id_user}', [TransaksiMenuController::class, 'index'])->name('menu-transaksi.index')->middleware('auth');
+Route::get('customer/dashboard/transaksi/terima-order-masuk/{id_penyewaan}', [TransaksiMenuController::class, 'terimaOrderMasuk'])->name('menu-transaksi.terima-order-masuk')->middleware('auth');
+Route::put('customer/dashboard/transaksi/input-pembayaran-cod/{id_penyewaan}', [TransaksiMenuController::class, 'inputPembayaranCOD'])->name('menu-transaksi.input-pembayaran-cod')->middleware('auth');
+Route::put('customer/dashboard/transaksi/confirm-order-masuk/{id_penyewaan}/{id_user}', [TransaksiMenuController::class, 'confirmOrderMasuk'])->name('menu-transaksi.confirm-order-masuk')->middleware('auth');

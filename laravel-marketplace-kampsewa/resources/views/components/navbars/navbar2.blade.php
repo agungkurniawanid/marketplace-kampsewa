@@ -13,10 +13,10 @@
                 <li class="nav-item {{ $title == 'Dashboard | Customer' ? 'active' : '' }} show">
                     <a href="/customer/dashboard/home" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
                 </li>
-                <li class="nav-item {{ $title == 'Kelola Iklan' ? 'active' : '' }} {{ $title == 'Iklan | Customer' ? 'active' : '' }}">
+                <li class="nav-item {{ $title == 'Terima Order Masuk' ? 'active' : '' }} {{ $title == 'Order Masuk' ? 'active' : ''}} {{ $title == 'Kelola Iklan' ? 'active' : '' }} {{ $title == 'Iklan | Customer' ? 'active' : '' }}">
                     <a href="" class="nav-link with-sub"><i class="typcn typcn-shopping-bag"></i> Transaksi</a>
                     <nav class="az-menu-sub">
-                        <a href="page-signin.html" class="nav-link">Penyewaan & Transaksi offline</a>
+                        <a href="{{ route('menu-transaksi.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link">Penyewaan & Transaksi offline</a>
                         <a href="{{ route('buat-iklan.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link">Buat Promosi / Iklan</a>
                     </nav>
                 </li>

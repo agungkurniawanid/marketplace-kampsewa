@@ -377,4 +377,14 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function logout(Request $request)
+    {
+        // Menghapus token saat ini yang digunakan untuk otentikasi
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully'
+        ]);
+    }
 }

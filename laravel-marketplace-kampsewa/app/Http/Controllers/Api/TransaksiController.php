@@ -177,11 +177,13 @@ class TransaksiController extends Controller
                 $pemasukanData = [
                     [
                         'id_user' => $id_toko,
+                        'sumber' => 'Penyewaan',
                         'deskripsi' => 'Layanan Penyewaan Toko',
                         'nominal' => $request->total_pembayaran,
                     ],
                     [
                         'id_user' => $id_toko,
+                        'sumber' => 'Service',
                         'deskripsi' => 'Biaya Admin',
                         'nominal' => $request->biaya_admin,
                     ]

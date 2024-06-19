@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 // auth
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
-
 // -- chart api web dev
 Route::get('/chart-keuntungan-menu-dashboard', [ChartWebController::class, 'ApiTotalKeuntungan']);
 Route::get('/chart-penghasilan-menu-penghasilan', [ChartWebController::class, 'apiChartMenuPenghasilan']);
@@ -29,6 +28,7 @@ Route::post('/lupa-password/kirim-ulang-otp/{nomor_telephone}', [LupaPassword::c
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     // user
+    Route::post('/logout', [UserController::class, 'logout']);
     Route::get('/user/{id_user}', [UserController::class, 'detailUser']);
     Route::post('/user/update-profile/{id_user}', [UserController::class, 'editProfile']);
     Route::get('/user/pemesanan/{id_user}', [UserController::class, 'pemesananUser']);

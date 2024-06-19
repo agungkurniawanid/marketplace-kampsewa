@@ -87,7 +87,7 @@ class LupaPassword extends Controller
                 Alert::toast('Kode OTP yang Anda masukkan telah kadaluarsa', 'error');
                 return back()->with('error', 'Kode OTP yang Anda masukkan telah kadaluarsa');
             } else {
-                Alert::toast('Kode OTP Berhasil di Verifikasi', 'succcess');
+                Alert::toast('Kode OTP Berhasil di Verifikasi', 'success');
                 return redirect('lupa-password/reset-password/' . $nomor_telephone);
             }
         } else {
