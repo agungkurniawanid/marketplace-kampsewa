@@ -16,11 +16,13 @@
                     sesuai dengan list pesanan user, dan menekan tombol terima!</p>
             </div>
         @endif
-        <div>
-            <button onclick="scrollToElement()"
-                class="hover:text-black p-2 rounded-full bg-[#F6D91F] border-black border-2 font-medium text-black">Terima
-                order disni!</button>
-        </div>
+        @if ($data->status_penyewaan == 'Pending')
+            <div>
+                <button onclick="scrollToElement()"
+                    class="hover:text-black p-2 rounded-full bg-[#F6D91F] border-black border-2 font-medium text-black">Terima
+                    order disni!</button>
+            </div>
+        @endif
         <div class="--component-grid grid xl:grid-cols-2 gap-4">
             <div class="--component-1 flex flex-col gap-6">
                 <div class="--information-user-order">
@@ -289,21 +291,24 @@
                 </div>
             </div>
         </div>
-        <div class="--component-terima shadow-box-shadow-8 p-4 rounded-lg">
-            <p class="font-medium text-[14px] mb-2 text-center">Jika dirasa sudah memenuhi anda maka tekan tombol terima
-                dibawah ini,
-                dan waktu mulai dari penyewaan client akan berlangsung.</p>
-            <form id="form-confirm-order"
-                action="{{ route('menu-transaksi.confirm-order-masuk', ['id_penyewaan' => $data->id_penyewaan, 'id_user' => Crypt::encrypt(session('id_user'))]) }}"
-                method="POST">
-                @csrf
-                @method('PUT')
-                <div class="w-full flex justify-center"><button id="terima-order"
-                        {{ $data->status_pembayaran == 'Belum lunas' ? 'disabled' : '' }}
-                        class="p-3 w-1/2 rounded-full {{ $data->status_pembayaran == 'Belum lunas' ? 'opacity-45' : '' }} bg-[#F6D91F] border-black border-2 font-medium text-black">Terima
-                        Order</button></div>
-            </form>
-        </div>
+        @if ($data->status_penyewaan == 'Pending')
+            <div class="--component-terima shadow-box-shadow-8 p-4 rounded-lg">
+                <p class="font-medium text-[14px] mb-2 text-center">Jika dirasa sudah memenuhi anda maka tekan tombol
+                    terima
+                    dibawah ini,
+                    dan waktu mulai dari penyewaan client akan berlangsung.</p>
+                <form id="form-confirm-order"
+                    action="{{ route('menu-transaksi.confirm-order-masuk', ['id_penyewaan' => $data->id_penyewaan, 'id_user' => Crypt::encrypt(session('id_user'))]) }}"
+                    method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="w-full flex justify-center"><button id="terima-order"
+                            {{ $data->status_pembayaran == 'Belum lunas' ? 'disabled' : '' }}
+                            class="p-3 w-1/2 rounded-full {{ $data->status_pembayaran == 'Belum lunas' ? 'opacity-45' : '' }} bg-[#F6D91F] border-black border-2 font-medium text-black">Terima
+                            Order</button></div>
+                </form>
+            </div>
+        @endif
     </div>
     <script>
         var jumlah_pembayaran = document.getElementById('jumlah_pembayaran');

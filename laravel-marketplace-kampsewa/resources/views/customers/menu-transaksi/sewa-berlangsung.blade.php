@@ -2,21 +2,24 @@
 @section('customer-content')
     <div class="--container sm:flex sm:flex-col sm:gap-8 w-full h-auto px-6 py-5 sm:px-8 sm:py-5">
         <div class="--title">
-            <h1 class="xl:text-[28px] font-black">Menu Order, Transaksi & Denda</h1>
+            <h1 class="xl:text-[28px] font-black">Menu Sewa Pelanggan Berlangsung.</h1>
         </div>
         <div class="--action flex xl:items-center w-full xl:justify-between">
             <ul class="--menu flex wrap gap-4 items-center">
                 <li><a class="{{ $title === 'Order Masuk' ? 'border-b-2 border-b-[#FF3F42] text-[#FF3F42]' : '' }} hover:border-b-2 hover:border-b-[#FF3F42] hover:text-[#FF3F42] p-2 xl:text-[16px] font-medium text-[#D1CDD0]"
-                        href="">Order Masuk</a></li>
+                        href="{{ route('menu-transaksi.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Order
+                        Masuk</a></li>
                 <li><a class="{{ $title === 'Sewa Berlangsung' ? 'border-b-2 border-b-[#FF3F42] text-[#FF3F42]' : '' }} hover:border-b-2 hover:border-b-[#FF3F42] hover:text-[#FF3F42] p-2 xl:text-[16px] font-medium text-[#D1CDD0]"
-                        href="{{ route('menu-transaksi.sewa-berlangsung', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Sewa Berlangsung</a></li>
+                        href="{{ route('menu-transaksi.sewa-berlangsung', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Sewa
+                        Berlangsung</a></li>
                 <li><a class="{{ $title === 'Denda' ? 'border-b-2 border-b-[#FF3F42] text-[#FF3F42]' : '' }} hover:border-b-2 hover:border-b-[#FF3F42] hover:text-[#FF3F42] p-2 xl:text-[16px] font-medium text-[#D1CDD0]"
                         href="">Denda</a></li>
                 <li><a class="{{ $title === 'Selesai Order' ? 'border-b-2 border-b-[#FF3F42] text-[#FF3F42]' : '' }} hover:border-b-2 hover:border-b-[#FF3F42] hover:text-[#FF3F42] p-2 xl:text-[16px] font-medium text-[#D1CDD0]"
                         href="">Selesai</a></li>
             </ul>
             <div class="--filter flex items-center gap-6">
-                <form method="GET">
+                <form method="GET"
+                    action="{{ route('menu-transaksi.sewa-berlangsung', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">
                     <div class="--filter-search relative flex">
                         <input type="search" value="{{ $search }}" name="search"
                             class="shadow-box-shadow-11 rounded-lg bg-white appearance-none px-6 py-2"
@@ -24,7 +27,9 @@
                             aria-describedby="button-addon3" />
                     </div>
                 </form>
-                <form method="GET" id="form_filter_tanggal">
+                <form method="GET"
+                    action="{{ route('menu-transaksi.sewa-berlangsung', ['id_user' => Crypt::encrypt(session('id_user'))]) }}"
+                    id="form_filter_tanggal">
                     <div class="--filter-tanggal flex xl:items-center xl:gap-4">
                         <div class="--tangga-awal">
                             <input id="tanggal_awal" type="date"
@@ -41,8 +46,10 @@
         </div>
         <div class="--warnging-alert w-fit p-2 rounded-lg bg-orange-500/20 flex items-center gap-2">
             <div class="--icon"><i class="text-orange-500 bi bi-exclamation-diamond-fill"></i></div>
-            <p class="text-[14px] font-medium text-orange-500">Tekan tombol terima saat pelanggan sudah sampai dilokasi atau
-                saat pengiriman barang, dengan ketentuan waktu dan tanggal penyewaan sudah masuk permintaan!</p>
+            <p class="text-[14px] font-medium text-orange-500">Disini anda hanya dapat melihat siapa saja pelanggan yang
+                menyewa peralatan anda waktu penyewaan sedang berlangsung, anda bisa melihat detailnya dengan menekan tombol
+                <b>Detail</b>
+            </p>
         </div>
         <div class="--table bg-white w-full">
             <table class="w-full bg-white border-spacing-2">
@@ -74,7 +81,7 @@
                             <td class="px-4 py-2">{{ Carbon\Carbon::parse($item->tanggal_mulai)->format('d F Y') }}</td>
                             <td class="px-4 py-2">{{ Carbon\Carbon::parse($item->tanggal_selesai)->format('d F Y') }}</td>
                             <td class="px-4 py-2">
-                                <p class="py-1 px-2 rounded-md bg-amber-500/20 text-amber-900 text-center">
+                                <p class="py-1 px-2 rounded-md bg-green-500/20 text-green-900 text-center">
                                     {{ $item->status_penyewaan }}</p>
                             </td>
                             <td class="px-4 py-2">
@@ -88,8 +95,9 @@
                                     src="{{ asset('assets/image/customers/produk/' . $item->foto_depan) }}" alt="">
                                 <div class="max-w-[250px] line-clamp-1">{{ $item->nama }}</div>
                             </td>
-                            <td class="px-4 py-2"><a href="{{ route('menu-transaksi.terima-order-masuk', ['id_penyewaan' => Crypt::encrypt($item->id_penyewaan)]) }}"
-                                    class="py-1 px-2 rounded-md bg-blue-500/20 text-blue-900 text-center hover:text-blue-900">Terima</a>
+                            <td class="px-4 py-2"><a
+                                    href="{{ route('menu-transaksi.terima-order-masuk', ['id_penyewaan' => Crypt::encrypt($item->id_penyewaan)]) }}"
+                                    class="py-1 px-2 rounded-md bg-orange-500/20 text-orange-900 text-center hover:text-blue-900">Detail</a>
                             </td>
                         </tr>
                         <tr>
@@ -100,7 +108,6 @@
             </table>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Ambil nilai dari query string jika tersedia
@@ -164,5 +171,4 @@
             });
         });
     </script>
-
 @endsection
