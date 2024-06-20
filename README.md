@@ -1,4 +1,4 @@
-# COLLABORATOR TEAM WEB
+# COLLABORATOR TEAM WEBSITE
 Agung Kurniawan, Mutiara Ayu Canda Dewi, Anggi Nur Ajijah
 
 # TECHNOLOGY USED
