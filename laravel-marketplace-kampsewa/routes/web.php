@@ -43,6 +43,9 @@ Route::post('/lupa-password/reset-password/{nomor_telephone}', [LupaPassword::cl
 
 // landing page routes
 Route::get('/', [LandingPageController::class, 'halamanBeranda'])->name('landing-page.halaman-beranda');
+Route::get('/halaman_destinasi', [LandingPageController::class, 'halaman_destinasi'])->name('landing-page.halaman_destinasi');
+Route::get('/halaman_sewabarang', [LandingPageController::class, 'halaman_sewabarang'])->name('landing-page.halaman_sewabarang');
+Route::get('/halaman_testimoni', [LandingPageController::class, 'halaman_testimoni'])->name('landing-page.halaman_testimoni');
 
 // -- dashboard menu route
 Route::get('/developer/dashboard/home', [DashboardController::class, 'index'])->name('home.index')->middleware('auth');
