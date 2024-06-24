@@ -12,10 +12,10 @@
                 <li><a class="{{ $title === 'Sewa Berlangsung' ? 'border-b-2 border-b-[#FF3F42] text-[#FF3F42]' : '' }} hover:border-b-2 hover:border-b-[#FF3F42] hover:text-[#FF3F42] p-2 xl:text-[16px] font-medium text-[#D1CDD0]"
                         href="{{ route('menu-transaksi.sewa-berlangsung', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Sewa
                         Berlangsung</a></li>
-                <li><a class="{{ $title === 'Denda' ? 'border-b-2 border-b-[#FF3F42] text-[#FF3F42]' : '' }} hover:border-b-2 hover:border-b-[#FF3F42] hover:text-[#FF3F42] p-2 xl:text-[16px] font-medium text-[#D1CDD0]"
-                        href="{{ route('menu-transaksi.denda-transaksi', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Denda</a></li>
+                {{-- <li><a class="{{ $title === 'Denda' ? 'border-b-2 border-b-[#FF3F42] text-[#FF3F42]' : '' }} hover:border-b-2 hover:border-b-[#FF3F42] hover:text-[#FF3F42] p-2 xl:text-[16px] font-medium text-[#D1CDD0]"
+                        href="{{ route('menu-transaksi.denda-transaksi', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Denda</a></li> --}}
                 <li><a class="{{ $title === 'Selesai Order' ? 'border-b-2 border-b-[#FF3F42] text-[#FF3F42]' : '' }} hover:border-b-2 hover:border-b-[#FF3F42] hover:text-[#FF3F42] p-2 xl:text-[16px] font-medium text-[#D1CDD0]"
-                        href="">Selesai</a></li>
+                        href="{{ route('menu-transaksi.order-selesai', ['id_user' => Crypt::encrypt(session('id_user'))]) }}">Selesai</a></li>
             </ul>
             <div class="--filter flex items-center gap-6">
                 <form method="GET"
@@ -160,7 +160,7 @@
             // Event listener untuk input search
             document.querySelector('input[name="search"]').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    e.preventDefault(); // Prevent form submission on Enter key press
+                    e.preventDefault();
                     submitForm();
                 }
             });

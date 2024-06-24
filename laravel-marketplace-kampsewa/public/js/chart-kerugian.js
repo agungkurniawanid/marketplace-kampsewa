@@ -1,6 +1,6 @@
 // Fetch API total keuntungan
 async function fetchApiTotalKerugian() {
-    const url = "http://192.168.1.16:8000/api/chart-keuntungan-menu-dashboard";
+    const url = "http://192.168.1.3:8000/api/chart-keuntungan-menu-dashboard";
     try {
         const response = await fetch(url, { mode: 'cors' }); // Use 'cors' mode
         const data = await response.json();
@@ -65,7 +65,7 @@ fetchApiTotalKerugian().then(data => {
             datasets: [
                 {
                     label: "Kerugian",
-                    data: [1500000000, 1000000000], // Manual data in the same unit (1.5M and 1M)
+                    data: [1500000000, 1000000000],
                     backgroundColor: [
                         "rgb(54, 162, 235)",
                         "#F2F5FD",

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AuthController extends Controller
@@ -49,7 +50,7 @@ class AuthController extends Controller
                     return redirect()->intended('/developer/dashboard/home')->with('success', 'Login success');
                 } elseif ($user->type == 0) {
                     Alert::toast('Login success', 'success');
-                    return redirect()->intended('/customer/dashboard/home')->with('success', 'Login success');
+                    return redirect()->intended('/customer/dashboard/home/')->with('success', 'Login success');
                 }
             } else {
                 Alert::toast('Password salah', 'error');

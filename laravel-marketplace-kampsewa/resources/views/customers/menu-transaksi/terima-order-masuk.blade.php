@@ -298,7 +298,7 @@
                     dibawah ini,
                     dan waktu mulai dari penyewaan client akan berlangsung.</p>
                 <form id="form-confirm-order"
-                    action="{{ route('menu-transaksi.confirm-order-masuk', ['id_penyewaan' => $data->id_penyewaan, 'id_user' => Crypt::encrypt(session('id_user'))]) }}"
+                    action="{{ route('menu-transaksi.confirm-order-masuk', ['id_penyewaan' => $data->id_penyewaan, 'id_user' => Crypt::encrypt(session('id_user')), 'parameter' => 1]) }}"
                     method="POST">
                     @csrf
                     @method('PUT')
@@ -306,6 +306,22 @@
                             {{ $data->status_pembayaran == 'Belum lunas' ? 'disabled' : '' }}
                             class="p-3 w-1/2 rounded-full {{ $data->status_pembayaran == 'Belum lunas' ? 'opacity-45' : '' }} bg-[#F6D91F] border-black border-2 font-medium text-black">Terima
                             Order</button></div>
+                </form>
+            </div>
+            @elseif ($data->status_penyewaan == 'Pengembalian')
+            <div class="--component-terima shadow-box-shadow-8 p-4 rounded-lg">
+                <p class="font-medium text-[14px] mb-2 text-center">Jika dirasa sudah memenuhi anda maka tekan tombol
+                    terima
+                    dibawah ini,
+                    dan client anda akan memiliki status selesai.</p>
+                <form id="form-confirm-order"
+                    action="{{ route('menu-transaksi.confirm-order-masuk', ['id_penyewaan' => $data->id_penyewaan, 'id_user' => Crypt::encrypt(session('id_user')), 'parameter' => 2]) }}"
+                    method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="w-full flex justify-center"><button id="terima-order"
+                            {{ $data->status_pembayaran == 'Belum lunas' ? 'disabled' : '' }}
+                            class="p-3 w-1/2 rounded-full {{ $data->status_pembayaran == 'Belum lunas' ? 'opacity-45' : '' }} bg-[#F6D91F] border-black border-2 font-medium text-black">Terima Pengembalian Client</button></div>
                 </form>
             </div>
         @endif
@@ -358,7 +374,7 @@
             Swal.fire({
                 icon: 'warning',
                 title: 'Konfirmasi Order',
-                text: 'Setelah anda menerima order ini maka waktu dari penyewaan client ini akan berlangsung, dan anda bisa melihat di menu Berlangsung!',
+                text: 'Setelah anda menerima order ini maka waktu dari penyewaan client ini akan berlangsung, dan jika client melakukan pengembalian maka status client adalah selesai!',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, simpan!',
                 cancelButtonText: 'Batal'

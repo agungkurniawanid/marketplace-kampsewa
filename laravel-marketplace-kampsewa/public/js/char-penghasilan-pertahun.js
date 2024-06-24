@@ -1,5 +1,5 @@
 async function fetchApiChartPenghasilan() {
-    const url = 'http://192.168.1.16:8000/api/chart-penghasilan-menu-penghasilan';
+    const url = 'http://192.168.1.3:8000/api/chart-penghasilan-menu-penghasilan';
     try {
         const response = await fetch(url);
         const data = await response.json();

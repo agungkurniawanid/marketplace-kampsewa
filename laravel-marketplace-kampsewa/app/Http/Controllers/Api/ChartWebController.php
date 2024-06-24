@@ -101,4 +101,21 @@ class ChartWebController extends Controller
 
         return response()->json(['total_pemasukan_per_bulan' => $totalPemasukanPerBulan], 200);
     }
+
+    public function apiPerbandinganPemasukanPertahunWebCust($id_user) {
+        $total_perbulan_tahun_kemarin = [];
+        for($bulan = 1; $bulan <= 12; $bulan++) {
+            $total_pertahun = Pemasukan::where('id_user', $id_user)
+            ->whereYear('created_at', Carbon::now()->year)->whereMonth('created_at', $bulan)
+            ->where('sumber', 'Penyewaan')
+            ->sum('nominal');
+            $total_perbulan_tahun_kemarin[$bulan] = $total_pertahun;
+        }
+        if(!empty($total_perbulan_tahun_kemarin)){
+            return response()->json([
+                'message' => 'success',
+                'data_pertahun' => $total_perbulan_tahun_kemarin,
+            ]);
+        }
+    }
 }

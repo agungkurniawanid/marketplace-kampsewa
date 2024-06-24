@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 // auth
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/register', [RegisterController::class, 'register']);
+
 // -- chart api web dev
 Route::get('/chart-keuntungan-menu-dashboard', [ChartWebController::class, 'ApiTotalKeuntungan']);
 Route::get('/chart-penghasilan-menu-penghasilan', [ChartWebController::class, 'apiChartMenuPenghasilan']);
 Route::get('/chart-penghasilan-perbulan-menu-penghasilan', [ChartWebController::class, 'apiChartTotalPenghasilanPerbulanSaatIniMenuPenghasilan']);
+Route::get('/chart-perbandingan-pertahun-web-cust/{id_user}', [ChartWebController::class, 'apiPerbandinganPemasukanPertahunWebCust']);
 
 // lupa password api
 Route::post('/lupa-password', [LupaPassword::class, 'verifikasiPhone']);

@@ -499,5 +499,6 @@ class TransaksiController extends Controller
 
     public function rincianProduk(Request $request)
     {
+
     }
 }

@@ -11,9 +11,9 @@
             </div><!-- az-header-menu-header -->
             <ul class="nav">
                 <li class="nav-item {{ $title == 'Dashboard | Customer' ? 'active' : '' }} show">
-                    <a href="/customer/dashboard/home" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
+                    <a href="{{ route('dashboard-cust', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link"><i class="typcn typcn-chart-area-outline"></i> Dashboard</a>
                 </li>
-                <li class="nav-item {{ $title == 'Denda Pelanggan' ? 'active' : '' }} {{ $title == 'Sewa Berlangsung' ? 'active' : '' }} {{ $title == 'Terima Order Masuk' ? 'active' : '' }} {{ $title == 'Order Masuk' ? 'active' : ''}} {{ $title == 'Kelola Iklan' ? 'active' : '' }} {{ $title == 'Iklan | Customer' ? 'active' : '' }}">
+                <li class="nav-item {{ $title == 'Order Selesai' ? 'active' : '' }} {{ $title == 'Denda Pelanggan' ? 'active' : '' }} {{ $title == 'Sewa Berlangsung' ? 'active' : '' }} {{ $title == 'Terima Order Masuk' ? 'active' : '' }} {{ $title == 'Order Masuk' ? 'active' : ''}} {{ $title == 'Kelola Iklan' ? 'active' : '' }} {{ $title == 'Iklan | Customer' ? 'active' : '' }}">
                     <a href="" class="nav-link with-sub"><i class="typcn typcn-shopping-bag"></i> Transaksi</a>
                     <nav class="az-menu-sub">
                         <a href="{{ route('menu-transaksi.index', ['id_user' => Crypt::encrypt(session('id_user'))]) }}" class="nav-link">Penyewaan & Transaksi offline</a>

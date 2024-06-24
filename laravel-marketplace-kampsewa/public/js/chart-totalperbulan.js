@@ -1,5 +1,5 @@
 async function fetchDataTotalPerbandinganPenghasilanDariTigaBulanLalu() {
-    const url = 'http://192.168.1.16:8000/api/chart-penghasilan-perbulan-menu-penghasilan';
+    const url = 'http://192.168.1.3:8000/api/chart-penghasilan-perbulan-menu-penghasilan';
     try {
         const response = await fetch(url, {
             method: 'GET',
