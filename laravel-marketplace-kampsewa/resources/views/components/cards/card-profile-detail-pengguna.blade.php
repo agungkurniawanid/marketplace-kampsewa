@@ -20,7 +20,7 @@
     <div class="_name-sampai-gender px-4 py-2">
         <div class="_name font-bold text-[#19191b]">{{ $name }}</div>
         <div class="_id text-[12px] text-gray-400 font-medium mt-[-5px] line-clamp-1">ID: {{ $data->user_id }}</div>
-        <div class="_alamat text-[12px] w-full font-medium mt-2">{{ $data->alamat ? json_decode($data->alamat)->alamat_1 : 'Belum di isi.' }}</div>
+        <div class="_alamat text-[12px] w-full font-medium mt-2">Belum di isi</div>
         <div class="_join-birth mt-2">
             <div class="_join flex items-center gap-1">
                 <div class="text-[12px] mt-[2px] font-medium text-[#19191b]"><i class="fi fi-rr-calendar"></i>
@@ -45,7 +45,7 @@
                 <div class="_icon text-[20px]"><i class="fi fi-rr-venus-mars"></i></div>
                 <div class="_gend">
                     <p class="text-[14px] font-bold">Jenis Kelamin</p>
-                    <p class="text-[12px] font-medium">{{ $data->jenis_kelamin }}</p>
+                    <p class="text-[12px] font-medium">{{ $data->jenis_kelamin ? $data->jenis_kelamin : 'Belum di isi.'}}</p>
                 </div>
             </div>
         </div>

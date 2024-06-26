@@ -1,3 +1,4 @@
+@include('components.modals.tambah-pemasukan-dev')
 @extends('layouts.developers.ly-dashboard')
 @section('content')
     <div class="_container p-8 flex flex-col gap-6">
@@ -79,11 +80,13 @@
                                 @if ($totalPemasukanPerbulanSebelumBulanSaatIni >= 0)
                                     <p class="text-white text-[12px]">Naik
                                         <b>{{ number_format($totalPemasukanPerbulanSebelumBulanSaatIni, 2) }}%</b> dari 3
-                                        bulan kemarin.</p>
+                                        bulan kemarin.
+                                    </p>
                                 @else
                                     <p class="text-white text-[12px]">Turun
                                         <b>{{ number_format($totalPemasukanPerbulanSebelumBulanSaatIni, 2) }}%</b> dari 3
-                                        bulan kemarin.</p>
+                                        bulan kemarin.
+                                    </p>
                                 @endif
                             </div>
                         </div>
@@ -191,7 +194,7 @@
                         </div>
                     </div>
 
-                    {{-- todo filter --}}
+                    {{-- todo filter
                     <div class="_filter">
                         <div class="flex items-center justify-center">
                             <div class="relative inline-block text-left">
@@ -235,12 +238,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     {{-- todo untuk tombol tambah data --}}
                     <div class="_btn-tambah-data">
-                        <button onclick="modalHandler(true)"
-                            class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">
+                        <button id="tambah-pemasukan-customer" class="px-4 py-2 gradient-1 cursor-pointer text-white rounded-full">
                             <div class="_icon-plus"></div>
                             <span>Tambah Pemasukan</span>
                         </button>
@@ -308,7 +310,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for ($i = 0; $i < 20; $i++)
+                                @foreach ($list_pemasukan as $item)
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <td class="px-3">
                                             <div class="inline-flex items-center">
@@ -332,17 +334,17 @@
                                         </td>
                                         <td scope="row"
                                             class="px-6 py-4 font-medium text-gray-900 flex items-center gap-2 whitespace-nowrap dark:text-white">
-                                            <p>Layanan Transaksi</p>
+                                            <p>{{ $item->sumber }}</p>
                                         </td>
                                         <td class="px-6 py-4">
                                             <p class="py-2 px-4 w-fit bg-[#F0FDF4] text-[#4ED17E] rounded-full">
-                                                2 November 2024</p>
+                                                {{ Carbon\Carbon::parse($item->created_at)->format('j M Y') }}</p>
                                         </td>
                                         <td class="px-6 py-4 line-clamp-1 max-w-[200px]">
-                                            Transaksi penyewaan antar customer dari aplikasi mobile
+                                            {{ $item->deskripsi }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            Rp. 1.000.000
+                                            Rp. {{ number_format($item->nominal, 0, ',', '.') }}
                                         </td>
                                         <td class="px-6 py-4 flex gap-2 items-center">
                                             <p><a href=""><i class="text-[16px] bi bi-pen-fill"></i></a>
@@ -351,7 +353,7 @@
                                             </p>
                                         </td>
                                     </tr>
-                                @endfor
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -359,4 +361,139 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const modal = document.getElementById('modal-tambah-pemasukan-customer');
+        const idButton = document.getElementById('tambah-pemasukan-customer');
+        const submitPemasukan = document.getElementById('tambah-pemasukan');
+        const formTambahPemasukan = document.getElementById('form-tambah-pemasukan');
+        const cancelButton = document.getElementById('cancel-tambah-pemasukan-web-customer');
+
+        // Fungsi untuk menampilkan atau menyembunyikan modal
+        function modalHandlerPemasukanCustomer(val) {
+            if (val) {
+                modal.style.display = "flex";
+            } else {
+                modal.style.display = "none";
+            }
+        }
+
+        // function isString
+        function isStringInputPemasukanCustomer(value) {
+            const lettersAndSpacesOnlyRegex = /^[A-Za-z\s]+$/;
+            return lettersAndSpacesOnlyRegex.test(value);
+        }
+
+        // function isNumeric
+        function isNumericPemasukanCustomer(value) {
+            const numbersOnlyRegex = /^[0-9]+$/;
+            return numbersOnlyRegex.test(value)
+        }
+
+        idButton.addEventListener('click', (event) => {
+            modalHandlerPemasukanCustomer(true);
+        });
+        cancelButton.addEventListener('click', () => {
+            modalHandlerPemasukanCustomer(false);
+        });
+
+        submitPemasukan.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // input tambah-pemasukan-customer.blade.php
+            let sumber = document.getElementById('sumber_pemasukan_customer').value.trim();
+            let deskripsi = document.getElementById('deskripsi_pemasukan_customer').value.trim();
+            let nominal = document.getElementById('nominal_pemasukan_customer').value.trim();
+
+            if (sumber === '') {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Sumber Kosong!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            } else if (!isStringInputPemasukanCustomer(sumber)) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Sumber tidak boleh angka!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            } else if (deskripsi === '') {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Deskripsi Kosong!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            } else if (nominal === '') {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Nominal Kosong!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            } else if (!isNumericPemasukanCustomer(nominal)) {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Input Nominal tidak boleh huruf!',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+                return;
+            }
+            Swal.fire({
+                title: 'Menyimpan data...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Submit formulir setelah penundaan kecil
+            setTimeout(() => {
+                formTambahPemasukan.submit();
+            }, 1000);
+        });
+    </script>
 @endsection

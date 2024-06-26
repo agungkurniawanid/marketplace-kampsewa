@@ -9,7 +9,7 @@
                 <div class="--foto-name-id flex flex-col gap-4 w-full bg-white shadow-box-shadow-11 rounded-[20px] p-4">
                     <div class="--image w-full flex justify-center">
                         <img class="object-cover border-2 border-solid border-white outline outline-[#5038ED] w-[80px] h-[80px] rounded-full"
-                            src="{{ asset('assets/image/allysa.jpg') }}" alt="">
+                            src="{{ asset('assets/image/developers/man.png') }}" alt="">
                     </div>
                     <div class="--name-id w-full text-center">
                         <p class="text-[14px] font-bold">{{ session('nama_lengkap') }}</p>

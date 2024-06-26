@@ -54,6 +54,7 @@ Route::put('/mark-notification-as-read', [DashboardController::class, 'markNotif
 
 // -- notification
 Route::get('developer/dashboard/notification', [NotificationController::class, 'index'])->name('notification.index')->middleware('auth');
+Route::post('developer/dashboard/notification/balas-semua-feedback', [NotificationController::class, 'balasSemuaFeedback'])->name('notification.balas-semua-feedback')->middleware('auth');
 
 // -- kelola pengguna
 Route::get('developer/dashboard/kelola-pengguna', [KelolaPenggunaMenuController::class, 'index'])->name('kelola-pengguna.index')->middleware('auth');
@@ -70,6 +71,7 @@ Route::delete('developer/dashboard/iklan/delete-iklan-pending/{id_iklan}', [Ikla
 
 Route::get('developer/dashboard/penyewaan', [Penyewaan::class, 'index'])->name('penyewaan.index')->middleware('auth');
 Route::get('developer/dashboard/penghasilan', [PenghasilanController::class, 'index'])->name('penghasilan.index')->middleware('auth');
+Route::post('developer/dashboard/penghasilan/tambah-penghasila-dev/{id_user}', [PenghasilanController::class, 'tambahPenghasilan'])->name('penghasilan.tambah-penghasilan-dev')->middleware('auth');
 Route::get('developer/dashboard/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran.index')->middleware('auth');
 Route::get('developer/dashboard/rekap-keuangan', [RekapKeuanganController::class, 'index'])->name('rekap-keuangan.index')->middleware('auth');
 Route::get('developer/dashboard/profile/{nama_lengkap}', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');

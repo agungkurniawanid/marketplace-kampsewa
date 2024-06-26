@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\CheckUserLogin;
 use App\Models\Feedback;
 use App\Models\Pemasukan;
+use App\Models\PembayaranPenyewaan;
 use App\Models\Pengeluaran;
 use App\Models\StatusNotifikasiUser;
 use App\Models\User;
@@ -178,7 +179,8 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $_get_customer_online = User::where('type', 0)->where('status', 'online')->get();
+        $_get_customer_online = User::where('type', 0)->where('status', 'online')->paginate(20);
+        $total_transaksi = PembayaranPenyewaan::count();
 
         return view('developers.dashboard', [
             'title' => 'Dashboard | Developer Kamp Sewa',
@@ -198,7 +200,8 @@ class DashboardController extends Controller
             'total_keuntungan_tahun_ini' => $formatted_keuntungan,
             'total_kerugian_tahun_ini' => $formatted_kerugian,
             'customer_baru_bulan_ini' => $_get_customer_baru_bulan_ini,
-            'customer_online' => $_get_customer_online
+            'customer_online' => $_get_customer_online,
+            'total_transaksi' => $total_transaksi,
         ]);
     }
 

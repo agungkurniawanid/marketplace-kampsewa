@@ -8,6 +8,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PenghasilanController extends Controller
 {
@@ -42,13 +44,13 @@ class PenghasilanController extends Controller
         // get total penghasilan bulan lalu dan sekarang
         $monthPreviousTotal = Pemasukan::whereMonth('created_at', Carbon::now()->subMonth()->month)->sum('nominal');
         $monthCurrentTotal = Pemasukan::whereMonth('created_at', Carbon::now()->month)->sum('nominal');
-        
-        for($month = 1; $month <= Carbon::now()->month; $month++) {
+
+        for ($month = 1; $month <= Carbon::now()->month; $month++) {
             $total = DB::table('pemasukan')
-            ->whereYear('created_at', Carbon::now()->year)
-            ->whereMonth('created_at', $month)
-            ->sum('nominal');
-            
+                ->whereYear('created_at', Carbon::now()->year)
+                ->whereMonth('created_at', $month)
+                ->sum('nominal');
+
             $totalPemasukanPerbulan[] = [
                 'month' => Carbon::create()->month($month)->format('F'),
                 'total' => $total,
@@ -56,21 +58,25 @@ class PenghasilanController extends Controller
         }
 
         $totalPemasukanPerbulanSebelumBulanSaatIni = 0;
-        for($month = 1; $month <= Carbon::now()->month - 1; $month++) {
+        for ($month = 1; $month <= Carbon::now()->month - 1; $month++) {
             $total = DB::table('pemasukan')
-            ->whereYear('created_at', Carbon::now()->year)
-            ->whereMonth('created_at', $month)
-            ->sum('nominal');
-            
+                ->whereYear('created_at', Carbon::now()->year)
+                ->whereMonth('created_at', $month)
+                ->sum('nominal');
+
             $totalPemasukanPerbulanSebelumBulanSaatIni += $total;
         }
 
         // persentase perbandingan penghasilan total bulan ini dan total bulan lalu
-        if($monthPreviousTotal != 0) {
+        if ($monthPreviousTotal != 0) {
             $persentase_perbandingan_total_bulan_ini = (($monthCurrentTotal - $totalPemasukanPerbulanSebelumBulanSaatIni) / $totalPemasukanPerbulanSebelumBulanSaatIni) * 100;
         } else {
             $persentase_perbandingan_total_bulan_ini = $monthCurrentTotal > 0 ? 100 : 0;
         }
+
+        $list_pemasukan = Pemasukan::where('sumber', 'Service')
+            ->orWhere('sumber', 'Layanan Iklan')
+            ->get();
 
         return view('developers.penghasilan')->with([
             'title' => 'Penghasilan',
@@ -82,6 +88,32 @@ class PenghasilanController extends Controller
             'monthCurrentTotal' => $monthCurrentTotal,
             'totalPemasukanPerbulan' => $totalPemasukanPerbulan,
             'totalPemasukanPerbulanSebelumBulanSaatIni' => $persentase_perbandingan_total_bulan_ini,
+            'list_pemasukan' => $list_pemasukan,
         ]);
+    }
+
+    public function tambahPenghasilan($id_user)
+    {
+        try {
+            request()->validate([
+                'id_user' => 'string',
+                'sumber' => 'required|string|max:50|min:5',
+                'deskripsi' => 'required|string|max:255',
+                'nominal' => 'required|integer',
+            ]);
+
+            $pemasukan = new Pemasukan();
+            $pemasukan->id_user = request()->id_user;
+            $pemasukan->sumber = strtoupper(request()->sumber);
+            $pemasukan->deskripsi = request()->deskripsi;
+            $pemasukan->nominal = request()->nominal;
+
+            $pemasukan->save();
+
+            Alert::toast('Data berhasil di simpan', 'success');
+            return back();
+        } catch (\Exception $error) {
+            Log::error($error->getMessage());
+        }
     }
 }

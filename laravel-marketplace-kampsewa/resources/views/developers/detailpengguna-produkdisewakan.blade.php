@@ -107,7 +107,7 @@
                                         </p>
                                     </div>
                                     <img class="object-cover w-full h-[180px]"
-                                        src="{{ asset('assets/image/customers/produk/shopping.webp') }}" alt="">
+                                        src="{{ asset('assets/image/customers/produk/' . $item->foto) }}" alt="">
                                 </div>
                             </a>
                         </div>
@@ -128,7 +128,7 @@
                                         <label class="relative flex items-center rounded-full cursor-pointer">
                                             <input type="checkbox"
                                                 class="product-checkbox before:content[''] peer relative w-6 h-6 cursor-pointer appearance-none rounded-lg border-2 border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-[#5038ED] checked:bg-[#5038ED] checked:before:bg-gray-900 hover:before:opacity-10"
-                                                data-id="{{ $item->id }}" />
+                                                data-id="{{ $item->id_produk }}" />
                                             <span
                                                 class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20"

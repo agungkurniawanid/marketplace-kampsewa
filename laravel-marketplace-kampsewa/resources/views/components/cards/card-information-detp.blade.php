@@ -56,10 +56,7 @@
                 <div class="text-[14px] font-medium text-[#343535]">Catatan : </div>
             </div>
             <div>
-                <p class="text-[14px] font-medium text-[#343535] line-clamp-4">Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Excepturi qui accusamus illo exercitationem, voluptates
-                    minus adipisci libero neque laudantium quod voluptatum reiciendis sunt id, nisi corrupti
-                    obcaecati? Pariatur, laborum non.</p>
+                <p class="text-[14px] font-medium text-[#343535] line-clamp-4">Aplikasinya bagus tetapi untuk sistem masih harus diperbaiki lagi!</p>
             </div>
         </div>
         <div class="_footer">
